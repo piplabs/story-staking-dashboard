@@ -1,0 +1,26 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer body {
+  body {
+    @apply bg-black;
+  }
+}
+
+@layer base {
+  h1 {
+    @apply text-3xl font-[var(--font-archivo)] tracking-[0.02em] lg:text-3xl;
+  }
+  h2 {
+    @apply text-2xl font-[var(--font-archivo)] tracking-[0.02em] lg:text-xl;
+  }
+  h3 {
+    @apply text-2xl font-medium tracking-[0.02em];
+  }
+}
+
+textarea:focus,
+input:focus {
+  outline: none;
+}

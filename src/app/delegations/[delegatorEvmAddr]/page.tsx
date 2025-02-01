@@ -1,0 +1,86 @@
+'use client'
+
+import { MoveLeftIcon } from 'lucide-react'
+import Image from 'next/image'
+import Link from 'next/link'
+import { Address, formatEther } from 'viem'
+
+import { DataRow } from '@/app/validators/[validatorAddr]/_components/ValidatorDataCards'
+import CopyStringButton from '@/components/buttons/CopyStringButton'
+import { useDelegatorTotalDelegationAmount } from '@/lib/services/hooks/useDelegatorTotalDelegationAmount'
+import { useDelegatorRewards } from '@/lib/services/hooks/useDelegatorTotalRewards'
+import { useIsSmallDevice } from '@/lib/services/hooks/useIsSmallDevice'
+import { truncateAddress } from '@/lib/utils'
+
+import DelegationsTable from './_components/DelegationsTable'
+import UnbondedDelegationsTable from './_components/UnbondedDelegationsTable'
+
+export default function Page({ params }: { params: { delegatorEvmAddr: Address } }) {
+  const isSmallDevice = useIsSmallDevice()
+  return (
+    <div className="max-w-screen flex h-full w-full flex-col gap-8 text-white">
+      <section className="flex flex-row gap-2">
+        <Link href="/">
+          <div className="flex flex-row gap-2">
+            <MoveLeftIcon size={24} />
+            Back to Home
+          </div>
+        </Link>
+      </section>
+
+      <section className="flex flex-col justify-between lg:flex-row">
+        <div className="mb-4 flex flex-row gap-2 rounded-md">
+          <Image
+            src={`https://cdn.stamp.fyi/avatar/${params.delegatorEvmAddr}`}
+            alt="Validator Avatar"
+            className="my-auto aspect-square h-12 w-12 rounded-md"
+            width={48}
+            height={48}
+          />
+          <div className="my-auto w-full break-words pr-8 text-xl">
+            <h2>
+              {isSmallDevice ? truncateAddress(params.delegatorEvmAddr) : params.delegatorEvmAddr}{' '}
+              <CopyStringButton value={params.delegatorEvmAddr} />
+            </h2>
+          </div>
+        </div>
+      </section>
+      <div className="flex flex-row">
+        <OverviewCard delegatorAddr={params.delegatorEvmAddr} />
+      </div>
+      <DelegationsTable delegatorEvmAddr={params.delegatorEvmAddr} />
+      <UnbondedDelegationsTable delegatorEvmAddr={params.delegatorEvmAddr} />
+    </div>
+  )
+}
+
+function OverviewCard({ delegatorAddr }: { delegatorAddr: Address }) {
+  const { data: totalStake, isPending } = useDelegatorTotalDelegationAmount({ delegatorAddr })
+  const { data: rewards, isPending: isRewardsPending } = useDelegatorRewards({
+    delegatorAddr,
+  })
+  console.log({ rewards })
+  return (
+    <div className="w-full rounded-[16px] bg-primary-darkGrey px-4 py-4 md:w-1/3 lg:px-8">
+      <p className="font- text-3xl font-medium">Overview</p>
+      <div className="border-grey mb-2 mt-2 border-b" />
+      <section className="flex flex-col gap-2">
+        <DataRow
+          title="Total Staked"
+          value={isPending || !totalStake ? '-' : `${formatEther(totalStake, 'gwei')} IP`}
+          tooltipInfo="The total amount of IP staked across validators"
+        />
+
+        <DataRow
+          title="Total Rewards Earned"
+          value={
+            isRewardsPending || !rewards
+              ? '-'
+              : `${Number(formatEther(rewards.accumulatedRewards, 'gwei')).toFixed(2)} IP`
+          }
+          tooltipInfo="The total IP rewards earned from staking on validators"
+        />
+      </section>
+    </div>
+  )
+}
