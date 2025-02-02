@@ -151,12 +151,9 @@ export default function DelegationsTable(props: { delegatorEvmAddr: Address }) {
 
               return validatorDelegation.periodDelegations?.map(
                 (periodDelegation: any, pIndex: number) => {
-                  console.log({ periodDelegation })
                   const isMatured = new Date(periodDelegation.end_time) < new Date()
 
-                  console.log('nnnnncasdasdaszzxxd', validatorDetails)
                   const validator = validatorDetails[periodDelegation.validator_address]
-                  console.log('casdasdasd', validator)
                   return (
                     <TableRow key={pIndex} className="border-none">
                       <TableCell className="break-words">

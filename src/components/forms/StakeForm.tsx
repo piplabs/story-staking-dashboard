@@ -53,7 +53,6 @@ const createFormSchema = ({
       .string()
       .refine(
         (value): value is string => {
-          console.log({ minStakeAmount, balance })
           if (!minStakeAmount || !balance) return false
           const amount = parseFloat(value)
           return !isNaN(amount) && amount >= parseFloat(formatEther(minStakeAmount))

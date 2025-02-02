@@ -35,7 +35,6 @@ const createFormSchema = ({ totalStaked }: { totalStaked?: string }) =>
       (value): value is string => {
         if (!totalStaked) return false
         const amount = parseFloat(value)
-        console.log(amount, totalStaked)
         return !isNaN(amount) && amount >= 1024 && amount <= parseFloat(totalStaked)
       },
       {
@@ -105,7 +104,7 @@ export function UnstakeForm({ validator }: { validator: Validator }) {
     if (isButtonDisabled) return
 
     const { unstakeAmount, periodDelegationId } = values
-    console.log('UNSTAKES', unstakeAmount, parseEther(unstakeAmount))
+
     const unstakeInputs: [Address, bigint, bigint, Hex] = [
       `0x${validator.consensus_pubkey.value.compressed_hex_pubkey}`,
       BigInt(periodDelegationId),
@@ -130,12 +129,6 @@ export function UnstakeForm({ validator }: { validator: Validator }) {
     parseInt(form.watch('unstakeAmount')) >
       parseInt(formatEther(BigInt(parseInt(selectedDelegation.shares).toString()), 'gwei'))
 
-  console.log(
-    'COMPARING',
-    selectedDelegation &&
-      formatEther(BigInt(parseInt(selectedDelegation.shares).toString()), 'gwei'),
-    form.watch('unstakeAmount')
-  )
   let buttonText
   if (!selectedPeriodId) {
     buttonText = 'Select a stake'

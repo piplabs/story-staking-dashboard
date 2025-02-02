@@ -59,7 +59,7 @@ function OverviewCard({ delegatorAddr }: { delegatorAddr: Address }) {
   const { data: rewards, isPending: isRewardsPending } = useDelegatorRewards({
     delegatorAddr,
   })
-  console.log({ rewards })
+
   return (
     <div className="w-full rounded-[16px] bg-primary-darkGrey px-4 py-4 md:w-1/3 lg:px-8">
       <p className="font- text-3xl font-medium">Overview</p>

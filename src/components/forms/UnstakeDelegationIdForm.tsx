@@ -53,7 +53,6 @@ export function UnstakeDelegationIdForm({
   delegationId: string
   onSuccess?: () => void
 }) {
-  console.log('udif', validator)
   const { address } = useAccount()
   const [unstakeTxHash, setUnstakeTxHash] = useState<Hex | undefined>(undefined)
   const sign = useSignMessage()
@@ -76,7 +75,6 @@ export function UnstakeDelegationIdForm({
     delegatorAddr: address || zeroAddress,
   })
 
-  console.log(periodDelegations, delegationId)
   const selectedDelegation = periodDelegations?.find((d) => d.period_delegation_id === delegationId)
 
   const formSchema = createFormSchema({
@@ -151,14 +149,7 @@ export function UnstakeDelegationIdForm({
   } else {
     buttonText = 'Unstake IP'
   }
-  console.log(
-    isTxnPending,
-    sign.isPending,
-    !form.formState.isValid,
-    txnReceipt.isSuccess,
-    isExceedsAllowableUnstake,
-    isWaitingForWalletConfirmation
-  )
+
   const isButtonDisabled =
     isTxnPending ||
     sign.isPending ||
@@ -170,7 +161,6 @@ export function UnstakeDelegationIdForm({
   const isFormDisabled =
     isTxnPending || sign.isPending || txnReceipt.isSuccess || isWaitingForWalletConfirmation
 
-  console.log({ selectedDelegation })
   const availableToUnstake = selectedDelegation
     ? formatEther(BigInt(parseInt(selectedDelegation.shares).toString()), 'gwei')
     : '0'

@@ -81,7 +81,6 @@ export async function getValidatorDelegations(
   )
 
   if (response.data.code !== 200) {
-    console.log('Error getValidatorDelegations', response)
     if (response.data.code == 500) {
       return {
         delegation_responses: [],

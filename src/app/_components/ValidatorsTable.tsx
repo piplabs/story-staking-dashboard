@@ -36,12 +36,8 @@ export function ValidatorsTable() {
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
 
-  const v = useAllValidators({})
-  const validators = v.data
-  const isFetched = v.isFetched
-  const isPending = v.isPending
+  const { data: validators, isFetched, isPending } = useAllValidators({})
   const size = useWindowSize()
-  console.log(validators)
 
   const columns: ColumnDef<Validator>[] = [
     {

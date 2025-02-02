@@ -55,7 +55,6 @@ export function useDelegatorPeriodDelegations(params: GetDelegatorPeriodDelegati
           }
         })
       )
-      console.log(Array.from(validatorDelegationsMap.values()))
       return Array.from(validatorDelegationsMap.values())
     },
     staleTime: 0,

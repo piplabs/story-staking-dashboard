@@ -46,7 +46,7 @@ export default function ActivityTable(props: { delegatorEvmAddr: Address }) {
     page: pageIndex + 1,
     pageSize,
   })
-  console.log({ operations })
+
   const table = useReactTable({
     data: operations?.operations || [],
     columns: [],

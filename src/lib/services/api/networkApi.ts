@@ -54,7 +54,6 @@ export async function getEvmOperations(
       event_type: '',
     }
   )
-  console.log('useEvmOperations', response)
 
   if (response.status === 200) {
     const parsedOperations = response.data.msg.operations.map((operation) => ({
