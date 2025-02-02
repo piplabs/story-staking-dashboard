@@ -149,21 +149,24 @@ export default function DelegationsTable(props: { delegatorEvmAddr: Address }) {
             table.getRowModel().rows.map((row: any) => {
               const validatorDelegation = row.original
 
-              return validatorDelegation.periodDelegations?.map(
+              return validatorDelegation.periodDelegations?.period_delegation_responses?.map(
                 (periodDelegation: any, pIndex: number) => {
-                  const isMatured = new Date(periodDelegation.end_time) < new Date()
+                  const isMatured =
+                    new Date(periodDelegation.period_delegation.end_time) < new Date()
 
-                  const validator = validatorDetails[periodDelegation.validator_address]
+                  const validator =
+                    validatorDetails[periodDelegation.period_delegation.validator_address]
+
                   return (
                     <TableRow key={pIndex} className="border-none">
                       <TableCell className="break-words">
                         {validator ? (
                           <Link
-                            href={`/validators/${periodDelegation.validator_address}`}
+                            href={`/validators/${periodDelegation.period_delegation.validator_address}`}
                             className="relative flex flex-row gap-2"
                           >
                             <Image
-                              src={`https://cdn.stamp.fyi/avatar/${periodDelegation.validator_address}`}
+                              src={`https://cdn.stamp.fyi/avatar/${periodDelegation.period_delegation.validator_address}`}
                               alt="Validator Avatar"
                               className="my-auto flex h-6 w-6 rounded-[4px]"
                               width={24}
@@ -183,37 +186,46 @@ export default function DelegationsTable(props: { delegatorEvmAddr: Address }) {
                               width={24}
                               height={24}
                             />
-                            <span className="text-lg">{periodDelegation.validator_address}</span>
+                            <span className="text-lg">
+                              {periodDelegation.period_delegation.validator_address}
+                            </span>
                           </div>
                         )}
                       </TableCell>
                       <TableCell className="hidden h-full text-center align-middle md:table-cell">
-                        {periodDelegation.period_delegation_id}
+                        {periodDelegation.period_delegation.period_delegation_id}
                       </TableCell>
                       <TableCell className="break-words text-center align-middle">
                         {formatLargeMetricsNumber(
-                          formatEther(BigInt(parseInt(periodDelegation.shares.toString())), 'gwei')
+                          formatEther(
+                            BigInt(parseInt(periodDelegation.period_delegation.shares.toString())),
+                            'gwei'
+                          )
                         )}{' '}
                         IP
                       </TableCell>
                       <TableCell className="break-words text-center">
-                        {periodDelegation.period_type !== undefined
+                        {periodDelegation.period_delegation.period_type !== undefined
                           ? STAKING_PERIODS.find(
-                              (period) => period.value === periodDelegation.period_type.toString()
+                              (period) =>
+                                period.value ===
+                                periodDelegation.period_delegation.period_type.toString()
                             )?.label + ''
                           : 'Flexible'}
                       </TableCell>
                       <TableCell className="hidden break-words text-center md:table-cell">
-                        {periodDelegation.period_type !== undefined
+                        {periodDelegation.period_delegation.period_type !== undefined
                           ? STAKING_PERIODS.find(
-                              (period) => period.value === periodDelegation.period_type.toString()
+                              (period) =>
+                                period.value ===
+                                periodDelegation.period_delegation.period_type.toString()
                             )?.multiplier
                           : '1.0x'}
                       </TableCell>
                       <TableCell className="break-words text-center">
                         <span className={isMatured ? 'text-green-500' : 'text-yellow-500'}>
                           {(() => {
-                            const endTime = new Date(periodDelegation.end_time)
+                            const endTime = new Date(periodDelegation.period_delegation.end_time)
                             const now = new Date()
                             if (endTime < now) {
                               return (
@@ -287,15 +299,17 @@ export default function DelegationsTable(props: { delegatorEvmAddr: Address }) {
                           <UnstakeDialog
                             validator={validator}
                             isUnstakeDisabled={!isMatured}
-                            delegationId={periodDelegation.period_delegation_id}
+                            delegationId={periodDelegation.period_delegation.period_delegation_id}
                             isMatured={isMatured}
                           />
 
                           <RedelegateDialog
                             validator={validator}
-                            delegationId={periodDelegation.period_delegation_id}
+                            delegationId={periodDelegation.period_delegation.period_delegation_id}
                             delegatedAmount={formatEther(
-                              BigInt(parseInt(periodDelegation.shares.toString())),
+                              BigInt(
+                                parseInt(periodDelegation.period_delegation.shares.toString())
+                              ),
                               'gwei'
                             )}
                           />

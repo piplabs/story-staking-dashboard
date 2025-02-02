@@ -183,7 +183,7 @@ export function RedelegateForm(props: {
         <>
           <h2 className="text-2xl font-bold">Redelegate IP</h2>
           <p>
-            {`Redelegate operation allows a delegator to move its staked tokens from one validator to another. There is a ${feeEther} IP fee to redelegate. The destination validator must support the same token type (locked/unlocked) as the source validator.`}{' '}
+            {`Redelegate operation allows a delegator to move its staked tokens from one validator to another. The destination validator must support the same token type (locked/unlocked) as the source validator.`}{' '}
             Learn more about redelegation from the{' '}
             <a
               href="https://docs.story.foundation/docs/tokenomics-staking#redelegate"
