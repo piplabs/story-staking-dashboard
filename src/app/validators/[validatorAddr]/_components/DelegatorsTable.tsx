@@ -38,7 +38,7 @@ export default function DelegatorsTable(props: { validator: Validator }) {
   const isSmallDevice = useIsSmallDevice()
 
   const { data: validatorDelegations, isLoading } = useValidatorDelegations({
-    validatorAddr: props.validator.evmAddress as Address,
+    validatorAddr: props.validator.consensus_pubkey.value.evm_address,
   })
 
   const columns: ColumnDef<{
@@ -63,7 +63,7 @@ export default function DelegatorsTable(props: { validator: Validator }) {
         }
         return (
           <Link
-            href={`./delegations/${row.original?.delegation.delegator_address.evm_address}`}
+            href={`/delegations/${row.original?.delegation.delegator_address.evm_address}`}
             className="flex flex-row gap-2"
           >
             <Image
@@ -102,37 +102,17 @@ export default function DelegatorsTable(props: { validator: Validator }) {
         )
       },
     },
-    // {
-    //   accessorKey: 'percentage',
-    //   header: ({ column }) => {
-    //     return <HeaderWithSortArrows column={column} header={'% Total Stake'} sorting={sorting} className='' />
-    //   },
-    //   cell: ({ row }) => {
-    //     return <p className=''>{formatEther(BigInt(row.original.balance.amount), 'gwei')} IP</p>
-    //   },
-    // },
   ]
 
   const table = useReactTable({
     data: validatorDelegations?.delegation_responses || [],
     columns,
     getCoreRowModel: getCoreRowModel(),
-    onSortingChange: setSorting,
-    getSortedRowModel: getSortedRowModel(),
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     state: {
-      sorting,
       columnFilters,
-    },
-    initialState: {
-      sorting: [
-        {
-          id: 'stake',
-          desc: true,
-        },
-      ],
     },
   })
 
@@ -188,7 +168,10 @@ export default function DelegatorsTable(props: { validator: Validator }) {
             )}
           </TableBody>
         </Table>
-        <DataTablePagination table={table} />
+        {validatorDelegations?.delegation_responses?.length &&
+          validatorDelegations?.delegation_responses?.length > 0 && (
+            <DataTablePagination table={table} />
+          )}
       </div>
     </>
   )

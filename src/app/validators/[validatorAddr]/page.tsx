@@ -95,7 +95,7 @@ export default function Page({ params }: { params: { validatorAddr: Address } })
           <AddressesCard validator={validator} />
         </div>
       </section>
-      {/* <DelegatorsTable validator={validator} /> */}
+      <DelegatorsTable validator={validator} />
     </div>
   )
 }

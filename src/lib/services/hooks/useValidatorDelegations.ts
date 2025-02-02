@@ -8,9 +8,18 @@ import {
 import { getValidatorDelegations } from '../api/validatorApi'
 
 export function useValidatorDelegations(params: GetValidatorDelegationsParams) {
+  const paramsWithDefault = {
+    ...params,
+    sortDescending: params.sortDescending ?? true,
+  }
+
   return useQuery<GetValidatorDelegationsResponse | undefined>({
-    queryKey: ['validatorDelegations', params.validatorAddr, params.sortDescending],
-    queryFn: () => getValidatorDelegations(params),
+    queryKey: [
+      'validatorDelegations',
+      paramsWithDefault.validatorAddr,
+      paramsWithDefault.sortDescending,
+    ],
+    queryFn: () => getValidatorDelegations(paramsWithDefault),
     staleTime: 0,
   })
 }

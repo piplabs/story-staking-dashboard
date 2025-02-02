@@ -13,7 +13,7 @@ import {
 import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useMemo, useState } from 'react'
-import { Address, formatEther, zeroAddress } from 'viem'
+import { Address, formatEther, isAddressEqual, zeroAddress } from 'viem'
 import { useAccount } from 'wagmi'
 
 import { DataTablePagination } from '@/components/DataTablePagination'
@@ -42,6 +42,8 @@ export default function DelegationsTable(props: { delegatorEvmAddr: Address }) {
 
   const isSmallDevice = useIsSmallDevice()
   const { address: connectedAddress, isConnected } = useAccount()
+  const isDelegatorTheOwner =
+    isConnected && connectedAddress && isAddressEqual(connectedAddress, props.delegatorEvmAddr)
 
   const {
     data: delegatorPeriodDelegations,
@@ -294,27 +296,29 @@ export default function DelegationsTable(props: { delegatorEvmAddr: Address }) {
                           })()}
                         </span>
                       </TableCell>
-                      <TableCell className="hidden md:table-cell">
-                        <div className="flex flex-row gap-4">
-                          <UnstakeDialog
-                            validator={validator}
-                            isUnstakeDisabled={!isMatured}
-                            delegationId={periodDelegation.period_delegation.period_delegation_id}
-                            isMatured={isMatured}
-                          />
+                      {isDelegatorTheOwner && (
+                        <TableCell className="hidden md:table-cell">
+                          <div className="flex flex-row gap-4">
+                            <UnstakeDialog
+                              validator={validator}
+                              isUnstakeDisabled={!isMatured}
+                              delegationId={periodDelegation.period_delegation.period_delegation_id}
+                              isMatured={isMatured}
+                            />
 
-                          <RedelegateDialog
-                            validator={validator}
-                            delegationId={periodDelegation.period_delegation.period_delegation_id}
-                            delegatedAmount={formatEther(
-                              BigInt(
-                                parseInt(periodDelegation.period_delegation.shares.toString())
-                              ),
-                              'gwei'
-                            )}
-                          />
-                        </div>
-                      </TableCell>
+                            <RedelegateDialog
+                              validator={validator}
+                              delegationId={periodDelegation.period_delegation.period_delegation_id}
+                              delegatedAmount={formatEther(
+                                BigInt(
+                                  parseInt(periodDelegation.period_delegation.shares.toString())
+                                ),
+                                'gwei'
+                              )}
+                            />
+                          </div>
+                        </TableCell>
+                      )}
                     </TableRow>
                   )
                 }
@@ -323,9 +327,7 @@ export default function DelegationsTable(props: { delegatorEvmAddr: Address }) {
           )}
         </TableBody>
       </Table>
-      {/* {validatorDelegations && validatorDelegations.delegation_responses.length > 10 && (
-        <DataTablePagination table={table} />
-      )} */}
+      {/* {delegatorPeriodDelegations && <DataTablePagination table={table} />} */}
     </div>
   )
 }

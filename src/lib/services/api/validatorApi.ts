@@ -104,8 +104,10 @@ export async function getValidatorDelegations(
     })
   }
 
-  return {
+  const validatorDelegations = {
     delegation_responses: delegations,
     pagination: response.data.msg.pagination,
   }
+
+  return validatorDelegations
 }
