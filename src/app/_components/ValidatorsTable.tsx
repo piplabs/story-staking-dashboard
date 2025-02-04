@@ -180,7 +180,7 @@ export function ValidatorsTable() {
         {/* <SelectValidatorsFilter /> */}
       </section>
 
-      <div className="relative flex min-h-[600px] flex-col rounded-[32px] border-none bg-primary-grey p-2 text-base text-white lg:p-8">
+      <div className="relative flex max-h-[600px] flex-col rounded-[32px] border-none bg-primary-grey p-2 text-base text-white lg:p-8">
         <Table>
           <TableHeader className="bg-none">
             {table.getHeaderGroups().map((headerGroup) => (

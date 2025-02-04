@@ -41,7 +41,7 @@ export default function RootLayout({
               <Header />
             </header>
             <main className="mx-auto mb-8 w-full flex-1 flex-col px-8 lg:px-16">
-              <script src="https://unpkg.com/react-scan/dist/auto.global.js" async />
+              {/* <script src="https://unpkg.com/react-scan/dist/auto.global.js" async /> */}
               <div className="my-8">
                 <NetworkHealthBanner />
               </div>
