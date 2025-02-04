@@ -150,7 +150,6 @@ export default function DelegationsTable(props: { delegatorEvmAddr: Address }) {
           ) : (
             table.getRowModel().rows.map((row: any) => {
               const validatorDelegation = row.original
-
               return validatorDelegation.periodDelegations?.period_delegation_responses?.map(
                 (periodDelegation: any, pIndex: number) => {
                   const isMatured =

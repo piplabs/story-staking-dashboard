@@ -60,7 +60,7 @@ export function UnstakeForm({ validator }: { validator: Validator }) {
       validatorAddr: validator.consensus_pubkey.value.evm_address,
       delegatorAddr: address || zeroAddress,
     })
-
+  console.log('usf', periodDelegations)
   const formSchema = createFormSchema({
     totalStaked: stakedAmount?.delegation_response.balance.amount,
   })
@@ -74,8 +74,9 @@ export function UnstakeForm({ validator }: { validator: Validator }) {
   })
 
   const selectedPeriodId = form.getValues('periodDelegationId')
-  const selectedDelegation = periodDelegations?.find(
-    (d) => d.period_delegation_id === selectedPeriodId.toString()
+
+  const selectedDelegation = periodDelegations?.period_delegation_responses.find(
+    (d) => d.period_delegation.period_delegation_id === selectedPeriodId.toString()
   )
 
   const txnReceipt = useWaitForTransactionReceipt({
@@ -87,14 +88,18 @@ export function UnstakeForm({ validator }: { validator: Validator }) {
     refetchDelegatorPeriodDelegations()
   }, [txnReceipt.isSuccess, refetchDelegatorStake, refetchDelegatorPeriodDelegations])
 
+  useEffect(() => {
+    refetchDelegatorPeriodDelegations()
+  }, [validator, address])
+
   const maxButtonOnClick = () => {
     const selectedPeriodId = form.getValues('periodDelegationId')
-    const selectedDelegation = periodDelegations?.find(
-      (d) => d.period_delegation_id === selectedPeriodId
+    const selectedDelegation = periodDelegations?.period_delegation_responses.find(
+      (d) => d.period_delegation.period_delegation_id === selectedPeriodId
     )
 
     if (selectedDelegation) {
-      form.setValue('unstakeAmount', selectedDelegation.shares, {
+      form.setValue('unstakeAmount', selectedDelegation.period_delegation.shares, {
         shouldValidate: true,
       })
     }
@@ -127,7 +132,12 @@ export function UnstakeForm({ validator }: { validator: Validator }) {
   const isExceedsAllowableUnstake =
     selectedDelegation &&
     parseInt(form.watch('unstakeAmount')) >
-      parseInt(formatEther(BigInt(parseInt(selectedDelegation.shares).toString()), 'gwei'))
+      parseInt(
+        formatEther(
+          BigInt(parseInt(selectedDelegation.period_delegation.shares).toString()),
+          'gwei'
+        )
+      )
 
   let buttonText
   if (!selectedPeriodId) {
@@ -159,6 +169,8 @@ export function UnstakeForm({ validator }: { validator: Validator }) {
   const isFormDisabled =
     isTxnPending || sign.isPending || txnReceipt.isSuccess || isWaitingForWalletConfirmation
 
+  console.log({ periodDelegations })
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 text-white">
@@ -174,7 +186,7 @@ export function UnstakeForm({ validator }: { validator: Validator }) {
           <p className="font-semibold">Unstaking Fee</p>
           <p className="text-primary-outline">{feeEther} IP</p>
         </section>
-        {periodDelegations?.length ? (
+        {periodDelegations?.period_delegation_responses.length ? (
           <section className="flex flex-col gap-2">
             <p className="font-semibold">Select From Your Stake</p>
             <div className="max-h-80 overflow-y-auto rounded-lg border border-stakingModalOutline bg-black p-4">
@@ -199,58 +211,66 @@ export function UnstakeForm({ validator }: { validator: Validator }) {
                             </tr>
                           </thead>
                           <tbody>
-                            {periodDelegations?.map((delegation: PeriodDelegation, index: any) => {
-                              const isUnlocked = new Date(delegation.end_time) <= new Date()
-                              const stakingPeriod = STAKING_PERIODS.find(
-                                (period) =>
-                                  period.value === (delegation.period_type?.toString() ?? '0')
-                              )
+                            {periodDelegations?.period_delegation_responses.map(
+                              (delegation: any, index: any) => {
+                                console.log({ delegation })
+                                const isUnlocked =
+                                  new Date(delegation.period_delegation.end_time) <= new Date()
+                                const stakingPeriod = STAKING_PERIODS.find(
+                                  (period) =>
+                                    period.value ===
+                                    (delegation.period_delegation.period_type?.toString() ?? '0')
+                                )
 
-                              const unstakeAvailable =
-                                (Number(stakedAmount?.delegation_response.balance.amount || 0) *
-                                  Number(delegation?.shares || 0)) /
-                                Number(stakedAmount?.delegation_response.balance.amount || 1)
-                              return (
-                                <tr
-                                  key={index}
-                                  className="border-b border-stakingModalOutline text-center last:border-b-0"
-                                >
-                                  <td className="py-2">
-                                    <input
-                                      type="radio"
-                                      value={delegation.period_delegation_id}
-                                      checked={field.value === delegation.period_delegation_id}
-                                      disabled={!isUnlocked || isFormDisabled}
-                                      onChange={(e) => {
-                                        field.onChange(e.target.value)
-                                        form.setValue('unstakeAmount', '', {
-                                          shouldValidate: true,
-                                        })
-                                      }}
-                                    />
-                                  </td>
-                                  <td className="py-2 text-sm font-medium">
-                                    {formatLargeMetricsNumber(
-                                      parseFloat(
-                                        formatEther(BigInt(Math.floor(unstakeAvailable)), 'gwei')
-                                      ),
-                                      { useSuffix: false }
-                                    )}{' '}
-                                    IP
-                                  </td>
-                                  <td className="py-2 text-sm text-primary-outline">
-                                    {stakingPeriod
-                                      ? `${stakingPeriod.label} (${stakingPeriod.multiplier} rewards)`
-                                      : ''}
-                                  </td>
-                                  <td className="py-2 text-sm text-primary-outline">
-                                    {isUnlocked
-                                      ? 'Unstakable Now'
-                                      : `Unstakable on ${new Date(delegation.end_time).toLocaleString('en-US', { timeZone: 'UTC' })} UTC`}
-                                  </td>
-                                </tr>
-                              )
-                            })}
+                                const unstakeAvailable =
+                                  (Number(stakedAmount?.delegation_response.balance.amount || 0) *
+                                    Number(delegation?.period_delegation.shares || 0)) /
+                                  Number(stakedAmount?.delegation_response.balance.amount || 1)
+                                return (
+                                  <tr
+                                    key={index}
+                                    className="border-b border-stakingModalOutline text-center last:border-b-0"
+                                  >
+                                    <td className="py-2">
+                                      <input
+                                        type="radio"
+                                        value={delegation.period_delegation.period_delegation_id}
+                                        checked={
+                                          field.value ===
+                                          delegation.period_delegation.period_delegation_id
+                                        }
+                                        disabled={!isUnlocked || isFormDisabled}
+                                        onChange={(e) => {
+                                          field.onChange(e.target.value)
+                                          form.setValue('unstakeAmount', '', {
+                                            shouldValidate: true,
+                                          })
+                                        }}
+                                      />
+                                    </td>
+                                    <td className="py-2 text-sm font-medium">
+                                      {formatLargeMetricsNumber(
+                                        parseFloat(
+                                          formatEther(BigInt(Math.floor(unstakeAvailable)), 'gwei')
+                                        ),
+                                        { useSuffix: false }
+                                      )}{' '}
+                                      IP
+                                    </td>
+                                    <td className="py-2 text-sm text-primary-outline">
+                                      {stakingPeriod
+                                        ? `${stakingPeriod.label} (${stakingPeriod.multiplier} rewards)`
+                                        : ''}
+                                    </td>
+                                    <td className="py-2 text-sm text-primary-outline">
+                                      {isUnlocked
+                                        ? 'Unstakable Now'
+                                        : `Unstakable on ${new Date(delegation.period_delegation.end_time).toLocaleString('en-US', { timeZone: 'UTC' })} UTC`}
+                                    </td>
+                                  </tr>
+                                )
+                              }
+                            )}
                           </tbody>
                         </table>
                       </div>

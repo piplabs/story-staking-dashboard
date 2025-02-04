@@ -33,9 +33,32 @@ export type GetDelegatorDelegationsResponse = {
   pagination: ApiResponsePagination
 }
 
+export type GetDelegatorPeriodDelegationsResponse = {
+  periodDelegations: {
+    balance: DelegationBalance
+    period_delegation_responses: PeriodDelegation[]
+  }
+  pagination: ApiResponsePagination
+}
+
 export type GetDelegatorPeriodDelegationsApiResponse = {
   code: number
-  msg: PeriodDelegation[]
+  msg: GetDelegatorPeriodDelegationsResponse
+  error: string
+}
+
+export type GetDelegatorPeriodDelegationsOnValidatorResponse = {
+  // balance: DelegationBalance
+  period_delegation_responses: {
+    balance: DelegationBalance
+    period_delegation: PeriodDelegation
+  }[]
+  pagination: ApiResponsePagination
+}
+
+export type GetDelegatorPeriodDelegationsOnValidatorApiResponse = {
+  code: number
+  msg: GetDelegatorPeriodDelegationsOnValidatorResponse
   error: string
 }
 
@@ -123,11 +146,4 @@ export type GetUnbondedDelegatorDelegationsApiResponse = {
 export type GetDelegatorPeriodDelegationsParams = {
   delegatorAddr: Address
   sortDescending?: boolean
-}
-
-export type GetDelegatorPeriodDelegationsResponse = {
-  validatorAddr: Address
-  balance: DelegationBalance
-  delegation: Delegation
-  periodDelegations: PeriodDelegation[]
 }

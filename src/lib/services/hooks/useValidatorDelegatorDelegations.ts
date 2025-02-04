@@ -1,9 +1,10 @@
 import { useQuery } from '@tanstack/react-query'
 
+import { getValidatorDelegatorDelegations } from '../api/delegatorApi'
 import {
-  getValidatorDelegatorDelegations,
-} from '../api/delegatorApi'
-import { GetValidatorDelegatorDelegationsParams, GetValidatorDelegatorDelegationsResponse } from '@/lib/types/delegatorApiTypes'
+  GetValidatorDelegatorDelegationsParams,
+  GetValidatorDelegatorDelegationsResponse,
+} from '@/lib/types/delegatorApiTypes'
 
 export function useValidatorDelegatorDelegations(params: GetValidatorDelegatorDelegationsParams) {
   return useQuery<GetValidatorDelegatorDelegationsResponse>({

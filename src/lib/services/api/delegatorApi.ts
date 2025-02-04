@@ -1,7 +1,7 @@
 import { Address } from 'viem'
 
 import { stakingDataAxios } from '@/lib/services/api'
-import { PeriodDelegation } from '@/lib/types'
+import { ApiResponsePagination, DelegationBalance, PeriodDelegation } from '@/lib/types'
 import {
   GetDelegatorDelegationsApiResponse,
   GetDelegatorDelegationsResponse,
@@ -16,6 +16,8 @@ import {
   GetUnbondedDelegatorDelegationsResponse,
   GetValidatorDelegatorDelegationsResponse,
   GetValidatorDelegatorDelegationApiResponse,
+  GetDelegatorPeriodDelegationsOnValidatorApiResponse,
+  GetDelegatorPeriodDelegationsOnValidatorResponse,
 } from '@/lib/types/delegatorApiTypes'
 
 export async function getValidatorDelegatorDelegations(
@@ -38,15 +40,14 @@ export async function getValidatorDelegatorDelegations(
 // Get delegator's period delegations for a specific validator
 export async function getDelegatorPeriodDelegationsOnValidator(
   params: GetDelegatorPeriodDelegationsOnValidatorParams
-): Promise<PeriodDelegation[]> {
-  const response = await stakingDataAxios.get<GetDelegatorPeriodDelegationsApiResponse>(
+): Promise<GetDelegatorPeriodDelegationsOnValidatorResponse> {
+  const response = await stakingDataAxios.get<GetDelegatorPeriodDelegationsOnValidatorApiResponse>(
     `/staking/validators/${params.validatorAddr}/delegators/${params.delegatorAddr}/period_delegations`
   )
 
-  if (response.data.code !== 200) {
-    throw new Error(response.data.error || 'Failed to fetch period delegations')
-  }
-
+  // if (response.data.code !== 200) {
+  //   throw new Error(response.data.error || 'Failed to fetch period delegations')
+  // }
   return response.data.msg
 }
 
