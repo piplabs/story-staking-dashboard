@@ -1,4 +1,4 @@
-# Story Staking Dashboard [WIP]
+# Story Staking Dashboard
 
 > **Note**: This project is still under active development and not all features are complete. Breaking changes may occur.
 
