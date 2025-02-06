@@ -1,6 +1,8 @@
-# Story Staking Dashboard
+# Story Staking Dashboard [WIP]
 
-Website: https://staking.story.foundation
+> **Note**: This project is still under active development and not all features are complete. Breaking changes may occur.
+
+Website: https://aeneid.staking.story.foundation
 API: Coming Soon
 
 ## Overview
@@ -12,4 +14,5 @@ For details on Story staking mechanics and tokenomics, please visit the [documen
 ## Setup
 
 1. Set up environment variables (look at `.env.example`)
-2.
+2. `pnpm install`
+3. `pnpm run dev`
