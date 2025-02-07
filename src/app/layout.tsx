@@ -34,7 +34,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={cn(inter.className, archivo.variable, inter.variable)}>
+      <body className={cn(inter.className, archivo.variable, inter.variable, 'bg-gray-950')}>
+        <div className="bg-dot-gray-700 absolute left-0 top-0 -z-10 h-[100vh] w-full" />
         <WagmiProviderWrapper>
           <div className="flex min-h-screen w-full flex-col">
             <header className="border-b border-white/20 px-8 py-4">

@@ -43,7 +43,8 @@ export default function StakingDataCard(props: StakingDataCardProps) {
           variant: props.variant,
           size: props.size,
           className: props.className,
-        })
+        }),
+        'bg-primary-grey'
       )}
     >
       {props.tooltip ? (

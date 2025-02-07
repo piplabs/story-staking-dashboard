@@ -2,7 +2,7 @@ import { Address, Hex } from 'viem'
 
 export type GetAprApiResponse = {
   code: number
-  msg: string
+  msg: { apr: string }
   error: string
 }
 

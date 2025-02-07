@@ -52,7 +52,7 @@ export default function Metrics() {
       />
       <StakingDataCard
         title="APR"
-        data={apr ? parseFloat(apr).toFixed(2) + '%' : undefined}
+        data={apr || '-'}
         tooltip={'Latest APR based on current inflation and total bonded token amount.'}
         className="grow"
         isFetching={isFetchingApr}
