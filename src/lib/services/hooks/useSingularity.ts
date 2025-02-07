@@ -12,7 +12,6 @@ export function useSingularity() {
       currentBlockHeight: blockHeight,
     }
   }
-
   return {
     error: false,
     isSingularity: blockHeight > process.env.NEXT_PUBLIC_SINGULARITY_BLOCK_HEIGHT ? false : true,

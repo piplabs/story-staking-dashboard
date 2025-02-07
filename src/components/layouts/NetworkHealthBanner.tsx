@@ -6,9 +6,12 @@ import React from 'react'
 import { links } from '@/lib/constants'
 import useNetworkHealth from '@/lib/services/hooks/useNetworkHealth'
 import { cn } from '@/lib/utils'
+import { useSingularity } from '@/lib/services/hooks/useSingularity'
+import TooltipWrapper from '../TooltipWrapper'
 
 export default function NetworkHealthBanner() {
   const { data: networkHealth } = useNetworkHealth()
+  const { isSingularity } = useSingularity()
 
   if (!networkHealth) return null
   if (networkHealth.status === 'Pending') return null
@@ -26,7 +29,7 @@ export default function NetworkHealthBanner() {
     },
     text: {
       Normal: (
-        <p className="">
+        <p className="flex items-center">
           Network is operating normally. Current block height is{' '}
           {networkHealth.execution_block_height}.
         </p>
@@ -66,15 +69,40 @@ export default function NetworkHealthBanner() {
     <div className="w-full">
       <div
         className={cn(
-          'flex flex-row gap-2 rounded-lg border px-4 py-2.5 font-medium text-white',
+          'flex flex-row gap-2 rounded-lg border px-4 py-2.5 font-medium text-white my-auto align-middle',
           statusDisplay.style[networkHealth.status]
         )}
       >
-        {statusDisplay.icon[networkHealth.status]}
+        <div className="flex my-auto">{statusDisplay.icon[networkHealth.status]}</div>
         {statusDisplay.text[networkHealth.status]}
+        <SingularityIndicator />
       </div>
     </div>
   )
+}
+
+function SingularityIndicator() {
+  const { isSingularity } = useSingularity()
+
+  if (isSingularity) {
+    return (
+      <TooltipWrapper content="The first 1,580,851 blocks after the genesis is called Singularity, during which everyone can create a validator and stake tokens but the active validator set will only have the genesis validators. Unstake and redelegate are not supported during this time. Learn more about network Singularity in the documentation (https://docs.story.foundation/docs/tokenomics-staking#singularity)">
+        <span className="flex items-center justify-center rounded-full text-[#E4CE07]">
+          Network is currently in&nbsp;
+          <Link
+            href="https://docs.story.foundation/docs/tokenomics-staking#singularity"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline"
+          >
+            Singularity
+          </Link>
+          .
+        </span>
+      </TooltipWrapper>
+    )
+  }
+  return null
 }
 
 function GreenCheck() {
