@@ -16,11 +16,7 @@ export default function Metrics() {
     isError: isErrorValidators,
   } = useAllValidators({})
 
-  const {
-    data: stsakingPool,
-    isFetching: isFetchingStake,
-    isError: isErrorStake,
-  } = useStakingPool()
+  const { data: stakingPool, isFetching: isFetchingStake, isError: isErrorStake } = useStakingPool()
   const { data: apr, isFetching: isFetchingApr, isError: isErrorApr } = useApr()
 
   const isSmallDevice = useIsSmallDevice()
@@ -37,9 +33,9 @@ export default function Metrics() {
       <StakingDataCard
         title="Total Staked"
         data={
-          stsakingPool
+          stakingPool
             ? formatLargeMetricsNumber(
-                formatEther(BigInt(stsakingPool.pool.bonded_tokens), 'gwei'),
+                formatEther(BigInt(stakingPool.pool.bonded_tokens), 'gwei'),
                 {
                   useSuffix: isSmallDevice,
                 }
