@@ -29,7 +29,7 @@ import {
 import { useReadIpTokenStakeMinStakeAmount, useWriteIpTokenStakeStake } from '@/lib/contracts'
 import { useValidatorDelegatorDelegations } from '@/lib/services/hooks/useValidatorDelegatorDelegations'
 import { Validator } from '@/lib/types'
-import { cn, formatLargeMetricsNumber, truncateAddress } from '@/lib/utils'
+import { base64ToHex, cn, formatLargeMetricsNumber, truncateAddress } from '@/lib/utils'
 
 import ViewTransaction from '../buttons/ViewTransaction'
 import SelectValidators from '../views/ListOfValidators'
@@ -92,7 +92,7 @@ export function StakeForm(props: { validator: Validator; isFlexible?: boolean })
     address: address,
   })
   const { refetch: refetchDelegatorStake } = useValidatorDelegatorDelegations({
-    validatorAddr: props.validator.consensus_pubkey.value.evm_address,
+    validatorAddr: props.validator.operator_address,
     delegatorAddr: address || zeroAddress,
   })
 
@@ -105,7 +105,7 @@ export function StakeForm(props: { validator: Validator; isFlexible?: boolean })
     resolver: zodResolver(formSchema),
     defaultValues: {
       stakeAmount: '1024',
-      validator: props.validator?.consensus_pubkey.value.evm_address || '',
+      validator: props.validator?.operator_address || '',
       stakingPeriod: '0',
     },
   })
@@ -120,15 +120,13 @@ export function StakeForm(props: { validator: Validator; isFlexible?: boolean })
   }, [txnReceipt.isSuccess])
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    if (props.validator?.consensus_pubkey.value.evm_address !== undefined) {
-      form.setValue('validator', props.validator.consensus_pubkey.value.evm_address)
+    if (props.validator?.operator_address !== undefined) {
+      form.setValue('validator', props.validator.operator_address)
     }
     const { stakeAmount, validator, stakingPeriod } = values
 
     const stakeInputs: [Address, number, Hex] = [
-      (props.validator
-        ? `0x${props.validator.consensus_pubkey.value.compressed_hex_pubkey}`
-        : '') as Hex,
+      (props.validator ? `0x${base64ToHex(props.validator.operator_address)}` : '') as Hex,
       parseInt(stakingPeriod),
       '0x',
     ]
@@ -210,11 +208,8 @@ export function StakeForm(props: { validator: Validator; isFlexible?: boolean })
                         className="flex h-12 w-full cursor-pointer items-center justify-between rounded-lg border border-solid border-stakingModalOutline bg-black px-4 hover:bg-[#202020]"
                       >
                         <p className="truncate font-medium text-white">
-                          {truncateAddress(
-                            props.validator?.consensus_pubkey.value.evm_address || '',
-                            8,
-                            8
-                          ) || truncateAddress(form.getValues('validator'), 8, 6)}
+                          {truncateAddress(props.validator?.operator_address || '', 8, 8) ||
+                            truncateAddress(form.getValues('validator'), 8, 6)}
                         </p>
                         <ChevronRight color="white" className="h-6 w-6" />
                       </Button>

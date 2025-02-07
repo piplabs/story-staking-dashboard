@@ -11,7 +11,7 @@ export type GetDelegatorPeriodDelegationsResponse = {
   balance: DelegationBalance
   validatorAddr: Address
   delegation: Delegation
-  periodDelegation: PeriodDelegation
+  periodDelegations: PeriodDelegation
 }[]
 
 export function useDelegatorPeriodDelegations(params: GetDelegatorPeriodDelegationsParams) {
@@ -31,7 +31,7 @@ export function useDelegatorPeriodDelegations(params: GetDelegatorPeriodDelegati
       await Promise.all(
         delegatorDelegations.delegation_responses.map(async (delegationResponse) => {
           const validatorAddr = delegationResponse.delegation.validator_address
-          const delegatorAddr = delegationResponse.delegation.delegator_address.evm_address
+          const delegatorAddr = delegationResponse.delegation.delegator_address
 
           // Initialize validator entry if not exists
           if (!validatorDelegationsMap.has(validatorAddr)) {
@@ -39,7 +39,7 @@ export function useDelegatorPeriodDelegations(params: GetDelegatorPeriodDelegati
               validatorAddr: validatorAddr,
               balance: delegationResponse.balance,
               delegation: delegationResponse.delegation,
-              periodDelegations: [],
+              periodDelegations: null,
             })
           }
 
@@ -47,7 +47,6 @@ export function useDelegatorPeriodDelegations(params: GetDelegatorPeriodDelegati
             validatorAddr,
             delegatorAddr,
           })
-
           // Add period delegations data to map
           const validatorDelegations = validatorDelegationsMap.get(validatorAddr)
           if (validatorDelegations) {
@@ -55,9 +54,10 @@ export function useDelegatorPeriodDelegations(params: GetDelegatorPeriodDelegati
           }
         })
       )
+
       return Array.from(validatorDelegationsMap.values())
     },
-    staleTime: 0,
     enabled: !!params.delegatorAddr && !!delegatorDelegations,
+    staleTime: 0,
   })
 }

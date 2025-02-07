@@ -10,7 +10,12 @@ import { useStakingPool } from '@/lib/services/hooks/useStakingPool'
 import { useValidatorDelegations } from '@/lib/services/hooks/useValidatorDelegations'
 import { useValidatorDelegatorDelegations } from '@/lib/services/hooks/useValidatorDelegatorDelegations'
 import { Validator } from '@/lib/types'
-import { formatLargeMetricsNumber, formatPercentage, truncateAddress } from '@/lib/utils'
+import {
+  base64ToHex,
+  formatLargeMetricsNumber,
+  formatPercentage,
+  truncateAddress,
+} from '@/lib/utils'
 
 export function AddressesCard({ validator }: { validator: Validator }) {
   return (
@@ -24,23 +29,23 @@ export function AddressesCard({ validator }: { validator: Validator }) {
           tooltipInfo="The preferred name of the validator node operator"
           isValueAddress={false}
         />
-        <DataRow
+        {/* <DataRow
           title="Validator Address"
           value={validator.consensus_pubkey.value.validator_address}
           tooltipInfo="The address of the validator in Bech32 format (storyvaloper prefix)"
           isValueAddress={true}
-        />
+        /> */}
         <DataRow
           title="EVM Address"
-          value={getAddress(validator.consensus_pubkey.value.evm_address)}
+          value={getAddress(validator.operator_address)}
           tooltipInfo="EVM Address of the validator"
           isValueAddress={true}
         />
         <DataRow
           title="Compressed Pubkey (hex)"
           value={
-            validator.consensus_pubkey.value.compressed_hex_pubkey
-              ? `0x${validator.consensus_pubkey.value.compressed_hex_pubkey.replace('0x', '')}`
+            validator.consensus_pubkey.value
+              ? `0x${base64ToHex(validator.consensus_pubkey.value)}`
               : '-'
           }
           tooltipInfo="The validator's compressed public key in hex format"
@@ -55,8 +60,8 @@ export function AddressesCard({ validator }: { validator: Validator }) {
 export function StakeInfoCard({ validator }: { validator: Validator }) {
   const totalStakedIp = formatEther(BigInt(Math.floor(parseFloat(validator.tokens))), 'gwei')
   const { data: selfStake } = useValidatorDelegatorDelegations({
-    validatorAddr: validator.consensus_pubkey.value.evm_address,
-    delegatorAddr: validator.consensus_pubkey.value.evm_address,
+    validatorAddr: validator.operator_address,
+    delegatorAddr: validator.operator_address,
   })
   const delegatedStakeAmount = selfStake
     ? formatLargeMetricsNumber(
@@ -150,7 +155,7 @@ export function DataRow({
 
 export function OverviewCard({ validator }: { validator: Validator }) {
   const { data: delegatorDelegations } = useValidatorDelegations({
-    validatorAddr: validator.evmAddress,
+    validatorAddr: validator.operator_address,
   })
   const { data: bondedTokensGwei } = useStakingPool()
   const totalStakedIp = formatEther(BigInt(Math.floor(Number(validator.tokens) * 1e9)), 'wei')

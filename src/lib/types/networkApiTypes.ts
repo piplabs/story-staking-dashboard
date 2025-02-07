@@ -21,8 +21,8 @@ export type GetNetworkHealthResponse = {
 }
 
 export type EvmOperation = {
-  error_code: string
-  event_msg: string
+  tx_hash: Hex
+  block_height: number
   event_type:
     | 'CreateValidator'
     | 'Deposit'
@@ -32,12 +32,13 @@ export type EvmOperation = {
     | 'Redelegate'
     | 'Withdraw'
     | 'Unjail'
-  height: number
-  status: string
-  target_delegator: string
-  target_validator: string
-  tx_hash: Hex
-  parsedEventMsg: any
+  address: Address
+  src_validator_address: Address
+  dst_validator_address: Address
+  dst_address: Address
+  status_ok: boolean
+  error_code: string
+  amount: string
 }
 
 export type GetEvmOperationsResponse = {

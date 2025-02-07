@@ -93,16 +93,6 @@ export default function ActivityTable(props: { delegatorEvmAddr: Address }) {
           {table.getRowModel().rows.length ? (
             table.getRowModel().rows.map((row) => {
               const operation = row.original as EvmOperation
-              let parsedEventMsg
-              if (operation.event_type.toLowerCase() === 'withdraw') {
-                parsedEventMsg = operation.parsedEventMsg.unstakeAmount
-              } else if (operation.event_type.toLowerCase() === 'deposit') {
-                parsedEventMsg = operation.parsedEventMsg.stakeAmount
-              } else if (operation.event_type.toLowerCase() === 'redelegate') {
-                parsedEventMsg = operation.parsedEventMsg.amount
-              } else {
-                parsedEventMsg = undefined
-              }
 
               return (
                 <TableRow key={row.id} className="border-none">
@@ -110,34 +100,34 @@ export default function ActivityTable(props: { delegatorEvmAddr: Address }) {
                     <span
                       className={cn(
                         'capitalize',
-                        operation.status.toLowerCase() === 'success'
+                        operation.status_ok === true
                           ? 'text-green-500'
-                          : operation.status.toLowerCase() === 'fail'
+                          : operation.status_ok === false
                             ? 'text-red-500'
                             : ''
                       )}
                     >
-                      {operation.status}
+                      {operation.status_ok ? 'Success' : 'Fail'}
                     </span>
                   </TableCell>
                   <TableCell className="text-center font-semibold">
                     {operation.event_type}
                   </TableCell>
                   <TableCell className="text-center">
-                    {parsedEventMsg ? `${formatEther(parsedEventMsg, 'wei')} IP` : '-'}
+                    {operation.amount ? `${formatEther(BigInt(operation.amount), 'gwei')} IP` : '-'}
                   </TableCell>
                   <TableCell className="text-center">
                     <Link
-                      href={`/validators/${operation.target_validator}`}
+                      href={`/validators/${operation.dst_validator_address}`}
                       className="flex flex-row justify-center gap-2"
                     >
-                      {truncateAddress(operation.target_validator, 8, 6)}
+                      {truncateAddress(operation.dst_validator_address, 8, 6)}
                       <div className="my-auto flex">
                         <ExternalLinkIcon className="ml-1 h-4 w-4" />
                       </div>
                     </Link>
                   </TableCell>
-                  <TableCell className="text-center">{operation.height}</TableCell>
+                  <TableCell className="text-center">{operation.block_height}</TableCell>
                   <TableCell className="text-center">
                     <Link
                       href={`${explorerUrl}/tx/${operation.tx_hash}`}

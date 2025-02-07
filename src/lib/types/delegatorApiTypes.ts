@@ -82,15 +82,15 @@ export type GetDelegatorRewardsApiResponse = {
   code: number
   msg: {
     address: Address
-    rewards: string
-    type: string
+    amount: string
+    last_update_height: number
   }
   error: string
 }
 
 export type GetDelegatorRewardsResponse = {
   accumulatedRewards: bigint
-  type: string
+  lastUpdateHeight: number
 }
 
 export type GetDelegatorRewardsParams = {

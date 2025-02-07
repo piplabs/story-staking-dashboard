@@ -38,7 +38,7 @@ export default function DelegatorsTable(props: { validator: Validator }) {
   const isSmallDevice = useIsSmallDevice()
 
   const { data: validatorDelegations, isLoading } = useValidatorDelegations({
-    validatorAddr: props.validator.consensus_pubkey.value.evm_address,
+    validatorAddr: props.validator.operator_address,
   })
 
   const columns: ColumnDef<{
@@ -46,7 +46,7 @@ export default function DelegatorsTable(props: { validator: Validator }) {
     balance: DelegationBalance
   }>[] = [
     {
-      accessorKey: 'delegation.delegator_address.evm_address',
+      accessorKey: 'delegation.delegator_address',
       header: ({ column }) => {
         return (
           <HeaderWithSortArrows column={column} header={'Address'} sorting={sorting} className="" />
@@ -54,20 +54,21 @@ export default function DelegatorsTable(props: { validator: Validator }) {
       },
       cell: ({ row }) => {
         let delegatorText
-        if (row.original?.delegation.delegator_address.evm_address) {
+        if (row.original?.delegation.delegator_address) {
           const isDelegatorTheValidator = isAddressEqual(
-            row.original?.delegation.delegator_address.evm_address as Address,
-            props.validator?.consensus_pubkey.value.evm_address as Address
+            row.original?.delegation.delegator_address as Address,
+            props.validator?.operator_address as Address
           )
           delegatorText = isDelegatorTheValidator ? ' (Self-delegation)' : ''
         }
+
         return (
           <Link
-            href={`/delegations/${row.original?.delegation.delegator_address.evm_address}`}
+            href={`/delegations/${row.original?.delegation.delegator_address}`}
             className="flex flex-row gap-2"
           >
             <Image
-              src={`https://cdn.stamp.fyi/avatar/${row.original?.delegation.delegator_address.evm_address}`}
+              src={`https://cdn.stamp.fyi/avatar/${row.original?.delegation.delegator_address}`}
               alt="Avatar thumbnail"
               className="rounded-[4px]"
               width={24}
@@ -75,8 +76,8 @@ export default function DelegatorsTable(props: { validator: Validator }) {
             />
             <p className="">
               {(isSmallDevice
-                ? truncateAddress(row.original?.delegation.delegator_address.evm_address, 10, 4)
-                : row.original?.delegation.delegator_address.evm_address) + delegatorText}
+                ? truncateAddress(row.original?.delegation.delegator_address, 10, 4)
+                : row.original?.delegation.delegator_address) + delegatorText}
             </p>
           </Link>
         )

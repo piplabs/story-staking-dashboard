@@ -40,9 +40,7 @@ export type GetValidatorParams = {
 }
 export type GetValidatorApiResponse = {
   code: number
-  msg: {
-    validator: Validator
-  }
+  msg: Validator
   error: string
 }
 

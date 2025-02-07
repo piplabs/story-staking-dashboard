@@ -55,16 +55,16 @@ export function ValidatorsTable() {
       cell: ({ row }) => {
         const moniker = row.original.description.moniker
 
-        const name = row.original.consensus_pubkey.value.evm_address
+        const name = row.original.operator_address
           ? size.width > 768
-            ? row.original.consensus_pubkey.value.evm_address
-            : truncateAddress(row.original.consensus_pubkey.value.evm_address, 6, 4)
+            ? row.original.operator_address
+            : truncateAddress(row.original.operator_address, 6, 4)
           : ''
 
         return (
           <div className="flex flex-row gap-2">
             <Image
-              src={`https://cdn.stamp.fyi/avatar/${row.original.consensus_pubkey.value.evm_address}`}
+              src={`https://cdn.stamp.fyi/avatar/${row.original.operator_address}`}
               alt="Validator Avatar"
               className="rounded-[4px]"
               width={24}
@@ -207,10 +207,7 @@ export function ValidatorsTable() {
                 >
                   {row.getVisibleCells().map((cell, index) => (
                     <TableCell key={cell.id}>
-                      <Link
-                        href={`/validators/${row.original.consensus_pubkey.value.evm_address}`}
-                        key={row.id}
-                      >
+                      <Link href={`/validators/${row.original.operator_address}`} key={row.id}>
                         {flexRender(cell.column.columnDef.cell, cell.getContext())}
                       </Link>
                     </TableCell>

@@ -79,3 +79,13 @@ export function convertKeysToCamelCase(obj: any): any {
     {} as Record<string, any>
   )
 }
+
+export function base64ToHex(base64: string): string {
+  // Decode Base64 to a binary string
+  const binary = atob(base64)
+
+  // Convert binary string to hex
+  return Array.from(binary)
+    .map((char) => char.charCodeAt(0).toString(16).padStart(2, '0'))
+    .join('')
+}

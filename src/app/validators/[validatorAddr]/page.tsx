@@ -31,7 +31,6 @@ export default function Page({ params }: { params: { validatorAddr: Address } })
   } = useValidator({ validatorAddr: params.validatorAddr })
 
   const moniker = validator?.description?.moniker
-
   if (!validator && isFetched) {
     return <div>Validator not found</div>
   }

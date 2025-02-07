@@ -20,7 +20,7 @@ export function YourStakeCard(props: { validator: Validator }) {
   })
 
   const { data: stakedAmountResponse, refetch } = useValidatorDelegatorDelegations({
-    validatorAddr: props.validator.consensus_pubkey.value.evm_address,
+    validatorAddr: props.validator.operator_address,
     delegatorAddr: address || zeroAddress,
   })
 

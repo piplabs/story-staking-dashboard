@@ -26,7 +26,7 @@ import { useDelegatorPeriodDelegationsOnValidator } from '@/lib/services/hooks/u
 import { useUnbondedDelegatorDelegations } from '@/lib/services/hooks/useUnbondedDelegatorDelegations'
 import { useValidatorDelegatorDelegations } from '@/lib/services/hooks/useValidatorDelegatorDelegations'
 import { Validator } from '@/lib/types'
-import { cn } from '@/lib/utils'
+import { base64ToHex, cn } from '@/lib/utils'
 
 import ViewTransaction from '../buttons/ViewTransaction'
 
@@ -61,13 +61,13 @@ export function UnstakeDelegationIdForm({
     useWriteIpTokenStakeUnstake()
 
   const { refetch: refetchDelegatorStake } = useValidatorDelegatorDelegations({
-    validatorAddr: validator.consensus_pubkey.value.evm_address,
+    validatorAddr: validator.operator_address,
     delegatorAddr: address || zeroAddress,
   })
 
   const { data: periodDelegations, refetch: refetchDelegatorPeriodDelegationsOnValidator } =
     useDelegatorPeriodDelegationsOnValidator({
-      validatorAddr: validator.consensus_pubkey.value.evm_address,
+      validatorAddr: validator.operator_address,
       delegatorAddr: address || zeroAddress,
     })
 
@@ -120,7 +120,7 @@ export function UnstakeDelegationIdForm({
 
     const { unstakeAmount } = values
     const unstakeInputs: [Address, bigint, bigint, Hex] = [
-      `0x${validator.consensus_pubkey.value.compressed_hex_pubkey}`,
+      `0x${base64ToHex(validator.consensus_pubkey.value)}`,
       BigInt(delegationId),
       parseEther(unstakeAmount),
       '0x',
@@ -189,7 +189,7 @@ export function UnstakeDelegationIdForm({
         <section className="flex flex-col">
           <p className="font-semibold">Validator</p>
           <p className="text-primary-outline">
-            {validator.description.moniker || validator.consensus_pubkey.value.evm_address}
+            {validator.description.moniker || validator.operator_address}
           </p>
         </section>
 

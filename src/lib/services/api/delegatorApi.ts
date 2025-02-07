@@ -1,4 +1,4 @@
-import { Address } from 'viem'
+import { Address, formatEther } from 'viem'
 
 import { stakingDataAxios } from '@/lib/services/api'
 import { ApiResponsePagination, DelegationBalance, PeriodDelegation } from '@/lib/types'
@@ -77,27 +77,33 @@ export async function getDelegatorDelegations(
     pagination: response.data.msg.pagination,
   }
 }
-
 export async function getDelegatorRewards(
   params: GetDelegatorRewardsParams
 ): Promise<GetDelegatorRewardsResponse> {
   const response = await stakingDataAxios.get<GetDelegatorRewardsApiResponse>(
-    `/delegator/${params.delegatorAddr}/rewards`
+    `/rewards/${params.delegatorAddr}`
   )
 
   if (response.data.code !== 200) {
     throw new Error(response.data.error || 'Failed to fetch total rewards')
   }
-  const rewards = response.data.msg.rewards
 
-  if (rewards.includes('e')) {
-    const [mantissa, exponent] = rewards.split('e')
+  const rewards = response.data.msg
+
+  if (rewards.amount.includes('e')) {
+    const [mantissa, exponent] = rewards.amount.split('e')
     const exp = parseInt(exponent)
     const value = parseFloat(mantissa) * Math.pow(10, exp)
-    return { accumulatedRewards: BigInt(Math.floor(value)), type: response.data.msg.type }
+    return {
+      accumulatedRewards: BigInt(formatEther(BigInt(Math.floor(value)), 'gwei')),
+      lastUpdateHeight: rewards.last_update_height,
+    }
   }
 
-  return { accumulatedRewards: BigInt(rewards), type: response.data.msg.type }
+  return {
+    accumulatedRewards: BigInt(formatEther(BigInt(rewards.amount), 'gwei')),
+    lastUpdateHeight: rewards.last_update_height,
+  }
 }
 
 export async function getUnbondedDelegatorDelegations(

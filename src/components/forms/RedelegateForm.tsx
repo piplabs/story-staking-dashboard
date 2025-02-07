@@ -32,7 +32,7 @@ import { useAllValidators } from '@/lib/services/hooks/useAllValidators'
 import { useDelegatorDelegations } from '@/lib/services/hooks/useDelegatorDelegations'
 import { useDelegatorPeriodDelegationsOnValidator } from '@/lib/services/hooks/useDelegatorPeriodDelegationsOnValidator'
 import { Validator } from '@/lib/types'
-import { cn, formatLargeMetricsNumber, truncateAddress } from '@/lib/utils'
+import { base64ToHex, cn, formatLargeMetricsNumber, truncateAddress } from '@/lib/utils'
 
 import ViewTransaction from '../buttons/ViewTransaction'
 
@@ -82,7 +82,7 @@ export function RedelegateForm(props: {
 
   // Refetch data after successful redelegations
   const { refetch: refetchDelegatorPeriodDelegations } = useDelegatorPeriodDelegationsOnValidator({
-    validatorAddr: props.validator.consensus_pubkey.value.evm_address,
+    validatorAddr: props.validator.operator_address,
     delegatorAddr: address || zeroAddress,
   })
   const { refetch: refetchDelegations } = useDelegatorDelegations({
@@ -108,17 +108,16 @@ export function RedelegateForm(props: {
   const { data: filteredValidatorsData } = useAllValidators({ tokenType: supportedTokenType })
 
   const filteredValidators = filteredValidatorsData?.allValidators?.filter((validator) => {
-    const validatorKey = validator.consensus_pubkey.value.compressed_hex_pubkey
-    const sourceKey = props.validator.consensus_pubkey.value.compressed_hex_pubkey
-    return validatorKey !== sourceKey
+    const validatorAddr = validator.operator_address
+    const sourceAddr = props.validator.operator_address
+    return validatorAddr !== sourceAddr
   })
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       redelegateAmount: '1024',
-      sourceValidator:
-        props.validator.description.moniker || props.validator.consensus_pubkey.value.evm_address,
+      sourceValidator: props.validator.description.moniker || props.validator.operator_address,
       destinationValidator: '',
       delegationId: props.delegationId || '1',
     },
@@ -135,7 +134,7 @@ export function RedelegateForm(props: {
       : `0x${destinationValidator}`
 
     const inputs: [Hex, Hex, bigint, bigint] = [
-      `0x${props.validator.consensus_pubkey.value.compressed_hex_pubkey}` as Hex, // validatorUncmpSrcPubkey
+      `0x${base64ToHex(props.validator.consensus_pubkey.value)}`, // validatorUncmpSrcPubkey
       formattedDestinationValidator as Hex, // validatorUncmpDstPubkey
       BigInt(delegationId), // delegationId
       parseEther(redelegateAmount), // amount
@@ -243,10 +242,10 @@ export function RedelegateForm(props: {
                   <SelectContent className="bg-black text-white">
                     {filteredValidators?.map((validator) => (
                       <SelectItem
-                        key={validator.consensus_pubkey.value.compressed_hex_pubkey}
-                        value={validator.consensus_pubkey.value.compressed_hex_pubkey}
+                        key={validator.operator_address}
+                        value={validator.operator_address}
                       >
-                        {validator.description?.moniker || validator.evmAddress}
+                        {validator.description?.moniker || validator.operator_address}
                       </SelectItem>
                     ))}
                   </SelectContent>

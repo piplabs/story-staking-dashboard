@@ -57,12 +57,11 @@ export async function getValidator(params: GetValidatorParams): Promise<Validato
   const response = await stakingDataAxios.get<GetValidatorApiResponse>(
     `/staking/validators/${params.validatorAddr}`
   )
-
   if (response.data.code !== 200) {
     throw new Error(response.data.error || 'Failed to fetch validator')
   }
 
-  return response.data.msg.validator
+  return response.data.msg
 }
 
 export async function getValidatorDelegations(

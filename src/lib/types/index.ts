@@ -30,30 +30,19 @@ export type IpAsset = {
 }
 
 export type Validator = {
-  operator_address: string
+  operator_address: Address
   consensus_pubkey: {
     type: string
-    value: {
-      compressed_base64_pubkey: string
-      compressed_hex_pubkey: string
-      delegator_address: string
-      evm_address: Address
-      uncompressed_hex_pubkey: string
-      validator_address: string
-    }
+    value: string
   }
-  decodedCmpPubkey?: string
-  evmAddress: Address
   status: number
-  support_token_type?: number
-  supportedTokenType?: 'LOCKED' | 'UNLOCKED'
+  support_token_type: 0 | 1
   tokens: string
+  jailed: boolean
   delegator_shares: string
   description: {
     moniker: string
   }
-
-  unbonding_time: string
   commission: {
     commission_rates: {
       rate: string
@@ -62,7 +51,6 @@ export type Validator = {
     }
     update_time: string
   }
-  min_self_delegation: string
   uptime: string
 }
 export type DelegatorDelegationAndBalance = {
@@ -73,11 +61,7 @@ export type DelegatorDelegationAndBalance = {
 }
 
 export type Delegation = {
-  delegator_address: {
-    compressed_pubkey: string
-    evm_address: Address
-    uncompressed_pubkey: string
-  }
+  delegator_address: Address
   validator_address: Address
   shares: string
 }

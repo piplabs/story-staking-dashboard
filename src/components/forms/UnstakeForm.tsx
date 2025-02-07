@@ -24,7 +24,7 @@ import { useWriteIpTokenStakeUnstake } from '@/lib/contracts'
 import { useDelegatorPeriodDelegationsOnValidator } from '@/lib/services/hooks/useDelegatorPeriodDelegationsOnValidator'
 import { useValidatorDelegatorDelegations } from '@/lib/services/hooks/useValidatorDelegatorDelegations'
 import { PeriodDelegation, Validator } from '@/lib/types'
-import { cn, formatLargeMetricsNumber } from '@/lib/utils'
+import { base64ToHex, cn, formatLargeMetricsNumber } from '@/lib/utils'
 
 import ViewTransaction from '../buttons/ViewTransaction'
 import { STAKING_PERIODS } from './StakeForm'
@@ -52,15 +52,15 @@ export function UnstakeForm({ validator }: { validator: Validator }) {
     useWriteIpTokenStakeUnstake()
 
   const { data: stakedAmount, refetch: refetchDelegatorStake } = useValidatorDelegatorDelegations({
-    validatorAddr: validator.consensus_pubkey.value.evm_address,
+    validatorAddr: validator.operator_address,
     delegatorAddr: address || zeroAddress,
   })
   const { data: periodDelegations, refetch: refetchDelegatorPeriodDelegations } =
     useDelegatorPeriodDelegationsOnValidator({
-      validatorAddr: validator.consensus_pubkey.value.evm_address,
+      validatorAddr: validator.operator_address,
       delegatorAddr: address || zeroAddress,
     })
-  console.log('usf', periodDelegations)
+
   const formSchema = createFormSchema({
     totalStaked: stakedAmount?.delegation_response.balance.amount,
   })
@@ -111,7 +111,7 @@ export function UnstakeForm({ validator }: { validator: Validator }) {
     const { unstakeAmount, periodDelegationId } = values
 
     const unstakeInputs: [Address, bigint, bigint, Hex] = [
-      `0x${validator.consensus_pubkey.value.compressed_hex_pubkey}`,
+      `0x${base64ToHex(validator.consensus_pubkey.value)}`,
       BigInt(periodDelegationId),
       parseEther(unstakeAmount),
       '0x',
@@ -169,8 +169,6 @@ export function UnstakeForm({ validator }: { validator: Validator }) {
   const isFormDisabled =
     isTxnPending || sign.isPending || txnReceipt.isSuccess || isWaitingForWalletConfirmation
 
-  console.log({ periodDelegations })
-
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 text-white">
@@ -178,7 +176,7 @@ export function UnstakeForm({ validator }: { validator: Validator }) {
         <section className="flex flex-col">
           <p className="font-semibold">Validator</p>
           <p className="text-primary-outline">
-            {validator.description.moniker || validator.consensus_pubkey.value.evm_address}
+            {validator.description.moniker || validator.operator_address}
           </p>
         </section>
 
@@ -213,7 +211,6 @@ export function UnstakeForm({ validator }: { validator: Validator }) {
                           <tbody>
                             {periodDelegations?.period_delegation_responses.map(
                               (delegation: any, index: any) => {
-                                console.log({ delegation })
                                 const isUnlocked =
                                   new Date(delegation.period_delegation.end_time) <= new Date()
                                 const stakingPeriod = STAKING_PERIODS.find(

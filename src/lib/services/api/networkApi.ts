@@ -33,38 +33,18 @@ export async function getNetworkHealth(): Promise<GetNetworkHealthResponse> {
 export async function getEvmOperations(
   params: GetEvmOperationsParams
 ): Promise<GetEvmOperationsResponse> {
-  function parseEventMsg(operation: EvmOperation) {
-    switch (operation.event_type) {
-      case 'Withdraw':
-        return { unstakeAmount: JSON.parse(operation.event_msg).unstakeAmount }
-      case 'Deposit':
-        return JSON.parse(operation.event_msg)
-      case 'Redelegate':
-        return { amount: JSON.parse(operation.event_msg).amount }
-      default:
-        return null
-    }
-  }
-
-  const response = await stakingDataAxios.post<GetEvmOperationsApiResponse>(
-    `/operation/evm/${params.evmAddr}`,
+  const response = await stakingDataAxios.get<GetEvmOperationsApiResponse>(
+    `/operations/${params.evmAddr}`,
     {
-      page: params.page,
-      size: params.pageSize,
-      event_type: '',
+      params: {
+        page: params.page,
+        per_page: params.pageSize,
+      },
     }
   )
 
-  if (response.status === 200) {
-    const parsedOperations = response.data.msg.operations.map((operation) => ({
-      ...operation,
-      parsedEventMsg: parseEventMsg(operation),
-    }))
-
-    return {
-      total: response.data.msg.total,
-      operations: parsedOperations,
-    }
+  if (response.data.code === 200) {
+    return response.data.msg
   }
 
   return {} as GetEvmOperationsResponse
