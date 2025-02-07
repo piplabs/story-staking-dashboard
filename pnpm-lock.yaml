@@ -157,6 +157,9 @@ devDependencies:
   lint-staged:
     specifier: ^15.4.1
     version: 15.4.3
+  mini-svg-data-uri:
+    specifier: ^1.4.4
+    version: 1.4.4
   postcss:
     specifier: ^8.5.1
     version: 8.5.1
@@ -9405,6 +9408,11 @@ packages:
   /mimic-function@5.0.1:
     resolution: {integrity: sha512-VP79XUPxV2CigYP3jWwAUFSku2aKqBH7uTAapFWCBqutsbmDo96KY5o8uh6U+/YSIn5OxJnXp73beVkpqMIGhA==}
     engines: {node: '>=18'}
+    dev: true
+
+  /mini-svg-data-uri@1.4.4:
+    resolution: {integrity: sha512-r9deDe9p5FJUPZAk3A59wGH7Ii9YrjjWw0jmw/liSbHl2CHiyXj6FcDXDu2K3TjVAXqiJdaw3xxwlZZr9E6nHg==}
+    hasBin: true
     dev: true
 
   /minimalistic-assert@1.0.1:
