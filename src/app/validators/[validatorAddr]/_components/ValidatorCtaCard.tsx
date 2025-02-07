@@ -34,18 +34,21 @@ export function YourStakeCard(props: { validator: Validator }) {
     : '0'
 
   const isUnstakeDisabled = stakedAmount === '0'
+  const isLockedTokenOnly = props.validator.support_token_type === 0
 
   return (
-    <div className="flex w-full flex-col rounded-[16px] bg-primary-surface px-8 py-6 border border-primary-border">
-      <h1>Stake</h1>
+    <div className="flex w-full flex-col grow rounded-[16px] bg-primary-surface px-8 py-6 border border-primary-border">
+      <h1>Stake </h1>
       <div className="border-grey mb-2 mt-2 border-b" />
 
       <div className="flex grow flex-col gap-6">
         <div className="flex flex-row">
           <div className="flex w-full flex-col gap-2">
-            <p className="font-medium text-primary-outline">Available to Stake</p>
+            <p className="font-medium text-primary-outline">
+              Available to Stake {isLockedTokenOnly && '(Locked tokens)'}
+            </p>
             <p className="text-xl font-medium text-white md:text-4xl">
-              {balance
+              {balance && !isLockedTokenOnly
                 ? formatLargeMetricsNumber(parseFloat(formatEther(balance.value)), {
                     useSuffix: false,
                   }) + ' IP'
