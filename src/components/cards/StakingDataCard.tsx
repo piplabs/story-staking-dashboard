@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils'
 
 import TooltipWrapper from '../TooltipWrapper'
 import { Skeleton } from '../ui/skeleton'
+import StyledCard from './StyledCard'
 
 const dataCardVariants = cva('flex flex-col whitespace-nowrap', {
   variants: {
@@ -34,19 +35,8 @@ export type StakingDataCardProps = {
 } & VariantProps<typeof dataCardVariants>
 
 export default function StakingDataCard(props: StakingDataCardProps) {
-  const percentChange: string = '0'
-
   return (
-    <div
-      className={cn(
-        dataCardVariants({
-          variant: props.variant,
-          size: props.size,
-          className: props.className,
-        }),
-        'bg-primary-grey'
-      )}
-    >
+    <StyledCard className={cn('w-full flex flex-col whitespace-nowrap ')}>
       {props.tooltip ? (
         <TooltipWrapper content={props.tooltip} className="bg-white">
           <p className="text-lg text-primary-outline">{props.title}</p>
@@ -74,7 +64,7 @@ export default function StakingDataCard(props: StakingDataCardProps) {
           <span className='text-primary-outline'>last {timeframe}</span> */}
         </p>
       )}
-    </div>
+    </StyledCard>
   )
 }
 

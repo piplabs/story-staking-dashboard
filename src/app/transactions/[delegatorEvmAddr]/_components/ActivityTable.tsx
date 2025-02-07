@@ -26,6 +26,7 @@ import { useEvmOperations } from '@/lib/services/hooks/useEvmOperations'
 import { useIsSmallDevice } from '@/lib/services/hooks/useIsSmallDevice'
 import { EvmOperation } from '@/lib/types/networkApiTypes'
 import { cn, truncateAddress } from '@/lib/utils'
+import StyledCard from '@/components/cards/StyledCard'
 
 export default function ActivityTable(props: { delegatorEvmAddr: Address }) {
   const { chain } = useAccount()
@@ -75,7 +76,7 @@ export default function ActivityTable(props: { delegatorEvmAddr: Address }) {
   }
 
   return (
-    <div className="rounded-[32px] border-none bg-primary-grey p-4 text-base text-white lg:p-8">
+    <StyledCard className="text-base text-white">
       <h1 className="p-2">Transactions</h1>
       <div className="border-grey mb-2 mt-2" />
       <Table>
@@ -152,7 +153,7 @@ export default function ActivityTable(props: { delegatorEvmAddr: Address }) {
         </TableBody>
       </Table>
       {operations && operations.total > 10 && <DataTablePagination table={table} />}
-    </div>
+    </StyledCard>
   )
 }
 function SkeletonTable() {

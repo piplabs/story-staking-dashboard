@@ -34,7 +34,7 @@ function ListOfValidators(props: SelectValidatorsProps) {
     <>
       <h2 className="text-2xl text-white">Select Validator</h2>
 
-      <div className="flex h-12 w-full items-center justify-between rounded-lg border-[1px] border-solid border-stakingModalOutline bg-black px-4">
+      <div className="flex h-12 w-full items-center justify-between rounded-lg border-[1px] border-solid border-primary-border bg-black px-4">
         <Input
           className="border-none bg-black font-normal text-white placeholder-gray-500 outline-none placeholder:text-white placeholder:opacity-50 focus:border-0 focus:border-none focus:outline-none focus:ring-0 focus:ring-transparent"
           placeholder="Enter Validator..."

@@ -32,7 +32,8 @@ import {
 import { getValidator } from '@/lib/services/api/validatorApi'
 import { useDelegatorPeriodDelegations } from '@/lib/services/hooks/useDelegatorPeriodDelegations'
 import { useIsSmallDevice } from '@/lib/services/hooks/useIsSmallDevice'
-import { formatLargeMetricsNumber } from '@/lib/utils'
+import { formatLargeMetricsNumber, truncateAddress } from '@/lib/utils'
+import StyledCard from '@/components/cards/StyledCard'
 
 export default function DelegationsTable(props: { delegatorEvmAddr: Address }) {
   const [sorting, setSorting] = useState<SortingState>([])
@@ -104,7 +105,7 @@ export default function DelegationsTable(props: { delegatorEvmAddr: Address }) {
   }
 
   return (
-    <div className="rounded-[32px] border-none bg-primary-grey p-2 text-base text-white md:p-8">
+    <StyledCard className="text-base text-white">
       <h1 className="p-4 md:p-0">Bonded Delegations</h1>
       <div className="border-grey mb-4 mt-2" />
       <Table>
@@ -173,7 +174,11 @@ export default function DelegationsTable(props: { delegatorEvmAddr: Address }) {
                               width={24}
                               height={24}
                             />
-                            <span className="md:text-lg">{validator.description.moniker}</span>
+                            <span className="md:text-lg">
+                              {isSmallDevice
+                                ? truncateAddress(validator.description.moniker)
+                                : validator.description.moniker}
+                            </span>
                             <div className="my-auto hidden md:flex">
                               <ExternalLinkIcon className="ml-1 h-4 w-4" />
                             </div>
@@ -327,13 +332,13 @@ export default function DelegationsTable(props: { delegatorEvmAddr: Address }) {
         </TableBody>
       </Table>
       {/* {delegatorPeriodDelegations && <DataTablePagination table={table} />} */}
-    </div>
+    </StyledCard>
   )
 }
 
 function SkeletonTable() {
   return (
-    <div className="rounded-[32px] border-none bg-primary-grey p-2 text-base text-white md:p-8">
+    <StyledCard className="">
       <h1 className="p-4 md:p-0">Bonded Delegations</h1>
       <div className="border-grey mb-4 mt-2" />
       <Table>
@@ -400,6 +405,6 @@ function SkeletonTable() {
           ))}
         </TableBody>
       </Table>
-    </div>
+    </StyledCard>
   )
 }

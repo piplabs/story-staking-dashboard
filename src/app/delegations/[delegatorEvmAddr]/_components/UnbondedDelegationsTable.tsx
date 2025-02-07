@@ -19,6 +19,7 @@ import {
 import { useIsSmallDevice } from '@/lib/services/hooks/useIsSmallDevice'
 import { useUnbondedDelegatorDelegations } from '@/lib/services/hooks/useUnbondedDelegatorDelegations'
 import { cn, formatLargeMetricsNumber, truncateAddress } from '@/lib/utils'
+import StyledCard from '@/components/cards/StyledCard'
 
 export default function UnbondedDelegationsTable(props: { delegatorEvmAddr: Address }) {
   const isSmallDevice = useIsSmallDevice()
@@ -32,7 +33,7 @@ export default function UnbondedDelegationsTable(props: { delegatorEvmAddr: Addr
   }
 
   return (
-    <div className="rounded-[32px] border-none bg-primary-grey p-2 text-base text-white lg:p-8">
+    <StyledCard className="text-base text-white">
       <h1 className="p-4">Unbonding Delegations</h1>
       <div className="border-grey mb-4 mt-2" />
       <Table>
@@ -139,13 +140,13 @@ export default function UnbondedDelegationsTable(props: { delegatorEvmAddr: Addr
           )}
         </TableBody>
       </Table>
-    </div>
+    </StyledCard>
   )
 }
 
 function SkeletonTable() {
   return (
-    <div className="rounded-[32px] border-none bg-primary-grey p-8 text-base text-white">
+    <StyledCard className="">
       <h1>Unbonding Delegations</h1>
       <div className="border-grey mb-4 mt-2" />
       <Table>
@@ -176,6 +177,6 @@ function SkeletonTable() {
           ))}
         </TableBody>
       </Table>
-    </div>
+    </StyledCard>
   )
 }

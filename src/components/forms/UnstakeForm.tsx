@@ -187,7 +187,7 @@ export function UnstakeForm({ validator }: { validator: Validator }) {
         {periodDelegations?.period_delegation_responses.length ? (
           <section className="flex flex-col gap-2">
             <p className="font-semibold">Select From Your Stake</p>
-            <div className="max-h-80 overflow-y-auto rounded-lg border border-stakingModalOutline bg-black p-4">
+            <div className="max-h-80 overflow-y-auto rounded-lg border border-primary-border bg-black p-4">
               <FormField
                 control={form.control}
                 name="periodDelegationId"
@@ -197,7 +197,7 @@ export function UnstakeForm({ validator }: { validator: Validator }) {
                       <div className="space-y-2">
                         <table className="w-full">
                           <thead>
-                            <tr className="border-b border-stakingModalOutline">
+                            <tr className="border-b border-primary-border">
                               <th className="pb-2 text-center"></th>
                               <th className="pb-2 text-center text-sm font-medium">
                                 Staked Amount
@@ -226,7 +226,7 @@ export function UnstakeForm({ validator }: { validator: Validator }) {
                                 return (
                                   <tr
                                     key={index}
-                                    className="border-b border-stakingModalOutline text-center last:border-b-0"
+                                    className="border-b border-primary-border text-center last:border-b-0"
                                   >
                                     <td className="py-2">
                                       <input
@@ -289,7 +289,7 @@ export function UnstakeForm({ validator }: { validator: Validator }) {
                 Amount to Unstake
               </FormLabel>
               <FormControl>
-                <div className="flex h-12 w-full items-center justify-between rounded-lg border-[1px] border-solid border-stakingModalOutline bg-black pr-2">
+                <div className="flex h-12 w-full items-center justify-between rounded-lg border-[1px] border-solid border-primary-border bg-black pr-2">
                   <Input
                     disabled={isFormDisabled}
                     className="border-none bg-black font-normal text-white placeholder-gray-500 outline-none placeholder:text-white placeholder:opacity-50 focus:border-0 focus:border-none focus:outline-none focus:ring-0 focus:ring-transparent"

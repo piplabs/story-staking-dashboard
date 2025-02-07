@@ -31,7 +31,7 @@ export const storyAeneid = defineChain({
   blockExplorers: {
     default: {
       name: 'Story Aeneid Explorer',
-      url: 'https://aeneid.storyscan.io/',
+      url: 'https://aeneid.storyscan.xyz/',
     },
   },
   testnet: true,

@@ -2,7 +2,7 @@
 
 import { useAccount } from 'wagmi'
 
-import { Button } from '@/components/ui/button'
+import { Button, disabledButtonVariant } from '@/components/ui/button'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { useSingularity } from '@/lib/services/hooks/useSingularity'
 import { Validator } from '@/lib/types'
@@ -11,6 +11,7 @@ import ConnectWalletButton from '../buttons/ConnectWalletButton'
 import { UnstakeDelegationIdForm } from '../forms/UnstakeDelegationIdForm'
 import { UnstakeForm } from '../forms/UnstakeForm'
 import { Dialog, DialogContent, DialogTrigger } from '../ui/dialog'
+import StyledCard from '../cards/StyledCard'
 
 export type UnstakeDialogProps = {
   validator: Validator
@@ -42,11 +43,7 @@ export function UnstakeDialog({
     return (
       <TooltipProvider>
         <Tooltip>
-          <TooltipTrigger>
-            <Button className="" variant="disabled" disabled>
-              Unstake
-            </Button>
-          </TooltipTrigger>
+          <TooltipTrigger className={disabledButtonVariant}>Unstake</TooltipTrigger>
           <TooltipContent className="border-none bg-black p-2">
             <p>{disabledText}</p>
           </TooltipContent>
@@ -69,13 +66,15 @@ export function UnstakeDialog({
 
       <DialogContent
         onPointerDownOutside={(e) => e.preventDefault()}
-        className="border border-solid border-stakingModalOutline bg-[#202020] sm:max-w-[825px] sm:rounded-[32px]"
+        className=" sm:max-w-[825px] p-0"
       >
-        {delegationId ? (
-          <UnstakeDelegationIdForm validator={validator} delegationId={delegationId} />
-        ) : (
-          <UnstakeForm validator={validator} />
-        )}
+        <StyledCard>
+          {delegationId ? (
+            <UnstakeDelegationIdForm validator={validator} delegationId={delegationId} />
+          ) : (
+            <UnstakeForm validator={validator} />
+          )}
+        </StyledCard>
       </DialogContent>
     </Dialog>
   )

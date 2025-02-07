@@ -14,6 +14,7 @@ import { truncateAddress } from '@/lib/utils'
 
 import DelegationsTable from './_components/DelegationsTable'
 import UnbondedDelegationsTable from './_components/UnbondedDelegationsTable'
+import StyledCard from '@/components/cards/StyledCard'
 
 export default function Page({ params }: { params: { delegatorEvmAddr: Address } }) {
   const isSmallDevice = useIsSmallDevice()
@@ -61,7 +62,7 @@ function OverviewCard({ delegatorAddr }: { delegatorAddr: Address }) {
   })
 
   return (
-    <div className="w-full rounded-[16px] bg-primary-darkGrey px-4 py-4 md:w-1/3 lg:px-8">
+    <StyledCard className="w-full md:w-1/3">
       <p className="font- text-3xl font-medium">Overview</p>
       <div className="border-grey mb-2 mt-2 border-b" />
       <section className="flex flex-col gap-2">
@@ -83,6 +84,6 @@ function OverviewCard({ delegatorAddr }: { delegatorAddr: Address }) {
           tooltipInfo="The total IP rewards earned from staking on validators"
         />
       </section>
-    </div>
+    </StyledCard>
   )
 }

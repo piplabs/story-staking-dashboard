@@ -217,7 +217,7 @@ export function UnstakeDelegationIdForm({
                 Amount to Unstake <span className="text-primary-outline">(Minimum 1024 IP)</span>
               </FormLabel>
               <FormControl>
-                <div className="flex h-12 w-full items-center justify-between rounded-lg border-[1px] border-solid border-stakingModalOutline bg-black pr-2">
+                <div className="flex h-12 w-full items-center justify-between rounded-lg border-[1px] border-solid border-primary-border bg-black pr-2">
                   <Input
                     disabled={isFormDisabled}
                     className="border-none bg-black font-normal text-white placeholder-gray-500 outline-none placeholder:text-white placeholder:opacity-50 focus:border-0 focus:border-none focus:outline-none focus:ring-0 focus:ring-transparent"

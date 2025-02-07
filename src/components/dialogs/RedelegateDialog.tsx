@@ -2,14 +2,15 @@
 
 import { useAccount } from 'wagmi'
 
-import { Button } from '@/components/ui/button'
+import { Button, disabledButtonVariant } from '@/components/ui/button'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { useSingularity } from '@/lib/services/hooks/useSingularity'
 import { Validator } from '@/lib/types'
 
 import ConnectWalletButton from '../buttons/ConnectWalletButton'
 import { RedelegateForm } from '../forms/RedelegateForm'
-import { Dialog, DialogContent, DialogTrigger } from '../ui/dialog'
+import { Dialog, DialogContent, DialogTitle, DialogTrigger } from '../ui/dialog'
+import StyledCard from '../cards/StyledCard'
 
 export function RedelegateDialog(props: {
   validator: Validator
@@ -31,11 +32,7 @@ export function RedelegateDialog(props: {
     return (
       <TooltipProvider>
         <Tooltip>
-          <TooltipTrigger>
-            <Button className="" variant="disabled" disabled>
-              Redelegate
-            </Button>
-          </TooltipTrigger>
+          <TooltipTrigger className={disabledButtonVariant}>Redelegate</TooltipTrigger>
           <TooltipContent className="border-none bg-black p-2">
             <p>{disabledText}</p>
           </TooltipContent>
@@ -55,16 +52,17 @@ export function RedelegateDialog(props: {
           <ConnectWalletButton />
         )}
       </DialogTrigger>
-
       <DialogContent
         onPointerDownOutside={(e) => e.preventDefault()}
-        className="border border-solid border-stakingModalOutline bg-[#202020] sm:max-w-[825px] sm:rounded-[32px]"
+        className="sm:max-w-[825px] p-0"
       >
-        <RedelegateForm
-          validator={props.validator}
-          delegationId={props.delegationId}
-          delegatedAmount={props.delegatedAmount}
-        />
+        <StyledCard className="border-none border-0">
+          <RedelegateForm
+            validator={props.validator}
+            delegationId={props.delegationId}
+            delegatedAmount={props.delegatedAmount}
+          />
+        </StyledCard>
       </DialogContent>
     </Dialog>
   )

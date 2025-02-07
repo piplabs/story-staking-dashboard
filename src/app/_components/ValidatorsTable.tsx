@@ -31,6 +31,7 @@ import {
 import { useAllValidators } from '@/lib/services/hooks/useAllValidators'
 import { Validator } from '@/lib/types'
 import { cn, formatLargeMetricsNumber, truncateAddress } from '@/lib/utils'
+import StyledCard from '@/components/cards/StyledCard'
 
 export function ValidatorsTable() {
   const [sorting, setSorting] = useState<SortingState>([])
@@ -180,7 +181,7 @@ export function ValidatorsTable() {
         {/* <SelectValidatorsFilter /> */}
       </section>
 
-      <div className="relative flex max-h-[600px] flex-col rounded-[32px] border-none bg-primary-grey p-2 text-base text-white lg:p-8">
+      <StyledCard className="relative flex max-h-[600px] flex-col text-base">
         <Table>
           <TableHeader className="bg-none">
             {table.getHeaderGroups().map((headerGroup) => (
@@ -224,7 +225,7 @@ export function ValidatorsTable() {
           </TableBody>
         </Table>
         {table.getRowModel().rows?.length > 0 && <DataTablePagination table={table} />}
-      </div>
+      </StyledCard>
     </>
   )
 }

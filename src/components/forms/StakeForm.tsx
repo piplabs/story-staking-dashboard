@@ -123,10 +123,10 @@ export function StakeForm(props: { validator: Validator; isFlexible?: boolean })
     if (props.validator?.operator_address !== undefined) {
       form.setValue('validator', props.validator.operator_address)
     }
-    const { stakeAmount, validator, stakingPeriod } = values
+    const { stakeAmount, stakingPeriod } = values
 
     const stakeInputs: [Address, number, Hex] = [
-      (props.validator ? `0x${base64ToHex(props.validator.operator_address)}` : '') as Hex,
+      (props.validator ? `0x${base64ToHex(props.validator.consensus_pubkey.value)}` : '') as Hex,
       parseInt(stakingPeriod),
       '0x',
     ]
@@ -205,7 +205,7 @@ export function StakeForm(props: { validator: Validator; isFlexible?: boolean })
                         type="button"
                         variant="secondary"
                         onClick={() => setIsSelectingValidators(true)}
-                        className="flex h-12 w-full cursor-pointer items-center justify-between rounded-lg border border-solid border-stakingModalOutline bg-black px-4 hover:bg-[#202020]"
+                        className="flex h-12 w-full cursor-pointer items-center justify-between rounded-lg border border-solid border-primary-border bg-black px-4 hover:bg-[#202020]"
                       >
                         <p className="truncate font-medium text-white">
                           {truncateAddress(props.validator?.operator_address || '', 8, 8) ||
@@ -246,18 +246,18 @@ export function StakeForm(props: { validator: Validator; isFlexible?: boolean })
                   </FormLabel>
                   <FormControl>
                     {props.isFlexible ? (
-                      <div className="h-12 w-full rounded-lg border border-solid border-stakingModalOutline bg-black px-4 py-3 text-white opacity-50">
+                      <div className="h-12 w-full rounded-lg border border-solid border-primary-border bg-black px-4 py-3 text-white opacity-50">
                         Flexible (1.0x rewards) - Unstake anytime
                       </div>
                     ) : (
                       <Select onValueChange={field.onChange} defaultValue={field.value}>
                         <SelectTrigger
                           disabled={isFormDisabled}
-                          className="h-12 w-full border-stakingModalOutline bg-black"
+                          className="h-12 w-full border-primary-border bg-black"
                         >
                           <SelectValue placeholder="Select a staking period" />
                         </SelectTrigger>
-                        <SelectContent className="border-stakingModalOutline bg-black">
+                        <SelectContent className="border-primary-border bg-black">
                           {props.validator?.support_token_type === undefined ||
                           props.validator?.support_token_type === 0 ? (
                             <SelectItem key="0" value="0" className="text-white">
@@ -318,7 +318,7 @@ export function StakeForm(props: { validator: Validator; isFlexible?: boolean })
                     IP available)
                   </FormLabel>
                   <FormControl>
-                    <div className="flex h-12 w-full items-center justify-between rounded-lg border-[1px] border-solid border-stakingModalOutline bg-black pr-2">
+                    <div className="flex h-12 w-full items-center justify-between rounded-lg border-[1px] border-solid border-primary-border bg-black pr-2">
                       <Input
                         disabled={isFormDisabled}
                         className="border-none bg-black font-normal text-white placeholder-gray-500 outline-none placeholder:text-white placeholder:opacity-50 focus:border-0 focus:border-none focus:outline-none focus:ring-0 focus:ring-transparent"

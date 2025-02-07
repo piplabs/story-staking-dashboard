@@ -27,21 +27,17 @@ const config = {
       colors: {
         primary: {
           DEFAULT: '#5538CE',
-          black: '#101010',
           outline: '#909090',
           grey: '#202020',
-          darkGrey: '#1C1C1C',
+          surface: '#171717',
+          border: '#3F3F3F',
         },
         sp: {
           purple: {
             DEFAULT: '#5538CE',
             dark: '#3B2A8A',
-            veryDark: '#131133',
           },
         },
-        stakingModal: '#202020',
-        stakingModalOutline: '#424242',
-        placeholderGray: '#909090',
       },
       keyframes: {
         'accordion-down': {

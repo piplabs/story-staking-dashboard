@@ -31,6 +31,7 @@ import { useIsSmallDevice } from '@/lib/services/hooks/useIsSmallDevice'
 import { useValidatorDelegations } from '@/lib/services/hooks/useValidatorDelegations'
 import { Delegation, DelegationBalance, Validator } from '@/lib/types'
 import { cn, formatLargeMetricsNumber, truncateAddress } from '@/lib/utils'
+import StyledCard from '@/components/cards/StyledCard'
 
 export default function DelegatorsTable(props: { validator: Validator }) {
   const [sorting, setSorting] = useState<SortingState>([])
@@ -119,7 +120,7 @@ export default function DelegatorsTable(props: { validator: Validator }) {
 
   return (
     <>
-      <div className="rounded-[32px] border-none bg-primary-grey p-8 text-base text-white">
+      <StyledCard className=" p-8 text-base text-white">
         <h1>Delegations</h1>
         <div className="border-grey mb-2 mt-2 border-b" />
 
@@ -173,7 +174,7 @@ export default function DelegatorsTable(props: { validator: Validator }) {
           validatorDelegations?.delegation_responses?.length > 0 && (
             <DataTablePagination table={table} />
           )}
-      </div>
+      </StyledCard>
     </>
   )
 }

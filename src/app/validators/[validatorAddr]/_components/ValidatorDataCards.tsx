@@ -16,10 +16,11 @@ import {
   formatPercentage,
   truncateAddress,
 } from '@/lib/utils'
+import StyledCard from '@/components/cards/StyledCard'
 
 export function AddressesCard({ validator }: { validator: Validator }) {
   return (
-    <div className="w-full rounded-[16px] bg-primary-darkGrey px-8 py-6">
+    <StyledCard className="w-full">
       <h1>Addresses</h1>
       <div className="border-grey mb-2 mt-2 border-b" />
       <section className="flex flex-col gap-2">
@@ -27,14 +28,8 @@ export function AddressesCard({ validator }: { validator: Validator }) {
           title="Moniker"
           value={validator.description.moniker}
           tooltipInfo="The preferred name of the validator node operator"
-          isValueAddress={false}
-        />
-        {/* <DataRow
-          title="Validator Address"
-          value={validator.consensus_pubkey.value.validator_address}
-          tooltipInfo="The address of the validator in Bech32 format (storyvaloper prefix)"
           isValueAddress={true}
-        /> */}
+        />
         <DataRow
           title="EVM Address"
           value={getAddress(validator.operator_address)}
@@ -53,7 +48,7 @@ export function AddressesCard({ validator }: { validator: Validator }) {
           isValueAddress={true}
         />
       </section>
-    </div>
+    </StyledCard>
   )
 }
 
@@ -83,7 +78,7 @@ export function StakeInfoCard({ validator }: { validator: Validator }) {
     : undefined
 
   return (
-    <div className="w-full rounded-[16px] bg-primary-darkGrey px-8 py-6">
+    <StyledCard className="w-full">
       <p className="font-archivo text-3xl font-medium">Stake Info</p>
       <div className="border-grey mb-2 mt-2 border-b" />
       <section className="flex flex-col gap-2">
@@ -104,7 +99,7 @@ export function StakeInfoCard({ validator }: { validator: Validator }) {
           tooltipInfo="The tokens that the validator has staked themselves."
         />
       </section>
-    </div>
+    </StyledCard>
   )
 }
 
@@ -165,7 +160,7 @@ export function OverviewCard({ validator }: { validator: Validator }) {
   const votingPower = (Number(totalStakedIp) / Number(bondedTokens)) * 100
 
   return (
-    <div className="w-full rounded-[16px] bg-primary-darkGrey px-8 py-6">
+    <StyledCard className="w-full">
       <p className="font-archivo text-3xl font-medium">Overview</p>
       <div className="border-grey mb-2 mt-2 border-b" />
       <section className="flex flex-col gap-2">
@@ -195,7 +190,7 @@ export function OverviewCard({ validator }: { validator: Validator }) {
           tooltipInfo="The percentage of time the validator has been online and actively participating in consensus"
         />
       </section>
-    </div>
+    </StyledCard>
   )
 }
 
@@ -203,7 +198,7 @@ export function CommissionCard({ validator }: { validator: Validator }) {
   const commission = validator.commission
 
   return (
-    <div className="w-full rounded-[16px] bg-primary-darkGrey px-8 py-6">
+    <StyledCard className="w-full">
       <p className="font-archivo text-3xl font-medium">Commission</p>
       <div className="border-grey mb-2 mt-2 border-b" />
       <section className="flex flex-col gap-2">
@@ -224,6 +219,6 @@ export function CommissionCard({ validator }: { validator: Validator }) {
           tooltipInfo="The maximum daily increase of the validator commission"
         />
       </section>
-    </div>
+    </StyledCard>
   )
 }

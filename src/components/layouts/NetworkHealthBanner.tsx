@@ -20,7 +20,7 @@ export default function NetworkHealthBanner() {
       Down: RedAlert(),
     },
     style: {
-      Normal: 'border-white/[17%] bg-white/[13%]',
+      Normal: 'border-white/[17%] bg-primary-grey',
       Degraded: 'border-[#E4CE07] bg-[#514903]',
       Down: 'border-[#EF7276] bg-[#4A030B]',
     },

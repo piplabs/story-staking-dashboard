@@ -36,7 +36,7 @@ export function YourStakeCard(props: { validator: Validator }) {
   const isUnstakeDisabled = stakedAmount === '0'
 
   return (
-    <div className="flex w-full flex-col rounded-[16px] bg-primary-darkGrey px-8 py-6">
+    <div className="flex w-full flex-col rounded-[16px] bg-primary-surface px-8 py-6 border border-primary-border">
       <h1>Stake</h1>
       <div className="border-grey mb-2 mt-2 border-b" />
 

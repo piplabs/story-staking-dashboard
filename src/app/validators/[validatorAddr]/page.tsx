@@ -62,7 +62,9 @@ export default function Page({ params }: { params: { validatorAddr: Address } })
           />
           <div className="my-auto w-full break-words pr-8">
             {moniker ? (
-              <h2>{moniker}</h2>
+              <h2>
+                {moniker} <CopyStringButton value={moniker} />
+              </h2>
             ) : (
               <h2>
                 {params.validatorAddr} <CopyStringButton value={params.validatorAddr} />

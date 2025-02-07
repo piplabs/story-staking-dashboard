@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { LoaderCircle } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { zeroAddress } from 'viem'
+import { Address, zeroAddress } from 'viem'
 import { Hex, parseEther } from 'viem'
 import { useAccount, useWaitForTransactionReceipt } from 'wagmi'
 import { z } from 'zod'
@@ -35,6 +35,7 @@ import { Validator } from '@/lib/types'
 import { base64ToHex, cn, formatLargeMetricsNumber, truncateAddress } from '@/lib/utils'
 
 import ViewTransaction from '../buttons/ViewTransaction'
+import { getValidator } from '@/lib/services/api/validatorApi'
 
 const createFormSchema = ({ delegatedAmount }: { delegatedAmount: string | undefined }) =>
   z.object({
@@ -129,17 +130,15 @@ export function RedelegateForm(props: {
 
     const { redelegateAmount, destinationValidator, delegationId } = values
 
-    const formattedDestinationValidator = destinationValidator.startsWith('0x')
-      ? destinationValidator
-      : `0x${destinationValidator}`
+    const dstValidatorObj = await getValidator({ validatorAddr: destinationValidator as Address })
 
     const inputs: [Hex, Hex, bigint, bigint] = [
       `0x${base64ToHex(props.validator.consensus_pubkey.value)}`, // validatorUncmpSrcPubkey
-      formattedDestinationValidator as Hex, // validatorUncmpDstPubkey
+      `0x${base64ToHex(dstValidatorObj.consensus_pubkey.value)}`, // validatorUncmpDstPubkey
       BigInt(delegationId), // delegationId
       parseEther(redelegateAmount), // amount
     ]
-
+    console.log({ inputs })
     const txHash = await ipTokenRedelegate({
       value: feeWei,
       args: inputs,
@@ -157,7 +156,7 @@ export function RedelegateForm(props: {
   let buttonText
   if (!props.delegatedAmount || parseFloat(props.delegatedAmount) === 0) {
     buttonText = 'No IP available to redelegate'
-  } else if (isWaitingForWalletConfirmation) {
+  } else if (isWaitingForWalletConfirmation && !txnReceipt.isSuccess) {
     buttonText = 'Confirm transaction in wallet...'
   } else if (isTxnPending) {
     buttonText = 'Transaction pending...'
@@ -166,10 +165,9 @@ export function RedelegateForm(props: {
   } else {
     buttonText = 'Redelegate IP'
   }
-
   const isButtonDisabled =
     isTxnPending ||
-    isWaitingForWalletConfirmation ||
+    (isWaitingForWalletConfirmation && !txnReceipt.isSuccess) ||
     txnReceipt.isSuccess ||
     !props.delegatedAmount ||
     parseFloat(props.delegatedAmount) === 0
@@ -210,7 +208,7 @@ export function RedelegateForm(props: {
                 </FormLabel>
                 <FormControl>
                   <Input
-                    className="border-stakingModalOutline bg-black font-normal text-white"
+                    className="border-primary-border bg-black font-normal text-white"
                     placeholder="Enter source validator uncompressed public key"
                     {...field}
                     value={field.value ? `0x${field.value.slice(2)}` : ''}
@@ -265,7 +263,7 @@ export function RedelegateForm(props: {
                 </FormLabel>
                 <FormControl>
                   <Input
-                    className="border-stakingModalOutline bg-black font-normal text-white"
+                    className="border-primary-border bg-black font-normal text-white"
                     placeholder="Enter delegation ID..."
                     {...field}
                     disabled={!!props.delegationId}
@@ -289,7 +287,7 @@ export function RedelegateForm(props: {
                   available)
                 </FormLabel>
                 <FormControl>
-                  <div className="flex h-12 w-full items-center justify-between rounded-lg border-[1px] border-solid border-stakingModalOutline bg-black pr-2">
+                  <div className="flex h-12 w-full items-center justify-between rounded-lg border-[1px] border-solid border-primary-border bg-black pr-2">
                     <Input
                       className="border-none bg-black font-normal text-white placeholder-gray-500 outline-none placeholder:text-white placeholder:opacity-50 focus:border-0 focus:border-none focus:outline-none focus:ring-0 focus:ring-transparent"
                       placeholder="Enter amount (minimum 1024 IP)..."
@@ -302,7 +300,7 @@ export function RedelegateForm(props: {
                         type="button"
                         className="rounded-xl bg-sp-purple px-3 py-1 text-xs text-white"
                         onClick={maxButtonOnClick}
-                        disabled={isFormDisabled}
+                        disabled={isButtonDisabled}
                       >
                         Max
                       </button>
