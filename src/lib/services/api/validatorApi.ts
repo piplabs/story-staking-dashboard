@@ -47,6 +47,16 @@ export async function getAllValidators(params?: GetAllValidatorsParams): Promise
     validators = validators.sort((a, b) => parseFloat(b.tokens) - parseFloat(a.tokens))
   }
 
+  // Sort by supported token type if specified
+  if (params?.sortSupportedToken) {
+    validators = validators.sort((a, b) => {
+      // Sort "Unlocked" (support_token_type !== 0) first
+      const aIsUnlocked = a.support_token_type !== undefined && a.support_token_type !== 0
+      const bIsUnlocked = b.support_token_type !== undefined && b.support_token_type !== 0
+      return bIsUnlocked ? 1 : aIsUnlocked ? -1 : 0
+    })
+  }
+
   return {
     allValidators: validators,
     pagination: response.data.msg.pagination,

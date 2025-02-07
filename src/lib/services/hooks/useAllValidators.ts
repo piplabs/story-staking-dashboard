@@ -7,7 +7,7 @@ import { getAllValidators } from '../api/validatorApi'
 
 export function useAllValidators(params: GetAllValidatorsParams) {
   return useQuery<AllValidators, Error>({
-    queryKey: ['allValidators', params.sortDescending, params.tokenType],
+    queryKey: ['allValidators', params.sortDescending, params.tokenType, params.sortSupportedToken],
     queryFn: () => getAllValidators(params),
     // staleTime: 1000 * 60 * 5,
   })

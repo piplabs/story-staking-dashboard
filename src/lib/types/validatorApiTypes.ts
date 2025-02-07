@@ -16,6 +16,7 @@ export type GetAllValidatorsParams = {
   bondedOnly?: boolean
   tokenType?: 'LOCKED' | 'UNLOCKED'
   sortDescending?: boolean
+  sortSupportedToken?: true
 }
 
 export type GetAllValidatorsApiResponse = {
