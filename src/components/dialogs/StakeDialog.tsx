@@ -11,14 +11,14 @@ import { LockedTokenStakeForm } from '../forms/LockedTokenStakeForm'
 import { StakeForm } from '../forms/StakeForm'
 import StyledCard from '../cards/StyledCard'
 
-export function StakeDialog(props: { validator: Validator; isFlexible?: boolean }) {
+export function StakeDialog(props: { text?: string; validator?: Validator; isFlexible?: boolean }) {
   const { isConnected } = useAccount()
   return (
     <Dialog modal>
       <DialogTrigger asChild>
         {isConnected ? (
           <Button className="" variant="primary">
-            Stake
+            {props.text || 'Stake'}
           </Button>
         ) : (
           <ConnectWalletButton />
@@ -30,8 +30,9 @@ export function StakeDialog(props: { validator: Validator; isFlexible?: boolean 
         className="sm:max-w-[825px] p-0"
       >
         <StyledCard>
-          {props.validator.support_token_type === undefined ||
-          props.validator.support_token_type == 0 ? (
+          {props.validator &&
+          (props.validator?.support_token_type === undefined ||
+            props.validator?.support_token_type == 0) ? (
             <LockedTokenStakeForm validator={props.validator} />
           ) : (
             <StakeForm validator={props.validator} isFlexible={props.isFlexible} />
