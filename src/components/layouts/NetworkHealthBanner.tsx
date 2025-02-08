@@ -94,7 +94,7 @@ function SingularityIndicator() {
           <div className="ml-2" />
           Network is currently in&nbsp;
           <Link
-            href="https://docs.story.foundation/docs/tokenomics-staking#singularity"
+            href="https://docs.story.foundation/docs/tokenomics-staking#singularity:~:text=Singularity"
             target="_blank"
             rel="noopener noreferrer"
             className="underline"

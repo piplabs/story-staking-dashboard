@@ -60,9 +60,9 @@ export default function Page({ params }: { params: { validatorAddr: Address } })
             width={48}
             height={48}
           />
-          <div className="my-auto w-full break-words pr-8">
+          <div className="my-auto w-full break-words flex flex-row gap-4">
             {moniker ? (
-              <h2>
+              <h2 className="flex flex-row">
                 {moniker} <CopyStringButton value={moniker} />
               </h2>
             ) : (
@@ -70,10 +70,10 @@ export default function Page({ params }: { params: { validatorAddr: Address } })
                 {params.validatorAddr} <CopyStringButton value={params.validatorAddr} />
               </h2>
             )}
+            <div className="my-auto">
+              <ValidatorStatus status={validator.status} />
+            </div>
           </div>
-        </div>
-        <div className="my-auto">
-          <ValidatorStatus status={validator.status} />
         </div>
       </section>
 
@@ -116,9 +116,9 @@ function ValidatorStatus({ status }: { status: number }) {
   }
 
   return (
-    <div className="flex flex-col rounded-[16px]">
+    <div className="">
       {/* <p>Status</p> */}
-      <h1 className={statusStyle}>{statusText}</h1>
+      <h2 className={statusStyle}>{statusText}</h2>
     </div>
   )
 }

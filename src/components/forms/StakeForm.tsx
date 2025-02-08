@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ChevronRight, LoaderCircle, Search } from 'lucide-react'
 import { useEffect, useState } from 'react'
@@ -9,7 +10,7 @@ import { Hex, formatEther, parseEther } from 'viem'
 import { useAccount, useBalance, useSignMessage, useWaitForTransactionReceipt } from 'wagmi'
 import { z } from 'zod'
 
-import { Button } from '@/components/ui/button'
+import { Button, buttonVariants } from '@/components/ui/button'
 import {
   Form,
   FormControl,
@@ -33,6 +34,7 @@ import { base64ToHex, cn, formatLargeMetricsNumber, truncateAddress } from '@/li
 
 import ViewTransaction from '../buttons/ViewTransaction'
 import SelectValidators from '../views/ListOfValidators'
+import { DialogClose } from '../ui/dialog'
 
 export const STAKING_PERIODS = [
   { value: '0', label: 'Flexible', multiplier: '1.0x', description: 'Unstake anytime' },
@@ -161,7 +163,7 @@ export function StakeForm(props: { validator: Validator; isFlexible?: boolean })
   } else if (isTxnPending) {
     buttonText = 'Transaction pending...'
   } else if (txnReceipt.isSuccess) {
-    buttonText = 'Staked!'
+    buttonText = 'Staked! View your delegations'
   } else if (!form.formState.isValid) {
     if (form.getValues('stakeAmount') === '') {
       buttonText = 'Invalid amount'
@@ -342,32 +344,45 @@ export function StakeForm(props: { validator: Validator; isFlexible?: boolean })
                 </FormItem>
               )}
             />
-            <Button
-              type="submit"
-              className={cn(
-                'flex w-full flex-row gap-2 font-semibold',
-                isButtonDisabled ? 'cursor-not-allowed opacity-50' : '',
-                txnReceipt.isSuccess
-                  ? 'bg-green-500 text-white opacity-100 hover:bg-green-500'
-                  : 'bg-primary'
+            <div className="mx-auto flex flex-row items-center gap-4 justify-center w-full">
+              {txnReceipt.isSuccess ? (
+                <>
+                  <Link href={`/delegations/${address}`} className="w-full">
+                    <Button className={cn('flex flex-row gap-2 bg-primary text-white w-full')}>
+                      Staked! View your delegations
+                    </Button>
+                  </Link>
+                  <DialogClose className={cn(buttonVariants({ variant: 'secondary' }), 'w-full')}>
+                    Close
+                  </DialogClose>
+                </>
+              ) : (
+                <Button
+                  type="submit"
+                  className={cn(
+                    'flex w-full flex-row gap-2',
+                    isButtonDisabled ? 'cursor-not-allowed opacity-50' : '',
+                    'bg-primary'
+                  )}
+                  disabled={isButtonDisabled}
+                  onClick={(e) => {
+                    if (isButtonDisabled) {
+                      e.preventDefault()
+                      e.stopPropagation()
+                    }
+                  }}
+                >
+                  {(isTxnPending || isWaitingForWalletConfirmation || sign.isPending) && (
+                    <LoaderCircle className="animate-spin" />
+                  )}
+                  {buttonText}
+                </Button>
               )}
-              disabled={isButtonDisabled}
-              onClick={(e) => {
-                if (isButtonDisabled) {
-                  e.preventDefault()
-                  e.stopPropagation()
-                }
-              }}
-            >
-              {(isTxnPending || isWaitingForWalletConfirmation || sign.isPending) && (
-                <LoaderCircle className="animate-spin" />
-              )}
-              {buttonText}
-            </Button>
+            </div>
           </>
         )}
       </form>
-      {txnReceipt.isSuccess && <ViewTransaction txHash={stakeTxHash} />}
+      <p className="mt-4">{txnReceipt.isSuccess && <ViewTransaction txHash={stakeTxHash} />}</p>
     </Form>
   )
 }

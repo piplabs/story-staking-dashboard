@@ -13,20 +13,19 @@ export default function TooltipWrapper(props: {
   }
 
   return (
-    <div className="flex flex-row gap-2">
+    <span className="inline-flex items-center gap-2">
+      {/* This ensures text and icon are side-by-side in one line */}
       {props.children}
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger>
             <InfoIcon className="h-4 w-4 text-primary-outline" />
           </TooltipTrigger>
-          <TooltipContent
-            className={cn(props.className, 'max-w-prose bg-white text-left text-black')}
-          >
+          <TooltipContent className={cn(props.className, 'max-w-prose bg-white text-black')}>
             {props.content}
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>
-    </div>
+    </span>
   )
 }

@@ -38,8 +38,8 @@ export default function Page({ params }: { params: { delegatorEvmAddr: Address }
             width={48}
             height={48}
           />
-          <div className="my-auto w-full break-words pr-8 text-xl">
-            <h2>
+          <div className="my-auto w-full break-words pr-8 text-xl ">
+            <h2 className="flex flex-row">
               {isSmallDevice ? truncateAddress(params.delegatorEvmAddr) : params.delegatorEvmAddr}{' '}
               <CopyStringButton value={params.delegatorEvmAddr} />
             </h2>

@@ -2,14 +2,14 @@ export default function CopyStringButton({ value }: { value: string }) {
   return (
     <button
       onClick={() => navigator.clipboard.writeText(value as string)}
-      className="group flex-shrink-0 rounded-md p-1 transition-colors hover:bg-primary-grey"
+      className="group flex flex-shrink-0 items-center rounded-md p-1 transition-colors"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
-        viewBox="0 0 24 24"
+        viewBox="0 0 20 20"
         stroke="currentColor"
-        className="h-4 w-4 transition-colors group-hover:stroke-primary-outline group-active:stroke-sp-purple"
+        className="h-5 w-5 transition-colors group-hover:stroke-primary-outline group-active:stroke-sp-purple"
       >
         <path
           strokeLinecap="round"

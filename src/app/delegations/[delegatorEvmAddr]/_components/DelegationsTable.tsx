@@ -34,12 +34,13 @@ import { useDelegatorPeriodDelegations } from '@/lib/services/hooks/useDelegator
 import { useIsSmallDevice } from '@/lib/services/hooks/useIsSmallDevice'
 import { formatLargeMetricsNumber, truncateAddress } from '@/lib/utils'
 import StyledCard from '@/components/cards/StyledCard'
+import { useSingularity } from '@/lib/services/hooks/useSingularity'
 
 export default function DelegationsTable(props: { delegatorEvmAddr: Address }) {
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [validatorDetails, setValidatorDetails] = useState<Record<string, any>>({})
-
+  const { isSingularity } = useSingularity()
   const isSmallDevice = useIsSmallDevice()
   const { address: connectedAddress, isConnected } = useAccount()
   const isDelegatorTheOwner =
@@ -111,8 +112,8 @@ export default function DelegationsTable(props: { delegatorEvmAddr: Address }) {
       <Table>
         <TableHeader>
           <TableRow className="border-white/30">
-            <TableHead className="w-[30%] align-middle">Validator</TableHead>
-            <TableHead className="hidden w-[15%] text-center align-middle md:table-cell">
+            <TableHead className="w-[10%] align-middle">Validator</TableHead>
+            <TableHead className="hidden w-[12%] text-center align-middle md:table-cell">
               <TooltipWrapper content='A unique identifier assigned to each delegation transaction between a delegator and validator. All Flexible stakes are assigned to "0"'>
                 Delegation ID
               </TooltipWrapper>
@@ -123,20 +124,22 @@ export default function DelegationsTable(props: { delegatorEvmAddr: Address }) {
                 Staking Period
               </TooltipWrapper>
             </TableHead>
-            <TableHead className="hidden w-[10%] text-center align-middle md:table-cell">
+            <TableHead className="hidden w-[5%] text-center align-middle md:table-cell">
               <TooltipWrapper content="The reward multiplier applied to staking rewards based on the chosen staking period. Longer staking periods offer higher multipliers.">
                 Multiplier
               </TooltipWrapper>
             </TableHead>
-            <TableHead className="w-[20%] justify-center align-middle">
+            <TableHead className="w-[12%] justify-center align-middle">
               <div className="mx-auto flex">
-                <TooltipWrapper content="The date and time when staked tokens will become available for unstaking. Only applies to fixed period staking.">
+                <TooltipWrapper content="The date and time when staked tokens will become available for unstaking and redelegating. Only applies to fixed period staking.">
                   Maturity Time
                 </TooltipWrapper>
               </div>
             </TableHead>
             {isDelegatorMatchConnectedWallet && (
-              <TableHead className="hidden w-[10%] align-middle md:table-cell">Actions</TableHead>
+              <TableHead className="hidden w-[20%] align-middle md:table-cell text-center">
+                Actions {isSingularity && '(Disabled during Singularity)'}
+              </TableHead>
             )}
           </TableRow>
         </TableHeader>
@@ -179,9 +182,9 @@ export default function DelegationsTable(props: { delegatorEvmAddr: Address }) {
                                 ? truncateAddress(validator.description.moniker)
                                 : validator.description.moniker}
                             </span>
-                            <div className="my-auto hidden md:flex">
+                            {/* <div className="my-auto hidden md:flex">
                               <ExternalLinkIcon className="ml-1 h-4 w-4" />
-                            </div>
+                            </div> */}
                           </Link>
                         ) : (
                           <div className="flex flex-row gap-2">
@@ -228,77 +231,32 @@ export default function DelegationsTable(props: { delegatorEvmAddr: Address }) {
                             )?.multiplier
                           : '1.0x'}
                       </TableCell>
-                      <TableCell className="break-words text-center">
-                        <span className={isMatured ? 'text-green-500' : 'text-yellow-500'}>
-                          {(() => {
-                            const endTime = new Date(periodDelegation.period_delegation.end_time)
-                            const now = new Date()
-                            if (endTime < now) {
-                              return (
-                                <div className="flex flex-col">
-                                  <div>Matured</div>
-                                  <div>{`${endTime.toLocaleString([], {
-                                    month: 'short',
-                                    day: 'numeric',
-                                    year: 'numeric',
-                                    hour: 'numeric',
-                                    minute: '2-digit',
-                                    hour12: true,
-                                  })}`}</div>
-                                </div>
-                              )
-                            }
-                            const diffMs = endTime.getTime() - now.getTime()
-                            const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24))
-                            const diffHours = Math.floor(
-                              (diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-                            )
-                            const diffMinutes = Math.floor(
-                              (diffMs % (1000 * 60 * 60)) / (1000 * 60)
-                            )
-                            const diffSeconds = Math.floor((diffMs % (1000 * 60)) / 1000)
-
-                            const endTimeStr = endTime.toLocaleString([], {
-                              month: 'short',
-                              day: 'numeric',
-                              year: 'numeric',
-                              hour: 'numeric',
-                              minute: '2-digit',
-                              hour12: true,
-                            })
-
-                            if (diffDays > 0) {
-                              return (
-                                <div className="flex flex-col">
-                                  <div>{`${diffDays} ${diffDays === 1 ? 'day' : 'days'} ${diffHours} ${diffHours === 1 ? 'hour' : 'hours'} ${diffMinutes} ${diffMinutes === 1 ? 'minute' : 'minutes'} ${diffSeconds} ${diffSeconds === 1 ? 'second' : 'seconds'} left`}</div>
-                                  <div>{`${endTimeStr}`}</div>
-                                </div>
-                              )
-                            }
-                            if (diffHours > 0) {
-                              return (
-                                <div className="flex flex-col">
-                                  <div>{`${diffHours} ${diffHours === 1 ? 'hour' : 'hours'} ${diffMinutes} ${diffMinutes === 1 ? 'minute' : 'minutes'} ${diffSeconds} ${diffSeconds === 1 ? 'second' : 'seconds'} left`}</div>
-                                  <div>{`${endTimeStr}`}</div>
-                                </div>
-                              )
-                            }
-                            if (diffMinutes > 0) {
-                              return (
-                                <div className="flex flex-col">
-                                  <div>{`${diffMinutes} ${diffMinutes === 1 ? 'minute' : 'minutes'} ${diffSeconds} ${diffSeconds === 1 ? 'second' : 'seconds'} left`}</div>
-                                  <div>{`${endTimeStr}`}</div>
-                                </div>
-                              )
-                            }
+                      <TableCell className="">
+                        {(() => {
+                          const endTime = new Date(periodDelegation.period_delegation.end_time)
+                          if (endTime < new Date()) {
                             return (
-                              <div className="flex flex-col">
-                                <div>{`${diffSeconds} ${diffSeconds === 1 ? 'second' : 'seconds'} left`}</div>
-                                <div>{`${endTimeStr}`}</div>
+                              <div className="">
+                                <span className="text-green-500">Matured</span>
                               </div>
                             )
-                          })()}
-                        </span>
+                          }
+                          const formattedEndTime = endTime.toLocaleString([], {
+                            month: 'short',
+                            day: 'numeric',
+                            year: 'numeric',
+                            hour: 'numeric',
+                            minute: '2-digit',
+                            hour12: true,
+                          })
+                          return (
+                            <TooltipWrapper content={formattedEndTime}>
+                              <div className="">
+                                <span className="text-yellow-500">Maturing</span>
+                              </div>
+                            </TooltipWrapper>
+                          )
+                        })()}
                       </TableCell>
                       {isDelegatorTheOwner && (
                         <TableCell className="hidden md:table-cell">
@@ -363,7 +321,7 @@ function SkeletonTable() {
             </TableHead>
             <TableHead className="w-[20%] justify-center align-middle">
               <div className="mx-auto flex">
-                <TooltipWrapper content="The date and time when staked tokens will become available for unstaking. Only applies to fixed period staking.">
+                <TooltipWrapper content="The date and time when staked tokens will become available for unstaking and redelegating. Only applies to fixed period staking.">
                   Maturity Time
                 </TooltipWrapper>
               </div>

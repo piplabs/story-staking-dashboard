@@ -6,7 +6,7 @@ export default function Footer() {
   return (
     <footer className="border-t border-t-primary-outline bg-black p-4 text-white">
       <div className="flex w-full flex-row justify-between">
-        <div className="uppercase">© Story Foundation 2024</div>
+        <div className="uppercase">© Story Foundation 2025</div>
         <section className="flex flex-row gap-4">
           <Link
             href={links.privacy}

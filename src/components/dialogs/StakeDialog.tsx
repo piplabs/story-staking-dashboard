@@ -27,7 +27,7 @@ export function StakeDialog(props: { validator: Validator; isFlexible?: boolean 
 
       <DialogContent
         onPointerDownOutside={(e) => e.preventDefault()}
-        className="sm:max-w-[425px] p-0"
+        className="sm:max-w-[825px] p-0"
       >
         <StyledCard>
           {props.validator.support_token_type === undefined ||

@@ -14,7 +14,7 @@ import {
 } from '@tanstack/react-table'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useState } from 'react'
+import { ReactNode, useState } from 'react'
 import { useWindowSize } from 'react-use'
 import { formatEther } from 'viem'
 
@@ -51,7 +51,11 @@ export function ValidatorsTable() {
         return (
           <HeaderWithSortArrows
             column={column}
-            header={'Validator'}
+            header={
+              <p>
+                <span className="font-bold">Validator</span> (click to view more details)
+              </p>
+            }
             sorting={sorting}
             className="w-full grow"
           />
@@ -184,7 +188,6 @@ export function ValidatorsTable() {
         {/* <ValidatorSearchBar table={table} className='w-full' /> */}
         {/* <SelectValidatorsFilter /> */}
       </section>
-
       <StyledCard className="relative flex max-h-[600px] flex-col text-base">
         <Table>
           <TableHeader className="bg-none">
@@ -241,7 +244,7 @@ function HeaderWithSortArrows({
   className,
 }: {
   column: Column<Validator, unknown>
-  header: string
+  header: string | ReactNode
   sorting: SortingState
   className?: string
 }) {
@@ -250,7 +253,7 @@ function HeaderWithSortArrows({
 
   return (
     <div className={cn('flex flex-row', className)}>
-      <p className="text-center font-bold lg:text-xl">{header}</p>
+      <p className="text-center lg:text-xl">{header}</p>
       {/* <ArrowUp
         className={cn(
           'my-auto h-4 w-4 stroke-1 hover:cursor-pointer hover:stroke-2 active:stroke-2',
