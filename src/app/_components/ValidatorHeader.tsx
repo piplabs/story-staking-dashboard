@@ -6,16 +6,18 @@ import { Button } from '@/components/ui/button'
 import { links } from '@/lib/constants'
 import { useIsSmallDevice } from '@/lib/services/hooks/useIsSmallDevice'
 import { StakeDialog } from '@/components/dialogs/StakeDialog'
+import { useAccount } from 'wagmi'
 
 export default function ValidatorHeader() {
   const isSmallDevice = useIsSmallDevice()
+  const { isConnected } = useAccount()
 
   return (
     <section className="flex w-full flex-row gap-4">
       <h1 className="w-full">Validators</h1>
       {!isSmallDevice && (
         <div className="my-auto flex flex-row gap-8">
-          <StakeDialog text={'Stake Now'} />
+          {isConnected && <StakeDialog text={'Stake Now'} />}
 
           <Link
             href={'https://docs.story.foundation/docs/node-setup-dev-mainnet'}

@@ -380,62 +380,65 @@ function ValidatorSelectFormField({
         <FormItem>
           <FormControl>
             <div className="space-y-2">
-              <table className="w-full">
-                <thead>
-                  <tr className="border-b border-primary-border relative">
-                    <th className="absolute">Select a validator</th>
-                    <th className="pb-2 text-left text-sm font-medium"></th>
-                    <th className="pb-2 text-left text-sm font-medium text-primary-outline">
-                      Total Stake
-                    </th>
-                    <th className="pb-2 text-left text-sm font-medium text-primary-outline">
-                      Uptime
-                    </th>
-                    <th className="pb-2 text-left text-sm font-medium text-primary-outline">
-                      Commission
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filteredValidators?.allValidators.map((validator: Validator, index: any) => {
-                    const validatorName = validator.description?.moniker
-                      ? validator.description?.moniker
-                      : isSmallDevice
-                        ? truncateAddress(validator.operator_address)
-                        : validator.operator_address
-                    return (
-                      <tr key={index} className="border-b border-primary-border last:border-b-0">
-                        <td className="py-2">
-                          <input
-                            type="radio"
-                            value={validator.operator_address}
-                            checked={field.value === validator.operator_address}
-                            // disabled={}
-                            onChange={(e) => {
-                              field.onChange(e.target.value)
-                              // form.setValue('validator', '', {
-                              //   shouldValidate: true,
-                              // })
-                            }}
-                          />
-                        </td>
-                        <td className="py-2 text-sm font-medium">{validatorName}</td>
-                        <td className="py-2 text-sm font-medium">
-                          {formatLargeMetricsNumber(formatEther(BigInt(validator.tokens), 'gwei'))}{' '}
-                          IP
-                        </td>
-                        <td className="py-2 text-sm">{validator.uptime}</td>
-                        <td className="py-2 text-sm ">
-                          {(Number(validator.commission.commission_rates.rate) * 100).toFixed(2)}%{' '}
-                        </td>
-                      </tr>
-                    )
-                  })}
-                </tbody>
-              </table>
+              <div className="overflow-hidden border-b border-primary-border">
+                <table className="w-full">
+                  <thead>
+                    <tr className="border-b border-primary-border relative">
+                      <th className="absolute">Select a validator</th>
+                      <th className="pb-2 text-left text-sm font-medium"></th>
+                      <th className="pb-2 text-left text-sm font-medium text-primary-outline">
+                        Total Stake
+                      </th>
+                      <th className="pb-2 text-left text-sm font-medium text-primary-outline">
+                        Uptime
+                      </th>
+                      <th className="pb-2 text-left text-sm font-medium text-primary-outline">
+                        Commission
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="bg-black ">
+                    {filteredValidators?.allValidators.map((validator: Validator, index: any) => {
+                      const validatorName = validator.description?.moniker
+                        ? validator.description.moniker
+                        : isSmallDevice
+                          ? truncateAddress(validator.operator_address)
+                          : validator.operator_address
+                      return (
+                        <tr
+                          key={index}
+                          className="border-b border-primary-border last:border-b-0 h-12 w-full"
+                        >
+                          <td className="px-3 py-2">
+                            <input
+                              type="radio"
+                              value={validator.operator_address}
+                              disabled={isFormDisabled}
+                              checked={field.value === validator.operator_address}
+                              onChange={(e) => {
+                                field.onChange(e.target.value)
+                              }}
+                            />
+                          </td>
+                          <td className="py-2 text-sm font-medium">{validatorName}</td>
+                          <td className="py-2 text-sm font-medium">
+                            {formatLargeMetricsNumber(
+                              formatEther(BigInt(validator.tokens), 'gwei')
+                            )}{' '}
+                            IP
+                          </td>
+                          <td className="py-2 text-sm">{validator.uptime}</td>
+                          <td className="py-2 text-sm">
+                            {(Number(validator.commission.commission_rates.rate) * 100).toFixed(2)}%
+                          </td>
+                        </tr>
+                      )
+                    })}
+                  </tbody>
+                </table>
+              </div>
             </div>
           </FormControl>
-          <FormMessage />
         </FormItem>
       )}
     />
