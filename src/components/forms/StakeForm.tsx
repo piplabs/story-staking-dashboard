@@ -371,6 +371,8 @@ function ValidatorSelectFormField({
   isFormDisabled: boolean
 }) {
   const { data: filteredValidators } = useAllValidators({ tokenType: 'UNLOCKED' })
+  const allValidators = filteredValidators?.allValidators
+
   const isSmallDevice = useIsSmallDevice()
   return (
     <FormField
@@ -380,11 +382,15 @@ function ValidatorSelectFormField({
         <FormItem>
           <FormControl>
             <div className="space-y-2">
-              <div className="overflow-hidden border-b border-primary-border">
+              <div className="relative max-h-[200px] overflow-y-auto scrollbar-hide border-b border-primary-border">
                 <table className="w-full">
                   <thead>
-                    <tr className="border-b border-primary-border relative">
-                      <th className="absolute">Select a validator</th>
+                    <tr className="sticky top-0 z-10 border-b border-primary-border bg-primary-surface">
+                      <th className="relative pb-2 text-left text-sm font-medium ">
+                        <div className="absolute left-0 top-0 whitespace-nowrap text-[16px] font-semibold text-white">
+                          Select a validator
+                        </div>
+                      </th>
                       <th className="pb-2 text-left text-sm font-medium"></th>
                       <th className="pb-2 text-left text-sm font-medium text-primary-outline">
                         Total Stake
@@ -397,8 +403,8 @@ function ValidatorSelectFormField({
                       </th>
                     </tr>
                   </thead>
-                  <tbody className="bg-black ">
-                    {filteredValidators?.allValidators.map((validator: Validator, index: any) => {
+                  <tbody className="bg-black">
+                    {allValidators?.map((validator: Validator, index: any) => {
                       const validatorName = validator.description?.moniker
                         ? validator.description.moniker
                         : isSmallDevice
@@ -415,9 +421,7 @@ function ValidatorSelectFormField({
                               value={validator.operator_address}
                               disabled={isFormDisabled}
                               checked={field.value === validator.operator_address}
-                              onChange={(e) => {
-                                field.onChange(e.target.value)
-                              }}
+                              onChange={(e) => field.onChange(e.target.value)}
                             />
                           </td>
                           <td className="py-2 text-sm font-medium">{validatorName}</td>
