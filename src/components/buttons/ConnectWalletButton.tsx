@@ -6,9 +6,13 @@ import { Button } from '../ui/button'
 
 interface ConnectWalletButtonProps {
   text?: string
+  isShowNetwork?: boolean
 }
 
-export default function ConnectWalletButton({ text }: ConnectWalletButtonProps) {
+export default function ConnectWalletButton({
+  text,
+  isShowNetwork = false,
+}: ConnectWalletButtonProps) {
   const isSmallDevice = useIsSmallDevice()
   return (
     <ConnectButton.Custom>
@@ -52,7 +56,7 @@ export default function ConnectWalletButton({ text }: ConnectWalletButtonProps) 
               }
               return (
                 <div style={{ display: 'flex', gap: 12 }}>
-                  {!isSmallDevice && (
+                  {!isSmallDevice && isShowNetwork && (
                     <Button
                       variant="outline"
                       onClick={openChainModal}
