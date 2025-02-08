@@ -22,7 +22,7 @@ import {
 export async function getAllValidators(params?: GetAllValidatorsParams): Promise<AllValidators> {
   const response = await stakingDataAxios.get<GetAllValidatorsApiResponse>('/staking/validators', {
     params: {
-      status: params?.status || 'BOND_STATUS_BONDED',
+      // status: params?.status || 'BOND_STATUS_BONDED',
       'pagination.limit': 500,
       'pagination.count_total': true,
     },

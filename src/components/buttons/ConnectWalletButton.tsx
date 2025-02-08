@@ -1,12 +1,14 @@
 'use client'
 
 import { ConnectButton } from '@rainbow-me/rainbowkit'
-
 import { useIsSmallDevice } from '@/lib/services/hooks/useIsSmallDevice'
-
 import { Button } from '../ui/button'
 
-export default function ConnectWalletButton() {
+interface ConnectWalletButtonProps {
+  text?: string
+}
+
+export default function ConnectWalletButton({ text }: ConnectWalletButtonProps) {
   const isSmallDevice = useIsSmallDevice()
   return (
     <ConnectButton.Custom>
@@ -37,7 +39,7 @@ export default function ConnectWalletButton() {
               if (!connected) {
                 return (
                   <Button variant="outline" onClick={openConnectModal} type="button">
-                    Connect Wallet
+                    {text || 'Connect Wallet'}
                   </Button>
                 )
               }
