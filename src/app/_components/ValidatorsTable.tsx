@@ -188,7 +188,7 @@ export function ValidatorsTable() {
         {/* <ValidatorSearchBar table={table} className='w-full' /> */}
         {/* <SelectValidatorsFilter /> */}
       </section>
-      <StyledCard className="relative flex max-h-[600px] flex-col text-base">
+      <StyledCard className="relative flex max-h-[620px] flex-col text-base overflow-y-auto scrollbar-hide">
         <Table>
           <TableHeader className="bg-none">
             {table.getHeaderGroups().map((headerGroup) => (
