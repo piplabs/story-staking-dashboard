@@ -11,7 +11,7 @@ export default defineConfig(() => {
   })
 
   return {
-    out: './src/lib/hooks/contracts.ts',
+    out: './src/lib/contracts.ts',
     contracts: [
       {
         name: 'IPTokenStake',
