@@ -34,13 +34,11 @@ export async function getAllValidators(params?: GetAllValidatorsParams): Promise
   // Apply token type filter
   if (params?.tokenType === 'LOCKED') {
     validators = validators.filter(
-      (validator) =>
-        validator.support_token_type === undefined || validator.support_token_type === 0
+      (validator) => validator.support_token_type === undefined || validator.support_token_type === 0
     )
   } else if (params?.tokenType === 'UNLOCKED') {
     validators = validators.filter(
-      (validator) =>
-        validator.support_token_type !== undefined && validator.support_token_type !== 0
+      (validator) => validator.support_token_type !== undefined && validator.support_token_type !== 0
     )
   }
 
@@ -66,9 +64,7 @@ export async function getAllValidators(params?: GetAllValidatorsParams): Promise
 }
 
 export async function getValidator(params: GetValidatorParams): Promise<Validator> {
-  const response = await stakingDataAxios.get<GetValidatorApiResponse>(
-    `/staking/validators/${params.validatorAddr}`
-  )
+  const response = await stakingDataAxios.get<GetValidatorApiResponse>(`/staking/validators/${params.validatorAddr}`)
   if (response.data.code !== 200) {
     throw new Error(response.data.error || 'Failed to fetch validator')
   }

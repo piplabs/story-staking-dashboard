@@ -10,12 +10,7 @@ import { useStakingPool } from '@/lib/services/hooks/useStakingPool'
 import { useValidatorDelegations } from '@/lib/services/hooks/useValidatorDelegations'
 import { useValidatorDelegatorDelegations } from '@/lib/services/hooks/useValidatorDelegatorDelegations'
 import { Validator } from '@/lib/types'
-import {
-  base64ToHex,
-  formatLargeMetricsNumber,
-  formatPercentage,
-  truncateAddress,
-} from '@/lib/utils'
+import { base64ToHex, formatLargeMetricsNumber, formatPercentage, truncateAddress } from '@/lib/utils'
 import StyledCard from '@/components/cards/StyledCard'
 
 export function AddressesCard({ validator }: { validator: Validator }) {
@@ -38,11 +33,7 @@ export function AddressesCard({ validator }: { validator: Validator }) {
         />
         <DataRow
           title="Compressed Pubkey (hex)"
-          value={
-            validator.consensus_pubkey.value
-              ? `0x${base64ToHex(validator.consensus_pubkey.value)}`
-              : '-'
-          }
+          value={validator.consensus_pubkey.value ? `0x${base64ToHex(validator.consensus_pubkey.value)}` : '-'}
           tooltipInfo="The validator's compressed public key in hex format"
           isTextTruncated={true}
           isValueAddress={true}
@@ -70,10 +61,7 @@ export function StakeInfoCard({ validator }: { validator: Validator }) {
 
   const selfStakeAmount = selfStake
     ? formatLargeMetricsNumber(
-        formatEther(
-          BigInt(Math.floor(parseFloat(selfStake.delegation_response.balance.amount))),
-          'gwei'
-        )
+        formatEther(BigInt(Math.floor(parseFloat(selfStake.delegation_response.balance.amount))), 'gwei')
       )
     : undefined
 
@@ -178,9 +166,7 @@ export function OverviewCard({ validator }: { validator: Validator }) {
         <DataRow
           title="Supported Token Type"
           value={
-            validator.support_token_type === undefined || validator.support_token_type === 0
-              ? 'Locked'
-              : 'Unlocked'
+            validator.support_token_type === undefined || validator.support_token_type === 0 ? 'Locked' : 'Unlocked'
           }
           tooltipInfo="Whether this validator accepts unlocked or locked tokens for staking. Only validators that support unlocked tokens allow for all types of staking periods. Please view our documentation for more details: https://docs.story.foundation/docs/tokenomics-staking."
         />

@@ -21,14 +21,7 @@ import { RedelegateDialog } from '@/components/dialogs/RedelegateDialog'
 import { StakeDialog } from '@/components/dialogs/StakeDialog'
 import { UnstakeDialog } from '@/components/dialogs/UnstakeDialog'
 import { STAKING_PERIODS } from '@/components/forms/StakeForm'
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { getValidator } from '@/lib/services/api/validatorApi'
 import { useDelegatorPeriodDelegations } from '@/lib/services/hooks/useDelegatorPeriodDelegations'
 import { useIsSmallDevice } from '@/lib/services/hooks/useIsSmallDevice'
@@ -54,8 +47,7 @@ export default function DelegationsTable(props: { delegatorEvmAddr: Address }) {
     delegatorAddr: props.delegatorEvmAddr,
   })
 
-  const isDelegatorMatchConnectedWallet =
-    connectedAddress?.toLowerCase() === props.delegatorEvmAddr.toLowerCase()
+  const isDelegatorMatchConnectedWallet = connectedAddress?.toLowerCase() === props.delegatorEvmAddr.toLowerCase()
 
   const table = useReactTable({
     data: delegatorPeriodDelegations || [],
@@ -156,11 +148,9 @@ export default function DelegationsTable(props: { delegatorEvmAddr: Address }) {
 
               return validatorDelegation.periodDelegations?.period_delegation_responses?.map(
                 (periodDelegation: any, pIndex: number) => {
-                  const isMatured =
-                    new Date(periodDelegation.period_delegation.end_time) < new Date()
+                  const isMatured = new Date(periodDelegation.period_delegation.end_time) < new Date()
 
-                  const validator =
-                    validatorDetails[periodDelegation.period_delegation.validator_address]
+                  const validator = validatorDetails[periodDelegation.period_delegation.validator_address]
 
                   return (
                     <TableRow key={pIndex} className="border-none">
@@ -195,9 +185,7 @@ export default function DelegationsTable(props: { delegatorEvmAddr: Address }) {
                               width={24}
                               height={24}
                             />
-                            <span className="text-lg">
-                              {periodDelegation.period_delegation.validator_address}
-                            </span>
+                            <span className="text-lg">{periodDelegation.period_delegation.validator_address}</span>
                           </div>
                         )}
                       </TableCell>
@@ -206,28 +194,21 @@ export default function DelegationsTable(props: { delegatorEvmAddr: Address }) {
                       </TableCell>
                       <TableCell className="break-words text-center align-middle">
                         {formatLargeMetricsNumber(
-                          formatEther(
-                            BigInt(parseInt(periodDelegation.period_delegation.shares.toString())),
-                            'gwei'
-                          )
+                          formatEther(BigInt(parseInt(periodDelegation.period_delegation.shares.toString())), 'gwei')
                         )}{' '}
                         IP
                       </TableCell>
                       <TableCell className="break-words text-center">
                         {periodDelegation.period_delegation.period_type !== undefined
                           ? STAKING_PERIODS.find(
-                              (period) =>
-                                period.value ===
-                                periodDelegation.period_delegation.period_type.toString()
+                              (period) => period.value === periodDelegation.period_delegation.period_type.toString()
                             )?.label + ''
                           : 'Flexible'}
                       </TableCell>
                       <TableCell className="hidden break-words text-center md:table-cell">
                         {periodDelegation.period_delegation.period_type !== undefined
                           ? STAKING_PERIODS.find(
-                              (period) =>
-                                period.value ===
-                                periodDelegation.period_delegation.period_type.toString()
+                              (period) => period.value === periodDelegation.period_delegation.period_type.toString()
                             )?.multiplier
                           : '1.0x'}
                       </TableCell>
@@ -272,9 +253,7 @@ export default function DelegationsTable(props: { delegatorEvmAddr: Address }) {
                               validator={validator}
                               delegationId={periodDelegation.period_delegation.period_delegation_id}
                               delegatedAmount={formatEther(
-                                BigInt(
-                                  parseInt(periodDelegation.period_delegation.shares.toString())
-                                ),
+                                BigInt(parseInt(periodDelegation.period_delegation.shares.toString())),
                                 'gwei'
                               )}
                             />

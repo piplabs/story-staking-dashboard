@@ -26,9 +26,7 @@ export function YourStakeCard(props: { validator: Validator }) {
 
   const stakedAmount = stakedAmountResponse?.delegation_response.balance.amount
     ? formatLargeMetricsNumber(
-        parseFloat(
-          formatEther(BigInt(stakedAmountResponse.delegation_response.balance.amount), 'gwei')
-        ),
+        parseFloat(formatEther(BigInt(stakedAmountResponse.delegation_response.balance.amount), 'gwei')),
         { useSuffix: false }
       )
     : '0'

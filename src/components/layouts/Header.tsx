@@ -57,11 +57,7 @@ export default function Header() {
         <DropdownMenu open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
           <DropdownMenuTrigger className="my-auto block md:hidden" asChild>
             <button>
-              {mobileMenuOpen ? (
-                <X className="h-6 w-6 text-white" />
-              ) : (
-                <Menu className="h-6 w-6 text-white" />
-              )}
+              {mobileMenuOpen ? <X className="h-6 w-6 text-white" /> : <Menu className="h-6 w-6 text-white" />}
             </button>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-full rounded-xl border-white/20 bg-black p-4 text-white md:hidden">

@@ -11,12 +11,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { useValidator } from '@/lib/services/hooks/useValidator'
 
 import { YourStakeCard } from './_components/ValidatorCtaCard'
-import {
-  AddressesCard,
-  CommissionCard,
-  OverviewCard,
-  StakeInfoCard,
-} from './_components/ValidatorDataCards'
+import { AddressesCard, CommissionCard, OverviewCard, StakeInfoCard } from './_components/ValidatorDataCards'
 
 const DelegatorsTable = dynamic(() => import('./_components/DelegatorsTable'), {
   ssr: false,
@@ -24,11 +19,7 @@ const DelegatorsTable = dynamic(() => import('./_components/DelegatorsTable'), {
 export const fetchCache = 'force-no-store'
 
 export default function Page({ params }: { params: { validatorAddr: Address } }) {
-  const {
-    data: validator,
-    isFetched,
-    isPending,
-  } = useValidator({ validatorAddr: params.validatorAddr })
+  const { data: validator, isFetched, isPending } = useValidator({ validatorAddr: params.validatorAddr })
 
   const moniker = validator?.description?.moniker
   if (!validator && isFetched) {
@@ -84,9 +75,7 @@ export default function Page({ params }: { params: { validatorAddr: Address } })
         <div className="flex flex-1 place-items-stretch">
           <CommissionCard validator={validator} />
         </div>
-        <div className="flex flex-1 place-self-stretch">
-          {validator && <YourStakeCard validator={validator} />}
-        </div>
+        <div className="flex flex-1 place-self-stretch">{validator && <YourStakeCard validator={validator} />}</div>
       </section>
       <section className="flex w-full flex-col justify-between gap-8 lg:flex-row">
         <div className="flex flex-1 place-items-stretch">

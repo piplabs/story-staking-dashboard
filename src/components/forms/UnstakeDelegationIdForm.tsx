@@ -10,14 +10,7 @@ import { useAccount, useSignMessage, useWaitForTransactionReceipt } from 'wagmi'
 import { z } from 'zod'
 
 import { Button } from '@/components/ui/button'
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form'
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { feeEther, feeWei } from '@/lib/constants'
 import { useWriteIpTokenStakeUnstake } from '@/lib/contracts'
@@ -57,8 +50,7 @@ export function UnstakeDelegationIdForm({
   const [unstakeTxHash, setUnstakeTxHash] = useState<Hex | undefined>(undefined)
   const sign = useSignMessage()
 
-  const { writeContractAsync: unstake, isPending: isWaitingForWalletConfirmation } =
-    useWriteIpTokenStakeUnstake()
+  const { writeContractAsync: unstake, isPending: isWaitingForWalletConfirmation } = useWriteIpTokenStakeUnstake()
 
   const { refetch: refetchDelegatorStake } = useValidatorDelegatorDelegations({
     validatorAddr: validator.operator_address,
@@ -108,12 +100,7 @@ export function UnstakeDelegationIdForm({
       refetchUnbondingDelegations()
       onSuccess?.()
     }
-  }, [
-    txnReceipt.isSuccess,
-    refetchDelegatorStake,
-    refetchDelegatorPeriodDelegationsOnValidator,
-    onSuccess,
-  ])
+  }, [txnReceipt.isSuccess, refetchDelegatorStake, refetchDelegatorPeriodDelegationsOnValidator, onSuccess])
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     if (isButtonDisabled) return
@@ -142,12 +129,7 @@ export function UnstakeDelegationIdForm({
     selectedDelegation &&
     parseInt(form.watch('unstakeAmount')) >
       Math.round(
-        parseFloat(
-          formatEther(
-            BigInt(parseInt(selectedDelegation.period_delegation.shares).toString()),
-            'gwei'
-          )
-        )
+        parseFloat(formatEther(BigInt(parseInt(selectedDelegation.period_delegation.shares).toString()), 'gwei'))
       )
   let buttonText
   if (!form.formState.isValid && form.formState.isDirty) {
@@ -174,8 +156,7 @@ export function UnstakeDelegationIdForm({
     isExceedsAllowableUnstake ||
     isWaitingForWalletConfirmation
 
-  const isFormDisabled =
-    isTxnPending || sign.isPending || txnReceipt.isSuccess || isWaitingForWalletConfirmation
+  const isFormDisabled = isTxnPending || sign.isPending || txnReceipt.isSuccess || isWaitingForWalletConfirmation
 
   const availableToUnstake = selectedDelegation
     ? formatEther(BigInt(parseInt(selectedDelegation.period_delegation.shares).toString()), 'gwei')
@@ -188,9 +169,7 @@ export function UnstakeDelegationIdForm({
 
         <section className="flex flex-col">
           <p className="font-semibold">Validator</p>
-          <p className="text-primary-outline">
-            {validator.description.moniker || validator.operator_address}
-          </p>
+          <p className="text-primary-outline">{validator.description.moniker || validator.operator_address}</p>
         </section>
 
         <section className="flex flex-col">
@@ -239,9 +218,7 @@ export function UnstakeDelegationIdForm({
           className={cn(
             'flex w-full flex-row gap-2 font-semibold',
             isButtonDisabled ? 'pointer-events-none cursor-not-allowed opacity-50' : '',
-            txnReceipt.isSuccess
-              ? 'bg-green-500 text-white opacity-100 hover:bg-green-500'
-              : 'bg-primary'
+            txnReceipt.isSuccess ? 'bg-green-500 text-white opacity-100 hover:bg-green-500' : 'bg-primary'
           )}
           disabled={isButtonDisabled}
         >

@@ -376,9 +376,7 @@ export const ipTokenStakeAbi = [
   {
     type: 'event',
     anonymous: false,
-    inputs: [
-      { name: 'minCommissionRate', internalType: 'uint256', type: 'uint256', indexed: false },
-    ],
+    inputs: [{ name: 'minCommissionRate', internalType: 'uint256', type: 'uint256', indexed: false }],
     name: 'MinCommissionRateChanged',
   },
   {
@@ -390,9 +388,7 @@ export const ipTokenStakeAbi = [
   {
     type: 'event',
     anonymous: false,
-    inputs: [
-      { name: 'minUnstakeAmount', internalType: 'uint256', type: 'uint256', indexed: false },
-    ],
+    inputs: [{ name: 'minUnstakeAmount', internalType: 'uint256', type: 'uint256', indexed: false }],
     name: 'MinUnstakeAmountSet',
   },
   {
@@ -1184,12 +1180,11 @@ export const useSimulateIpTokenStakeUnstakeOnBehalf = /*#__PURE__*/ createUseSim
  *
  *
  */
-export const useSimulateIpTokenStakeUpdateValidatorCommission =
-  /*#__PURE__*/ createUseSimulateContract({
-    abi: ipTokenStakeAbi,
-    address: ipTokenStakeAddress,
-    functionName: 'updateValidatorCommission',
-  })
+export const useSimulateIpTokenStakeUpdateValidatorCommission = /*#__PURE__*/ createUseSimulateContract({
+  abi: ipTokenStakeAbi,
+  address: ipTokenStakeAddress,
+  functionName: 'updateValidatorCommission',
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link ipTokenStakeAbi}__
@@ -1250,57 +1245,55 @@ export const useWatchIpTokenStakeInitializedEvent = /*#__PURE__*/ createUseWatch
  *
  *
  */
-export const useWatchIpTokenStakeMinCommissionRateChangedEvent =
-  /*#__PURE__*/ createUseWatchContractEvent({
-    abi: ipTokenStakeAbi,
-    address: ipTokenStakeAddress,
-    eventName: 'MinCommissionRateChanged',
-  })
+export const useWatchIpTokenStakeMinCommissionRateChangedEvent = /*#__PURE__*/ createUseWatchContractEvent({
+  abi: ipTokenStakeAbi,
+  address: ipTokenStakeAddress,
+  eventName: 'MinCommissionRateChanged',
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link ipTokenStakeAbi}__ and `eventName` set to `"MinStakeAmountSet"`
  *
  *
  */
-export const useWatchIpTokenStakeMinStakeAmountSetEvent = /*#__PURE__*/ createUseWatchContractEvent(
-  { abi: ipTokenStakeAbi, address: ipTokenStakeAddress, eventName: 'MinStakeAmountSet' }
-)
+export const useWatchIpTokenStakeMinStakeAmountSetEvent = /*#__PURE__*/ createUseWatchContractEvent({
+  abi: ipTokenStakeAbi,
+  address: ipTokenStakeAddress,
+  eventName: 'MinStakeAmountSet',
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link ipTokenStakeAbi}__ and `eventName` set to `"MinUnstakeAmountSet"`
  *
  *
  */
-export const useWatchIpTokenStakeMinUnstakeAmountSetEvent =
-  /*#__PURE__*/ createUseWatchContractEvent({
-    abi: ipTokenStakeAbi,
-    address: ipTokenStakeAddress,
-    eventName: 'MinUnstakeAmountSet',
-  })
+export const useWatchIpTokenStakeMinUnstakeAmountSetEvent = /*#__PURE__*/ createUseWatchContractEvent({
+  abi: ipTokenStakeAbi,
+  address: ipTokenStakeAddress,
+  eventName: 'MinUnstakeAmountSet',
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link ipTokenStakeAbi}__ and `eventName` set to `"OwnershipTransferStarted"`
  *
  *
  */
-export const useWatchIpTokenStakeOwnershipTransferStartedEvent =
-  /*#__PURE__*/ createUseWatchContractEvent({
-    abi: ipTokenStakeAbi,
-    address: ipTokenStakeAddress,
-    eventName: 'OwnershipTransferStarted',
-  })
+export const useWatchIpTokenStakeOwnershipTransferStartedEvent = /*#__PURE__*/ createUseWatchContractEvent({
+  abi: ipTokenStakeAbi,
+  address: ipTokenStakeAddress,
+  eventName: 'OwnershipTransferStarted',
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link ipTokenStakeAbi}__ and `eventName` set to `"OwnershipTransferred"`
  *
  *
  */
-export const useWatchIpTokenStakeOwnershipTransferredEvent =
-  /*#__PURE__*/ createUseWatchContractEvent({
-    abi: ipTokenStakeAbi,
-    address: ipTokenStakeAddress,
-    eventName: 'OwnershipTransferred',
-  })
+export const useWatchIpTokenStakeOwnershipTransferredEvent = /*#__PURE__*/ createUseWatchContractEvent({
+  abi: ipTokenStakeAbi,
+  address: ipTokenStakeAddress,
+  eventName: 'OwnershipTransferred',
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link ipTokenStakeAbi}__ and `eventName` set to `"Redelegate"`
@@ -1340,12 +1333,11 @@ export const useWatchIpTokenStakeSetRewardAddressEvent = /*#__PURE__*/ createUse
  *
  *
  */
-export const useWatchIpTokenStakeSetWithdrawalAddressEvent =
-  /*#__PURE__*/ createUseWatchContractEvent({
-    abi: ipTokenStakeAbi,
-    address: ipTokenStakeAddress,
-    eventName: 'SetWithdrawalAddress',
-  })
+export const useWatchIpTokenStakeSetWithdrawalAddressEvent = /*#__PURE__*/ createUseWatchContractEvent({
+  abi: ipTokenStakeAbi,
+  address: ipTokenStakeAddress,
+  eventName: 'SetWithdrawalAddress',
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link ipTokenStakeAbi}__ and `eventName` set to `"Unjail"`
@@ -1374,12 +1366,11 @@ export const useWatchIpTokenStakeUnsetOperatorEvent = /*#__PURE__*/ createUseWat
  *
  *
  */
-export const useWatchIpTokenStakeUpdateValidatorCommissionEvent =
-  /*#__PURE__*/ createUseWatchContractEvent({
-    abi: ipTokenStakeAbi,
-    address: ipTokenStakeAddress,
-    eventName: 'UpdateValidatorCommission',
-  })
+export const useWatchIpTokenStakeUpdateValidatorCommissionEvent = /*#__PURE__*/ createUseWatchContractEvent({
+  abi: ipTokenStakeAbi,
+  address: ipTokenStakeAddress,
+  eventName: 'UpdateValidatorCommission',
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link ipTokenStakeAbi}__ and `eventName` set to `"Withdraw"`

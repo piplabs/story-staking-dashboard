@@ -10,22 +10,9 @@ import { useAccount, useWaitForTransactionReceipt } from 'wagmi'
 import { z } from 'zod'
 
 import { Button } from '@/components/ui/button'
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form'
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { feeEther, feeWei } from '@/lib/constants'
 import { useWriteIpTokenStakeRedelegate } from '@/lib/contracts'
 import { useAllValidators } from '@/lib/services/hooks/useAllValidators'
@@ -70,11 +57,7 @@ const createFormSchema = ({ delegatedAmount }: { delegatedAmount: string | undef
     }),
   })
 
-export function RedelegateForm(props: {
-  validator: Validator
-  delegationId?: string
-  delegatedAmount?: string
-}) {
+export function RedelegateForm(props: { validator: Validator; delegationId?: string; delegatedAmount?: string }) {
   const { writeContractAsync: ipTokenRedelegate, isPending: isWaitingForWalletConfirmation } =
     useWriteIpTokenStakeRedelegate()
 
@@ -203,9 +186,7 @@ export function RedelegateForm(props: {
             name="sourceValidator"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-[16px] font-semibold text-white">
-                  Source Validator
-                </FormLabel>
+                <FormLabel className="text-[16px] font-semibold text-white">Source Validator</FormLabel>
                 <FormControl>
                   <Input
                     className="border-primary-border bg-black font-normal text-white"
@@ -224,14 +205,8 @@ export function RedelegateForm(props: {
             name="destinationValidator"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-[16px] font-semibold text-white">
-                  Destination Validator
-                </FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                  value={field.value}
-                >
+                <FormLabel className="text-[16px] font-semibold text-white">Destination Validator</FormLabel>
+                <Select onValueChange={field.onChange} defaultValue={field.value} value={field.value}>
                   <FormControl>
                     <SelectTrigger disabled={isFormDisabled}>
                       <SelectValue placeholder="Select a validator to redelegate to" />
@@ -239,10 +214,7 @@ export function RedelegateForm(props: {
                   </FormControl>
                   <SelectContent className="bg-black text-white">
                     {filteredValidators?.map((validator) => (
-                      <SelectItem
-                        key={validator.operator_address}
-                        value={validator.operator_address}
-                      >
+                      <SelectItem key={validator.operator_address} value={validator.operator_address}>
                         {validator.description?.moniker || validator.operator_address}
                       </SelectItem>
                     ))}
@@ -258,9 +230,7 @@ export function RedelegateForm(props: {
             name="delegationId"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-[16px] font-semibold text-white">
-                  Delegation ID
-                </FormLabel>
+                <FormLabel className="text-[16px] font-semibold text-white">Delegation ID</FormLabel>
                 <FormControl>
                   <Input
                     className="border-primary-border bg-black font-normal text-white"
@@ -281,10 +251,7 @@ export function RedelegateForm(props: {
               <FormItem>
                 <FormLabel className="text-[16px] font-semibold text-white">
                   Amount to Redelegate (
-                  {props.delegatedAmount
-                    ? formatLargeMetricsNumber(props.delegatedAmount) + ' IP'
-                    : '0 IP'}{' '}
-                  available)
+                  {props.delegatedAmount ? formatLargeMetricsNumber(props.delegatedAmount) + ' IP' : '0 IP'} available)
                 </FormLabel>
                 <FormControl>
                   <div className="flex h-12 w-full items-center justify-between rounded-lg border-[1px] border-solid border-primary-border bg-black pr-2">
@@ -316,9 +283,7 @@ export function RedelegateForm(props: {
             className={cn(
               'flex w-full flex-row gap-2 font-semibold',
               isButtonDisabled ? 'cursor-not-allowed opacity-50' : '',
-              txnReceipt.isSuccess
-                ? 'bg-green-500 text-white opacity-100 hover:bg-green-500'
-                : 'bg-primary'
+              txnReceipt.isSuccess ? 'bg-green-500 text-white opacity-100 hover:bg-green-500' : 'bg-primary'
             )}
             disabled={isButtonDisabled}
             onClick={(e) => {
@@ -327,9 +292,7 @@ export function RedelegateForm(props: {
               }
             }}
           >
-            {(isTxnPending || isWaitingForWalletConfirmation) && (
-              <LoaderCircle className="animate-spin" />
-            )}
+            {(isTxnPending || isWaitingForWalletConfirmation) && <LoaderCircle className="animate-spin" />}
             {buttonText}
           </Button>
         </>

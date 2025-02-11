@@ -221,18 +221,14 @@ export const ipTokenStakeAbi = [
   },
   {
     type: 'function',
-    inputs: [
-      { name: 'newMinStakeAmount', internalType: 'uint256', type: 'uint256' },
-    ],
+    inputs: [{ name: 'newMinStakeAmount', internalType: 'uint256', type: 'uint256' }],
     name: 'setMinStakeAmount',
     outputs: [],
     stateMutability: 'nonpayable',
   },
   {
     type: 'function',
-    inputs: [
-      { name: 'newMinUnstakeAmount', internalType: 'uint256', type: 'uint256' },
-    ],
+    inputs: [{ name: 'newMinUnstakeAmount', internalType: 'uint256', type: 'uint256' }],
     name: 'setMinUnstakeAmount',
     outputs: [],
     stateMutability: 'nonpayable',
@@ -246,9 +242,7 @@ export const ipTokenStakeAbi = [
   },
   {
     type: 'function',
-    inputs: [
-      { name: 'newRewardsAddress', internalType: 'address', type: 'address' },
-    ],
+    inputs: [{ name: 'newRewardsAddress', internalType: 'address', type: 'address' }],
     name: 'setRewardsAddress',
     outputs: [],
     stateMutability: 'payable',
@@ -278,9 +272,7 @@ export const ipTokenStakeAbi = [
       { name: 'data', internalType: 'bytes', type: 'bytes' },
     ],
     name: 'stake',
-    outputs: [
-      { name: 'delegationId', internalType: 'uint256', type: 'uint256' },
-    ],
+    outputs: [{ name: 'delegationId', internalType: 'uint256', type: 'uint256' }],
     stateMutability: 'payable',
   },
   {
@@ -296,9 +288,7 @@ export const ipTokenStakeAbi = [
       { name: 'data', internalType: 'bytes', type: 'bytes' },
     ],
     name: 'stakeOnBehalf',
-    outputs: [
-      { name: 'delegationId', internalType: 'uint256', type: 'uint256' },
-    ],
+    outputs: [{ name: 'delegationId', internalType: 'uint256', type: 'uint256' }],
     stateMutability: 'payable',
   },
   {
@@ -778,8 +768,7 @@ export const ipTokenStakeAbi = [
   { type: 'error', inputs: [], name: 'ReentrancyGuardReentrantCall' },
 ] as const
 
-export const ipTokenStakeAddress =
-  '0xCCcCcC0000000000000000000000000000000001' as const
+export const ipTokenStakeAddress = '0xCCcCcC0000000000000000000000000000000001' as const
 
 export const ipTokenStakeConfig = {
   address: ipTokenStakeAddress,
@@ -819,32 +808,29 @@ export const useReadIpTokenStakeBb = /*#__PURE__*/ createUseReadContract({
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link ipTokenStakeAbi}__ and `functionName` set to `"DEFAULT_MIN_FEE"`
  */
-export const useReadIpTokenStakeDefaultMinFee =
-  /*#__PURE__*/ createUseReadContract({
-    abi: ipTokenStakeAbi,
-    address: ipTokenStakeAddress,
-    functionName: 'DEFAULT_MIN_FEE',
-  })
+export const useReadIpTokenStakeDefaultMinFee = /*#__PURE__*/ createUseReadContract({
+  abi: ipTokenStakeAbi,
+  address: ipTokenStakeAddress,
+  functionName: 'DEFAULT_MIN_FEE',
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link ipTokenStakeAbi}__ and `functionName` set to `"MAX_DATA_LENGTH"`
  */
-export const useReadIpTokenStakeMaxDataLength =
-  /*#__PURE__*/ createUseReadContract({
-    abi: ipTokenStakeAbi,
-    address: ipTokenStakeAddress,
-    functionName: 'MAX_DATA_LENGTH',
-  })
+export const useReadIpTokenStakeMaxDataLength = /*#__PURE__*/ createUseReadContract({
+  abi: ipTokenStakeAbi,
+  address: ipTokenStakeAddress,
+  functionName: 'MAX_DATA_LENGTH',
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link ipTokenStakeAbi}__ and `functionName` set to `"MAX_MONIKER_LENGTH"`
  */
-export const useReadIpTokenStakeMaxMonikerLength =
-  /*#__PURE__*/ createUseReadContract({
-    abi: ipTokenStakeAbi,
-    address: ipTokenStakeAddress,
-    functionName: 'MAX_MONIKER_LENGTH',
-  })
+export const useReadIpTokenStakeMaxMonikerLength = /*#__PURE__*/ createUseReadContract({
+  abi: ipTokenStakeAbi,
+  address: ipTokenStakeAddress,
+  functionName: 'MAX_MONIKER_LENGTH',
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link ipTokenStakeAbi}__ and `functionName` set to `"PP"`
@@ -858,12 +844,11 @@ export const useReadIpTokenStakePp = /*#__PURE__*/ createUseReadContract({
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link ipTokenStakeAbi}__ and `functionName` set to `"STAKE_ROUNDING"`
  */
-export const useReadIpTokenStakeStakeRounding =
-  /*#__PURE__*/ createUseReadContract({
-    abi: ipTokenStakeAbi,
-    address: ipTokenStakeAddress,
-    functionName: 'STAKE_ROUNDING',
-  })
+export const useReadIpTokenStakeStakeRounding = /*#__PURE__*/ createUseReadContract({
+  abi: ipTokenStakeAbi,
+  address: ipTokenStakeAddress,
+  functionName: 'STAKE_ROUNDING',
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link ipTokenStakeAbi}__ and `functionName` set to `"fee"`
@@ -877,32 +862,29 @@ export const useReadIpTokenStakeFee = /*#__PURE__*/ createUseReadContract({
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link ipTokenStakeAbi}__ and `functionName` set to `"minCommissionRate"`
  */
-export const useReadIpTokenStakeMinCommissionRate =
-  /*#__PURE__*/ createUseReadContract({
-    abi: ipTokenStakeAbi,
-    address: ipTokenStakeAddress,
-    functionName: 'minCommissionRate',
-  })
+export const useReadIpTokenStakeMinCommissionRate = /*#__PURE__*/ createUseReadContract({
+  abi: ipTokenStakeAbi,
+  address: ipTokenStakeAddress,
+  functionName: 'minCommissionRate',
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link ipTokenStakeAbi}__ and `functionName` set to `"minStakeAmount"`
  */
-export const useReadIpTokenStakeMinStakeAmount =
-  /*#__PURE__*/ createUseReadContract({
-    abi: ipTokenStakeAbi,
-    address: ipTokenStakeAddress,
-    functionName: 'minStakeAmount',
-  })
+export const useReadIpTokenStakeMinStakeAmount = /*#__PURE__*/ createUseReadContract({
+  abi: ipTokenStakeAbi,
+  address: ipTokenStakeAddress,
+  functionName: 'minStakeAmount',
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link ipTokenStakeAbi}__ and `functionName` set to `"minUnstakeAmount"`
  */
-export const useReadIpTokenStakeMinUnstakeAmount =
-  /*#__PURE__*/ createUseReadContract({
-    abi: ipTokenStakeAbi,
-    address: ipTokenStakeAddress,
-    functionName: 'minUnstakeAmount',
-  })
+export const useReadIpTokenStakeMinUnstakeAmount = /*#__PURE__*/ createUseReadContract({
+  abi: ipTokenStakeAbi,
+  address: ipTokenStakeAddress,
+  functionName: 'minUnstakeAmount',
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link ipTokenStakeAbi}__ and `functionName` set to `"owner"`
@@ -916,22 +898,20 @@ export const useReadIpTokenStakeOwner = /*#__PURE__*/ createUseReadContract({
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link ipTokenStakeAbi}__ and `functionName` set to `"pendingOwner"`
  */
-export const useReadIpTokenStakePendingOwner =
-  /*#__PURE__*/ createUseReadContract({
-    abi: ipTokenStakeAbi,
-    address: ipTokenStakeAddress,
-    functionName: 'pendingOwner',
-  })
+export const useReadIpTokenStakePendingOwner = /*#__PURE__*/ createUseReadContract({
+  abi: ipTokenStakeAbi,
+  address: ipTokenStakeAddress,
+  functionName: 'pendingOwner',
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link ipTokenStakeAbi}__ and `functionName` set to `"roundedStakeAmount"`
  */
-export const useReadIpTokenStakeRoundedStakeAmount =
-  /*#__PURE__*/ createUseReadContract({
-    abi: ipTokenStakeAbi,
-    address: ipTokenStakeAddress,
-    functionName: 'roundedStakeAmount',
-  })
+export const useReadIpTokenStakeRoundedStakeAmount = /*#__PURE__*/ createUseReadContract({
+  abi: ipTokenStakeAbi,
+  address: ipTokenStakeAddress,
+  functionName: 'roundedStakeAmount',
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link ipTokenStakeAbi}__
@@ -944,62 +924,56 @@ export const useWriteIpTokenStake = /*#__PURE__*/ createUseWriteContract({
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link ipTokenStakeAbi}__ and `functionName` set to `"acceptOwnership"`
  */
-export const useWriteIpTokenStakeAcceptOwnership =
-  /*#__PURE__*/ createUseWriteContract({
-    abi: ipTokenStakeAbi,
-    address: ipTokenStakeAddress,
-    functionName: 'acceptOwnership',
-  })
+export const useWriteIpTokenStakeAcceptOwnership = /*#__PURE__*/ createUseWriteContract({
+  abi: ipTokenStakeAbi,
+  address: ipTokenStakeAddress,
+  functionName: 'acceptOwnership',
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link ipTokenStakeAbi}__ and `functionName` set to `"createValidator"`
  */
-export const useWriteIpTokenStakeCreateValidator =
-  /*#__PURE__*/ createUseWriteContract({
-    abi: ipTokenStakeAbi,
-    address: ipTokenStakeAddress,
-    functionName: 'createValidator',
-  })
+export const useWriteIpTokenStakeCreateValidator = /*#__PURE__*/ createUseWriteContract({
+  abi: ipTokenStakeAbi,
+  address: ipTokenStakeAddress,
+  functionName: 'createValidator',
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link ipTokenStakeAbi}__ and `functionName` set to `"initialize"`
  */
-export const useWriteIpTokenStakeInitialize =
-  /*#__PURE__*/ createUseWriteContract({
-    abi: ipTokenStakeAbi,
-    address: ipTokenStakeAddress,
-    functionName: 'initialize',
-  })
+export const useWriteIpTokenStakeInitialize = /*#__PURE__*/ createUseWriteContract({
+  abi: ipTokenStakeAbi,
+  address: ipTokenStakeAddress,
+  functionName: 'initialize',
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link ipTokenStakeAbi}__ and `functionName` set to `"redelegate"`
  */
-export const useWriteIpTokenStakeRedelegate =
-  /*#__PURE__*/ createUseWriteContract({
-    abi: ipTokenStakeAbi,
-    address: ipTokenStakeAddress,
-    functionName: 'redelegate',
-  })
+export const useWriteIpTokenStakeRedelegate = /*#__PURE__*/ createUseWriteContract({
+  abi: ipTokenStakeAbi,
+  address: ipTokenStakeAddress,
+  functionName: 'redelegate',
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link ipTokenStakeAbi}__ and `functionName` set to `"redelegateOnBehalf"`
  */
-export const useWriteIpTokenStakeRedelegateOnBehalf =
-  /*#__PURE__*/ createUseWriteContract({
-    abi: ipTokenStakeAbi,
-    address: ipTokenStakeAddress,
-    functionName: 'redelegateOnBehalf',
-  })
+export const useWriteIpTokenStakeRedelegateOnBehalf = /*#__PURE__*/ createUseWriteContract({
+  abi: ipTokenStakeAbi,
+  address: ipTokenStakeAddress,
+  functionName: 'redelegateOnBehalf',
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link ipTokenStakeAbi}__ and `functionName` set to `"renounceOwnership"`
  */
-export const useWriteIpTokenStakeRenounceOwnership =
-  /*#__PURE__*/ createUseWriteContract({
-    abi: ipTokenStakeAbi,
-    address: ipTokenStakeAddress,
-    functionName: 'renounceOwnership',
-  })
+export const useWriteIpTokenStakeRenounceOwnership = /*#__PURE__*/ createUseWriteContract({
+  abi: ipTokenStakeAbi,
+  address: ipTokenStakeAddress,
+  functionName: 'renounceOwnership',
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link ipTokenStakeAbi}__ and `functionName` set to `"setFee"`
@@ -1013,62 +987,56 @@ export const useWriteIpTokenStakeSetFee = /*#__PURE__*/ createUseWriteContract({
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link ipTokenStakeAbi}__ and `functionName` set to `"setMinCommissionRate"`
  */
-export const useWriteIpTokenStakeSetMinCommissionRate =
-  /*#__PURE__*/ createUseWriteContract({
-    abi: ipTokenStakeAbi,
-    address: ipTokenStakeAddress,
-    functionName: 'setMinCommissionRate',
-  })
+export const useWriteIpTokenStakeSetMinCommissionRate = /*#__PURE__*/ createUseWriteContract({
+  abi: ipTokenStakeAbi,
+  address: ipTokenStakeAddress,
+  functionName: 'setMinCommissionRate',
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link ipTokenStakeAbi}__ and `functionName` set to `"setMinStakeAmount"`
  */
-export const useWriteIpTokenStakeSetMinStakeAmount =
-  /*#__PURE__*/ createUseWriteContract({
-    abi: ipTokenStakeAbi,
-    address: ipTokenStakeAddress,
-    functionName: 'setMinStakeAmount',
-  })
+export const useWriteIpTokenStakeSetMinStakeAmount = /*#__PURE__*/ createUseWriteContract({
+  abi: ipTokenStakeAbi,
+  address: ipTokenStakeAddress,
+  functionName: 'setMinStakeAmount',
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link ipTokenStakeAbi}__ and `functionName` set to `"setMinUnstakeAmount"`
  */
-export const useWriteIpTokenStakeSetMinUnstakeAmount =
-  /*#__PURE__*/ createUseWriteContract({
-    abi: ipTokenStakeAbi,
-    address: ipTokenStakeAddress,
-    functionName: 'setMinUnstakeAmount',
-  })
+export const useWriteIpTokenStakeSetMinUnstakeAmount = /*#__PURE__*/ createUseWriteContract({
+  abi: ipTokenStakeAbi,
+  address: ipTokenStakeAddress,
+  functionName: 'setMinUnstakeAmount',
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link ipTokenStakeAbi}__ and `functionName` set to `"setOperator"`
  */
-export const useWriteIpTokenStakeSetOperator =
-  /*#__PURE__*/ createUseWriteContract({
-    abi: ipTokenStakeAbi,
-    address: ipTokenStakeAddress,
-    functionName: 'setOperator',
-  })
+export const useWriteIpTokenStakeSetOperator = /*#__PURE__*/ createUseWriteContract({
+  abi: ipTokenStakeAbi,
+  address: ipTokenStakeAddress,
+  functionName: 'setOperator',
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link ipTokenStakeAbi}__ and `functionName` set to `"setRewardsAddress"`
  */
-export const useWriteIpTokenStakeSetRewardsAddress =
-  /*#__PURE__*/ createUseWriteContract({
-    abi: ipTokenStakeAbi,
-    address: ipTokenStakeAddress,
-    functionName: 'setRewardsAddress',
-  })
+export const useWriteIpTokenStakeSetRewardsAddress = /*#__PURE__*/ createUseWriteContract({
+  abi: ipTokenStakeAbi,
+  address: ipTokenStakeAddress,
+  functionName: 'setRewardsAddress',
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link ipTokenStakeAbi}__ and `functionName` set to `"setWithdrawalAddress"`
  */
-export const useWriteIpTokenStakeSetWithdrawalAddress =
-  /*#__PURE__*/ createUseWriteContract({
-    abi: ipTokenStakeAbi,
-    address: ipTokenStakeAddress,
-    functionName: 'setWithdrawalAddress',
-  })
+export const useWriteIpTokenStakeSetWithdrawalAddress = /*#__PURE__*/ createUseWriteContract({
+  abi: ipTokenStakeAbi,
+  address: ipTokenStakeAddress,
+  functionName: 'setWithdrawalAddress',
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link ipTokenStakeAbi}__ and `functionName` set to `"stake"`
@@ -1082,22 +1050,20 @@ export const useWriteIpTokenStakeStake = /*#__PURE__*/ createUseWriteContract({
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link ipTokenStakeAbi}__ and `functionName` set to `"stakeOnBehalf"`
  */
-export const useWriteIpTokenStakeStakeOnBehalf =
-  /*#__PURE__*/ createUseWriteContract({
-    abi: ipTokenStakeAbi,
-    address: ipTokenStakeAddress,
-    functionName: 'stakeOnBehalf',
-  })
+export const useWriteIpTokenStakeStakeOnBehalf = /*#__PURE__*/ createUseWriteContract({
+  abi: ipTokenStakeAbi,
+  address: ipTokenStakeAddress,
+  functionName: 'stakeOnBehalf',
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link ipTokenStakeAbi}__ and `functionName` set to `"transferOwnership"`
  */
-export const useWriteIpTokenStakeTransferOwnership =
-  /*#__PURE__*/ createUseWriteContract({
-    abi: ipTokenStakeAbi,
-    address: ipTokenStakeAddress,
-    functionName: 'transferOwnership',
-  })
+export const useWriteIpTokenStakeTransferOwnership = /*#__PURE__*/ createUseWriteContract({
+  abi: ipTokenStakeAbi,
+  address: ipTokenStakeAddress,
+  functionName: 'transferOwnership',
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link ipTokenStakeAbi}__ and `functionName` set to `"unjail"`
@@ -1111,53 +1077,47 @@ export const useWriteIpTokenStakeUnjail = /*#__PURE__*/ createUseWriteContract({
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link ipTokenStakeAbi}__ and `functionName` set to `"unjailOnBehalf"`
  */
-export const useWriteIpTokenStakeUnjailOnBehalf =
-  /*#__PURE__*/ createUseWriteContract({
-    abi: ipTokenStakeAbi,
-    address: ipTokenStakeAddress,
-    functionName: 'unjailOnBehalf',
-  })
+export const useWriteIpTokenStakeUnjailOnBehalf = /*#__PURE__*/ createUseWriteContract({
+  abi: ipTokenStakeAbi,
+  address: ipTokenStakeAddress,
+  functionName: 'unjailOnBehalf',
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link ipTokenStakeAbi}__ and `functionName` set to `"unsetOperator"`
  */
-export const useWriteIpTokenStakeUnsetOperator =
-  /*#__PURE__*/ createUseWriteContract({
-    abi: ipTokenStakeAbi,
-    address: ipTokenStakeAddress,
-    functionName: 'unsetOperator',
-  })
+export const useWriteIpTokenStakeUnsetOperator = /*#__PURE__*/ createUseWriteContract({
+  abi: ipTokenStakeAbi,
+  address: ipTokenStakeAddress,
+  functionName: 'unsetOperator',
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link ipTokenStakeAbi}__ and `functionName` set to `"unstake"`
  */
-export const useWriteIpTokenStakeUnstake = /*#__PURE__*/ createUseWriteContract(
-  {
-    abi: ipTokenStakeAbi,
-    address: ipTokenStakeAddress,
-    functionName: 'unstake',
-  },
-)
+export const useWriteIpTokenStakeUnstake = /*#__PURE__*/ createUseWriteContract({
+  abi: ipTokenStakeAbi,
+  address: ipTokenStakeAddress,
+  functionName: 'unstake',
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link ipTokenStakeAbi}__ and `functionName` set to `"unstakeOnBehalf"`
  */
-export const useWriteIpTokenStakeUnstakeOnBehalf =
-  /*#__PURE__*/ createUseWriteContract({
-    abi: ipTokenStakeAbi,
-    address: ipTokenStakeAddress,
-    functionName: 'unstakeOnBehalf',
-  })
+export const useWriteIpTokenStakeUnstakeOnBehalf = /*#__PURE__*/ createUseWriteContract({
+  abi: ipTokenStakeAbi,
+  address: ipTokenStakeAddress,
+  functionName: 'unstakeOnBehalf',
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link ipTokenStakeAbi}__ and `functionName` set to `"updateValidatorCommission"`
  */
-export const useWriteIpTokenStakeUpdateValidatorCommission =
-  /*#__PURE__*/ createUseWriteContract({
-    abi: ipTokenStakeAbi,
-    address: ipTokenStakeAddress,
-    functionName: 'updateValidatorCommission',
-  })
+export const useWriteIpTokenStakeUpdateValidatorCommission = /*#__PURE__*/ createUseWriteContract({
+  abi: ipTokenStakeAbi,
+  address: ipTokenStakeAddress,
+  functionName: 'updateValidatorCommission',
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link ipTokenStakeAbi}__
@@ -1170,398 +1130,358 @@ export const useSimulateIpTokenStake = /*#__PURE__*/ createUseSimulateContract({
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link ipTokenStakeAbi}__ and `functionName` set to `"acceptOwnership"`
  */
-export const useSimulateIpTokenStakeAcceptOwnership =
-  /*#__PURE__*/ createUseSimulateContract({
-    abi: ipTokenStakeAbi,
-    address: ipTokenStakeAddress,
-    functionName: 'acceptOwnership',
-  })
+export const useSimulateIpTokenStakeAcceptOwnership = /*#__PURE__*/ createUseSimulateContract({
+  abi: ipTokenStakeAbi,
+  address: ipTokenStakeAddress,
+  functionName: 'acceptOwnership',
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link ipTokenStakeAbi}__ and `functionName` set to `"createValidator"`
  */
-export const useSimulateIpTokenStakeCreateValidator =
-  /*#__PURE__*/ createUseSimulateContract({
-    abi: ipTokenStakeAbi,
-    address: ipTokenStakeAddress,
-    functionName: 'createValidator',
-  })
+export const useSimulateIpTokenStakeCreateValidator = /*#__PURE__*/ createUseSimulateContract({
+  abi: ipTokenStakeAbi,
+  address: ipTokenStakeAddress,
+  functionName: 'createValidator',
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link ipTokenStakeAbi}__ and `functionName` set to `"initialize"`
  */
-export const useSimulateIpTokenStakeInitialize =
-  /*#__PURE__*/ createUseSimulateContract({
-    abi: ipTokenStakeAbi,
-    address: ipTokenStakeAddress,
-    functionName: 'initialize',
-  })
+export const useSimulateIpTokenStakeInitialize = /*#__PURE__*/ createUseSimulateContract({
+  abi: ipTokenStakeAbi,
+  address: ipTokenStakeAddress,
+  functionName: 'initialize',
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link ipTokenStakeAbi}__ and `functionName` set to `"redelegate"`
  */
-export const useSimulateIpTokenStakeRedelegate =
-  /*#__PURE__*/ createUseSimulateContract({
-    abi: ipTokenStakeAbi,
-    address: ipTokenStakeAddress,
-    functionName: 'redelegate',
-  })
+export const useSimulateIpTokenStakeRedelegate = /*#__PURE__*/ createUseSimulateContract({
+  abi: ipTokenStakeAbi,
+  address: ipTokenStakeAddress,
+  functionName: 'redelegate',
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link ipTokenStakeAbi}__ and `functionName` set to `"redelegateOnBehalf"`
  */
-export const useSimulateIpTokenStakeRedelegateOnBehalf =
-  /*#__PURE__*/ createUseSimulateContract({
-    abi: ipTokenStakeAbi,
-    address: ipTokenStakeAddress,
-    functionName: 'redelegateOnBehalf',
-  })
+export const useSimulateIpTokenStakeRedelegateOnBehalf = /*#__PURE__*/ createUseSimulateContract({
+  abi: ipTokenStakeAbi,
+  address: ipTokenStakeAddress,
+  functionName: 'redelegateOnBehalf',
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link ipTokenStakeAbi}__ and `functionName` set to `"renounceOwnership"`
  */
-export const useSimulateIpTokenStakeRenounceOwnership =
-  /*#__PURE__*/ createUseSimulateContract({
-    abi: ipTokenStakeAbi,
-    address: ipTokenStakeAddress,
-    functionName: 'renounceOwnership',
-  })
+export const useSimulateIpTokenStakeRenounceOwnership = /*#__PURE__*/ createUseSimulateContract({
+  abi: ipTokenStakeAbi,
+  address: ipTokenStakeAddress,
+  functionName: 'renounceOwnership',
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link ipTokenStakeAbi}__ and `functionName` set to `"setFee"`
  */
-export const useSimulateIpTokenStakeSetFee =
-  /*#__PURE__*/ createUseSimulateContract({
-    abi: ipTokenStakeAbi,
-    address: ipTokenStakeAddress,
-    functionName: 'setFee',
-  })
+export const useSimulateIpTokenStakeSetFee = /*#__PURE__*/ createUseSimulateContract({
+  abi: ipTokenStakeAbi,
+  address: ipTokenStakeAddress,
+  functionName: 'setFee',
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link ipTokenStakeAbi}__ and `functionName` set to `"setMinCommissionRate"`
  */
-export const useSimulateIpTokenStakeSetMinCommissionRate =
-  /*#__PURE__*/ createUseSimulateContract({
-    abi: ipTokenStakeAbi,
-    address: ipTokenStakeAddress,
-    functionName: 'setMinCommissionRate',
-  })
+export const useSimulateIpTokenStakeSetMinCommissionRate = /*#__PURE__*/ createUseSimulateContract({
+  abi: ipTokenStakeAbi,
+  address: ipTokenStakeAddress,
+  functionName: 'setMinCommissionRate',
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link ipTokenStakeAbi}__ and `functionName` set to `"setMinStakeAmount"`
  */
-export const useSimulateIpTokenStakeSetMinStakeAmount =
-  /*#__PURE__*/ createUseSimulateContract({
-    abi: ipTokenStakeAbi,
-    address: ipTokenStakeAddress,
-    functionName: 'setMinStakeAmount',
-  })
+export const useSimulateIpTokenStakeSetMinStakeAmount = /*#__PURE__*/ createUseSimulateContract({
+  abi: ipTokenStakeAbi,
+  address: ipTokenStakeAddress,
+  functionName: 'setMinStakeAmount',
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link ipTokenStakeAbi}__ and `functionName` set to `"setMinUnstakeAmount"`
  */
-export const useSimulateIpTokenStakeSetMinUnstakeAmount =
-  /*#__PURE__*/ createUseSimulateContract({
-    abi: ipTokenStakeAbi,
-    address: ipTokenStakeAddress,
-    functionName: 'setMinUnstakeAmount',
-  })
+export const useSimulateIpTokenStakeSetMinUnstakeAmount = /*#__PURE__*/ createUseSimulateContract({
+  abi: ipTokenStakeAbi,
+  address: ipTokenStakeAddress,
+  functionName: 'setMinUnstakeAmount',
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link ipTokenStakeAbi}__ and `functionName` set to `"setOperator"`
  */
-export const useSimulateIpTokenStakeSetOperator =
-  /*#__PURE__*/ createUseSimulateContract({
-    abi: ipTokenStakeAbi,
-    address: ipTokenStakeAddress,
-    functionName: 'setOperator',
-  })
+export const useSimulateIpTokenStakeSetOperator = /*#__PURE__*/ createUseSimulateContract({
+  abi: ipTokenStakeAbi,
+  address: ipTokenStakeAddress,
+  functionName: 'setOperator',
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link ipTokenStakeAbi}__ and `functionName` set to `"setRewardsAddress"`
  */
-export const useSimulateIpTokenStakeSetRewardsAddress =
-  /*#__PURE__*/ createUseSimulateContract({
-    abi: ipTokenStakeAbi,
-    address: ipTokenStakeAddress,
-    functionName: 'setRewardsAddress',
-  })
+export const useSimulateIpTokenStakeSetRewardsAddress = /*#__PURE__*/ createUseSimulateContract({
+  abi: ipTokenStakeAbi,
+  address: ipTokenStakeAddress,
+  functionName: 'setRewardsAddress',
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link ipTokenStakeAbi}__ and `functionName` set to `"setWithdrawalAddress"`
  */
-export const useSimulateIpTokenStakeSetWithdrawalAddress =
-  /*#__PURE__*/ createUseSimulateContract({
-    abi: ipTokenStakeAbi,
-    address: ipTokenStakeAddress,
-    functionName: 'setWithdrawalAddress',
-  })
+export const useSimulateIpTokenStakeSetWithdrawalAddress = /*#__PURE__*/ createUseSimulateContract({
+  abi: ipTokenStakeAbi,
+  address: ipTokenStakeAddress,
+  functionName: 'setWithdrawalAddress',
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link ipTokenStakeAbi}__ and `functionName` set to `"stake"`
  */
-export const useSimulateIpTokenStakeStake =
-  /*#__PURE__*/ createUseSimulateContract({
-    abi: ipTokenStakeAbi,
-    address: ipTokenStakeAddress,
-    functionName: 'stake',
-  })
+export const useSimulateIpTokenStakeStake = /*#__PURE__*/ createUseSimulateContract({
+  abi: ipTokenStakeAbi,
+  address: ipTokenStakeAddress,
+  functionName: 'stake',
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link ipTokenStakeAbi}__ and `functionName` set to `"stakeOnBehalf"`
  */
-export const useSimulateIpTokenStakeStakeOnBehalf =
-  /*#__PURE__*/ createUseSimulateContract({
-    abi: ipTokenStakeAbi,
-    address: ipTokenStakeAddress,
-    functionName: 'stakeOnBehalf',
-  })
+export const useSimulateIpTokenStakeStakeOnBehalf = /*#__PURE__*/ createUseSimulateContract({
+  abi: ipTokenStakeAbi,
+  address: ipTokenStakeAddress,
+  functionName: 'stakeOnBehalf',
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link ipTokenStakeAbi}__ and `functionName` set to `"transferOwnership"`
  */
-export const useSimulateIpTokenStakeTransferOwnership =
-  /*#__PURE__*/ createUseSimulateContract({
-    abi: ipTokenStakeAbi,
-    address: ipTokenStakeAddress,
-    functionName: 'transferOwnership',
-  })
+export const useSimulateIpTokenStakeTransferOwnership = /*#__PURE__*/ createUseSimulateContract({
+  abi: ipTokenStakeAbi,
+  address: ipTokenStakeAddress,
+  functionName: 'transferOwnership',
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link ipTokenStakeAbi}__ and `functionName` set to `"unjail"`
  */
-export const useSimulateIpTokenStakeUnjail =
-  /*#__PURE__*/ createUseSimulateContract({
-    abi: ipTokenStakeAbi,
-    address: ipTokenStakeAddress,
-    functionName: 'unjail',
-  })
+export const useSimulateIpTokenStakeUnjail = /*#__PURE__*/ createUseSimulateContract({
+  abi: ipTokenStakeAbi,
+  address: ipTokenStakeAddress,
+  functionName: 'unjail',
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link ipTokenStakeAbi}__ and `functionName` set to `"unjailOnBehalf"`
  */
-export const useSimulateIpTokenStakeUnjailOnBehalf =
-  /*#__PURE__*/ createUseSimulateContract({
-    abi: ipTokenStakeAbi,
-    address: ipTokenStakeAddress,
-    functionName: 'unjailOnBehalf',
-  })
+export const useSimulateIpTokenStakeUnjailOnBehalf = /*#__PURE__*/ createUseSimulateContract({
+  abi: ipTokenStakeAbi,
+  address: ipTokenStakeAddress,
+  functionName: 'unjailOnBehalf',
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link ipTokenStakeAbi}__ and `functionName` set to `"unsetOperator"`
  */
-export const useSimulateIpTokenStakeUnsetOperator =
-  /*#__PURE__*/ createUseSimulateContract({
-    abi: ipTokenStakeAbi,
-    address: ipTokenStakeAddress,
-    functionName: 'unsetOperator',
-  })
+export const useSimulateIpTokenStakeUnsetOperator = /*#__PURE__*/ createUseSimulateContract({
+  abi: ipTokenStakeAbi,
+  address: ipTokenStakeAddress,
+  functionName: 'unsetOperator',
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link ipTokenStakeAbi}__ and `functionName` set to `"unstake"`
  */
-export const useSimulateIpTokenStakeUnstake =
-  /*#__PURE__*/ createUseSimulateContract({
-    abi: ipTokenStakeAbi,
-    address: ipTokenStakeAddress,
-    functionName: 'unstake',
-  })
+export const useSimulateIpTokenStakeUnstake = /*#__PURE__*/ createUseSimulateContract({
+  abi: ipTokenStakeAbi,
+  address: ipTokenStakeAddress,
+  functionName: 'unstake',
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link ipTokenStakeAbi}__ and `functionName` set to `"unstakeOnBehalf"`
  */
-export const useSimulateIpTokenStakeUnstakeOnBehalf =
-  /*#__PURE__*/ createUseSimulateContract({
-    abi: ipTokenStakeAbi,
-    address: ipTokenStakeAddress,
-    functionName: 'unstakeOnBehalf',
-  })
+export const useSimulateIpTokenStakeUnstakeOnBehalf = /*#__PURE__*/ createUseSimulateContract({
+  abi: ipTokenStakeAbi,
+  address: ipTokenStakeAddress,
+  functionName: 'unstakeOnBehalf',
+})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link ipTokenStakeAbi}__ and `functionName` set to `"updateValidatorCommission"`
  */
-export const useSimulateIpTokenStakeUpdateValidatorCommission =
-  /*#__PURE__*/ createUseSimulateContract({
-    abi: ipTokenStakeAbi,
-    address: ipTokenStakeAddress,
-    functionName: 'updateValidatorCommission',
-  })
+export const useSimulateIpTokenStakeUpdateValidatorCommission = /*#__PURE__*/ createUseSimulateContract({
+  abi: ipTokenStakeAbi,
+  address: ipTokenStakeAddress,
+  functionName: 'updateValidatorCommission',
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link ipTokenStakeAbi}__
  */
-export const useWatchIpTokenStakeEvent =
-  /*#__PURE__*/ createUseWatchContractEvent({
-    abi: ipTokenStakeAbi,
-    address: ipTokenStakeAddress,
-  })
+export const useWatchIpTokenStakeEvent = /*#__PURE__*/ createUseWatchContractEvent({
+  abi: ipTokenStakeAbi,
+  address: ipTokenStakeAddress,
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link ipTokenStakeAbi}__ and `eventName` set to `"CreateValidator"`
  */
-export const useWatchIpTokenStakeCreateValidatorEvent =
-  /*#__PURE__*/ createUseWatchContractEvent({
-    abi: ipTokenStakeAbi,
-    address: ipTokenStakeAddress,
-    eventName: 'CreateValidator',
-  })
+export const useWatchIpTokenStakeCreateValidatorEvent = /*#__PURE__*/ createUseWatchContractEvent({
+  abi: ipTokenStakeAbi,
+  address: ipTokenStakeAddress,
+  eventName: 'CreateValidator',
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link ipTokenStakeAbi}__ and `eventName` set to `"Deposit"`
  */
-export const useWatchIpTokenStakeDepositEvent =
-  /*#__PURE__*/ createUseWatchContractEvent({
-    abi: ipTokenStakeAbi,
-    address: ipTokenStakeAddress,
-    eventName: 'Deposit',
-  })
+export const useWatchIpTokenStakeDepositEvent = /*#__PURE__*/ createUseWatchContractEvent({
+  abi: ipTokenStakeAbi,
+  address: ipTokenStakeAddress,
+  eventName: 'Deposit',
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link ipTokenStakeAbi}__ and `eventName` set to `"FeeSet"`
  */
-export const useWatchIpTokenStakeFeeSetEvent =
-  /*#__PURE__*/ createUseWatchContractEvent({
-    abi: ipTokenStakeAbi,
-    address: ipTokenStakeAddress,
-    eventName: 'FeeSet',
-  })
+export const useWatchIpTokenStakeFeeSetEvent = /*#__PURE__*/ createUseWatchContractEvent({
+  abi: ipTokenStakeAbi,
+  address: ipTokenStakeAddress,
+  eventName: 'FeeSet',
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link ipTokenStakeAbi}__ and `eventName` set to `"Initialized"`
  */
-export const useWatchIpTokenStakeInitializedEvent =
-  /*#__PURE__*/ createUseWatchContractEvent({
-    abi: ipTokenStakeAbi,
-    address: ipTokenStakeAddress,
-    eventName: 'Initialized',
-  })
+export const useWatchIpTokenStakeInitializedEvent = /*#__PURE__*/ createUseWatchContractEvent({
+  abi: ipTokenStakeAbi,
+  address: ipTokenStakeAddress,
+  eventName: 'Initialized',
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link ipTokenStakeAbi}__ and `eventName` set to `"MinCommissionRateChanged"`
  */
-export const useWatchIpTokenStakeMinCommissionRateChangedEvent =
-  /*#__PURE__*/ createUseWatchContractEvent({
-    abi: ipTokenStakeAbi,
-    address: ipTokenStakeAddress,
-    eventName: 'MinCommissionRateChanged',
-  })
+export const useWatchIpTokenStakeMinCommissionRateChangedEvent = /*#__PURE__*/ createUseWatchContractEvent({
+  abi: ipTokenStakeAbi,
+  address: ipTokenStakeAddress,
+  eventName: 'MinCommissionRateChanged',
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link ipTokenStakeAbi}__ and `eventName` set to `"MinStakeAmountSet"`
  */
-export const useWatchIpTokenStakeMinStakeAmountSetEvent =
-  /*#__PURE__*/ createUseWatchContractEvent({
-    abi: ipTokenStakeAbi,
-    address: ipTokenStakeAddress,
-    eventName: 'MinStakeAmountSet',
-  })
+export const useWatchIpTokenStakeMinStakeAmountSetEvent = /*#__PURE__*/ createUseWatchContractEvent({
+  abi: ipTokenStakeAbi,
+  address: ipTokenStakeAddress,
+  eventName: 'MinStakeAmountSet',
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link ipTokenStakeAbi}__ and `eventName` set to `"MinUnstakeAmountSet"`
  */
-export const useWatchIpTokenStakeMinUnstakeAmountSetEvent =
-  /*#__PURE__*/ createUseWatchContractEvent({
-    abi: ipTokenStakeAbi,
-    address: ipTokenStakeAddress,
-    eventName: 'MinUnstakeAmountSet',
-  })
+export const useWatchIpTokenStakeMinUnstakeAmountSetEvent = /*#__PURE__*/ createUseWatchContractEvent({
+  abi: ipTokenStakeAbi,
+  address: ipTokenStakeAddress,
+  eventName: 'MinUnstakeAmountSet',
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link ipTokenStakeAbi}__ and `eventName` set to `"OwnershipTransferStarted"`
  */
-export const useWatchIpTokenStakeOwnershipTransferStartedEvent =
-  /*#__PURE__*/ createUseWatchContractEvent({
-    abi: ipTokenStakeAbi,
-    address: ipTokenStakeAddress,
-    eventName: 'OwnershipTransferStarted',
-  })
+export const useWatchIpTokenStakeOwnershipTransferStartedEvent = /*#__PURE__*/ createUseWatchContractEvent({
+  abi: ipTokenStakeAbi,
+  address: ipTokenStakeAddress,
+  eventName: 'OwnershipTransferStarted',
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link ipTokenStakeAbi}__ and `eventName` set to `"OwnershipTransferred"`
  */
-export const useWatchIpTokenStakeOwnershipTransferredEvent =
-  /*#__PURE__*/ createUseWatchContractEvent({
-    abi: ipTokenStakeAbi,
-    address: ipTokenStakeAddress,
-    eventName: 'OwnershipTransferred',
-  })
+export const useWatchIpTokenStakeOwnershipTransferredEvent = /*#__PURE__*/ createUseWatchContractEvent({
+  abi: ipTokenStakeAbi,
+  address: ipTokenStakeAddress,
+  eventName: 'OwnershipTransferred',
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link ipTokenStakeAbi}__ and `eventName` set to `"Redelegate"`
  */
-export const useWatchIpTokenStakeRedelegateEvent =
-  /*#__PURE__*/ createUseWatchContractEvent({
-    abi: ipTokenStakeAbi,
-    address: ipTokenStakeAddress,
-    eventName: 'Redelegate',
-  })
+export const useWatchIpTokenStakeRedelegateEvent = /*#__PURE__*/ createUseWatchContractEvent({
+  abi: ipTokenStakeAbi,
+  address: ipTokenStakeAddress,
+  eventName: 'Redelegate',
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link ipTokenStakeAbi}__ and `eventName` set to `"SetOperator"`
  */
-export const useWatchIpTokenStakeSetOperatorEvent =
-  /*#__PURE__*/ createUseWatchContractEvent({
-    abi: ipTokenStakeAbi,
-    address: ipTokenStakeAddress,
-    eventName: 'SetOperator',
-  })
+export const useWatchIpTokenStakeSetOperatorEvent = /*#__PURE__*/ createUseWatchContractEvent({
+  abi: ipTokenStakeAbi,
+  address: ipTokenStakeAddress,
+  eventName: 'SetOperator',
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link ipTokenStakeAbi}__ and `eventName` set to `"SetRewardAddress"`
  */
-export const useWatchIpTokenStakeSetRewardAddressEvent =
-  /*#__PURE__*/ createUseWatchContractEvent({
-    abi: ipTokenStakeAbi,
-    address: ipTokenStakeAddress,
-    eventName: 'SetRewardAddress',
-  })
+export const useWatchIpTokenStakeSetRewardAddressEvent = /*#__PURE__*/ createUseWatchContractEvent({
+  abi: ipTokenStakeAbi,
+  address: ipTokenStakeAddress,
+  eventName: 'SetRewardAddress',
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link ipTokenStakeAbi}__ and `eventName` set to `"SetWithdrawalAddress"`
  */
-export const useWatchIpTokenStakeSetWithdrawalAddressEvent =
-  /*#__PURE__*/ createUseWatchContractEvent({
-    abi: ipTokenStakeAbi,
-    address: ipTokenStakeAddress,
-    eventName: 'SetWithdrawalAddress',
-  })
+export const useWatchIpTokenStakeSetWithdrawalAddressEvent = /*#__PURE__*/ createUseWatchContractEvent({
+  abi: ipTokenStakeAbi,
+  address: ipTokenStakeAddress,
+  eventName: 'SetWithdrawalAddress',
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link ipTokenStakeAbi}__ and `eventName` set to `"Unjail"`
  */
-export const useWatchIpTokenStakeUnjailEvent =
-  /*#__PURE__*/ createUseWatchContractEvent({
-    abi: ipTokenStakeAbi,
-    address: ipTokenStakeAddress,
-    eventName: 'Unjail',
-  })
+export const useWatchIpTokenStakeUnjailEvent = /*#__PURE__*/ createUseWatchContractEvent({
+  abi: ipTokenStakeAbi,
+  address: ipTokenStakeAddress,
+  eventName: 'Unjail',
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link ipTokenStakeAbi}__ and `eventName` set to `"UnsetOperator"`
  */
-export const useWatchIpTokenStakeUnsetOperatorEvent =
-  /*#__PURE__*/ createUseWatchContractEvent({
-    abi: ipTokenStakeAbi,
-    address: ipTokenStakeAddress,
-    eventName: 'UnsetOperator',
-  })
+export const useWatchIpTokenStakeUnsetOperatorEvent = /*#__PURE__*/ createUseWatchContractEvent({
+  abi: ipTokenStakeAbi,
+  address: ipTokenStakeAddress,
+  eventName: 'UnsetOperator',
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link ipTokenStakeAbi}__ and `eventName` set to `"UpdateValidatorCommission"`
  */
-export const useWatchIpTokenStakeUpdateValidatorCommissionEvent =
-  /*#__PURE__*/ createUseWatchContractEvent({
-    abi: ipTokenStakeAbi,
-    address: ipTokenStakeAddress,
-    eventName: 'UpdateValidatorCommission',
-  })
+export const useWatchIpTokenStakeUpdateValidatorCommissionEvent = /*#__PURE__*/ createUseWatchContractEvent({
+  abi: ipTokenStakeAbi,
+  address: ipTokenStakeAddress,
+  eventName: 'UpdateValidatorCommission',
+})
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link ipTokenStakeAbi}__ and `eventName` set to `"Withdraw"`
  */
-export const useWatchIpTokenStakeWithdrawEvent =
-  /*#__PURE__*/ createUseWatchContractEvent({
-    abi: ipTokenStakeAbi,
-    address: ipTokenStakeAddress,
-    eventName: 'Withdraw',
-  })
+export const useWatchIpTokenStakeWithdrawEvent = /*#__PURE__*/ createUseWatchContractEvent({
+  abi: ipTokenStakeAbi,
+  address: ipTokenStakeAddress,
+  eventName: 'Withdraw',
+})

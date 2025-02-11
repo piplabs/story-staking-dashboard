@@ -68,9 +68,7 @@ function OverviewCard({ delegatorAddr }: { delegatorAddr: Address }) {
       <section className="flex flex-col gap-2">
         <DataRow
           title="Total Staked"
-          value={
-            isPending || totalStake === undefined ? '-' : `${formatEther(totalStake, 'gwei')} IP`
-          }
+          value={isPending || totalStake === undefined ? '-' : `${formatEther(totalStake, 'gwei')} IP`}
           tooltipInfo="The total amount of IP staked across validators"
         />
 

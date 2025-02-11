@@ -20,14 +20,7 @@ import { formatEther } from 'viem'
 
 import { DataTablePagination } from '@/components/DataTablePagination'
 import { Skeleton } from '@/components/ui/skeleton'
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { useAllValidators } from '@/lib/services/hooks/useAllValidators'
 import { Validator } from '@/lib/types'
 import { cn, formatLargeMetricsNumber, truncateAddress } from '@/lib/utils'
@@ -60,8 +53,7 @@ export function ValidatorsTable({
   const columns: ColumnDef<Validator>[] = [
     {
       accessorFn: (row: Validator) =>
-        row.description.moniker ||
-        (row.operator_address ? truncateAddress(row.operator_address, 6, 4) : ''),
+        row.description.moniker || (row.operator_address ? truncateAddress(row.operator_address, 6, 4) : ''),
       accessorKey: 'name',
       header: ({ column }) => {
         return (
@@ -146,14 +138,7 @@ export function ValidatorsTable({
     {
       accessorKey: 'uptime',
       header: ({ column }) => {
-        return (
-          <HeaderWithSortArrows
-            column={column}
-            header={'Uptime'}
-            sorting={sorting}
-            className="justify-center"
-          />
-        )
+        return <HeaderWithSortArrows column={column} header={'Uptime'} sorting={sorting} className="justify-center" />
       },
       cell: ({ row }) => {
         return <div className="text-center">{row.getValue('uptime')}</div>
@@ -206,9 +191,7 @@ export function ValidatorsTable({
                 {headerGroup.headers.map((header, index) => {
                   return (
                     <TableHead key={header.id} className="bg-transparent">
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(header.column.columnDef.header, header.getContext())}
+                      {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
                     </TableHead>
                   )
                 })}

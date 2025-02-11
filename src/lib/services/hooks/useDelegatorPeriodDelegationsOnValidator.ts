@@ -7,9 +7,7 @@ import {
 
 import { getDelegatorPeriodDelegationsOnValidator } from '../api/delegatorApi'
 
-export function useDelegatorPeriodDelegationsOnValidator(
-  params: GetDelegatorPeriodDelegationsOnValidatorParams
-) {
+export function useDelegatorPeriodDelegationsOnValidator(params: GetDelegatorPeriodDelegationsOnValidatorParams) {
   return useQuery<GetDelegatorPeriodDelegationsOnValidatorResponse>({
     queryKey: ['delegatorPeriodDelegationsOnValidator', params.delegatorAddr, params.validatorAddr],
     queryFn: async () => getDelegatorPeriodDelegationsOnValidator(params),

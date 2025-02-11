@@ -77,12 +77,8 @@ export async function getDelegatorDelegations(
     pagination: response.data.msg.pagination,
   }
 }
-export async function getDelegatorRewards(
-  params: GetDelegatorRewardsParams
-): Promise<GetDelegatorRewardsResponse> {
-  const response = await stakingDataAxios.get<GetDelegatorRewardsApiResponse>(
-    `/rewards/${params.delegatorAddr}`
-  )
+export async function getDelegatorRewards(params: GetDelegatorRewardsParams): Promise<GetDelegatorRewardsResponse> {
+  const response = await stakingDataAxios.get<GetDelegatorRewardsApiResponse>(`/rewards/${params.delegatorAddr}`)
 
   if (response.data.code !== 200) {
     throw new Error(response.data.error || 'Failed to fetch total rewards')

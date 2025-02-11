@@ -10,14 +10,7 @@ import { useAccount, useSignMessage, useWaitForTransactionReceipt } from 'wagmi'
 import { z } from 'zod'
 
 import { Button } from '@/components/ui/button'
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form'
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { feeEther, feeWei } from '@/lib/constants'
 import { useWriteIpTokenStakeUnstake } from '@/lib/contracts'
@@ -48,8 +41,7 @@ export function UnstakeForm({ validator }: { validator: Validator }) {
   const { address } = useAccount()
   const [unstakeTxHash, setUnstakeTxHash] = useState<Hex | undefined>(undefined)
   const sign = useSignMessage()
-  const { writeContractAsync: unstake, isPending: isWaitingForWalletConfirmation } =
-    useWriteIpTokenStakeUnstake()
+  const { writeContractAsync: unstake, isPending: isWaitingForWalletConfirmation } = useWriteIpTokenStakeUnstake()
 
   const { data: stakedAmount, refetch: refetchDelegatorStake } = useValidatorDelegatorDelegations({
     validatorAddr: validator.operator_address,
@@ -132,12 +124,7 @@ export function UnstakeForm({ validator }: { validator: Validator }) {
   const isExceedsAllowableUnstake =
     selectedDelegation &&
     parseInt(form.watch('unstakeAmount')) >
-      parseInt(
-        formatEther(
-          BigInt(parseInt(selectedDelegation.period_delegation.shares).toString()),
-          'gwei'
-        )
-      )
+      parseInt(formatEther(BigInt(parseInt(selectedDelegation.period_delegation.shares).toString()), 'gwei'))
 
   let buttonText
   if (!selectedPeriodId) {
@@ -166,8 +153,7 @@ export function UnstakeForm({ validator }: { validator: Validator }) {
     isExceedsAllowableUnstake ||
     isWaitingForWalletConfirmation
 
-  const isFormDisabled =
-    isTxnPending || sign.isPending || txnReceipt.isSuccess || isWaitingForWalletConfirmation
+  const isFormDisabled = isTxnPending || sign.isPending || txnReceipt.isSuccess || isWaitingForWalletConfirmation
 
   return (
     <Form {...form}>
@@ -175,9 +161,7 @@ export function UnstakeForm({ validator }: { validator: Validator }) {
         <h2 className="text-2xl font-bold">Unstake IP</h2>
         <section className="flex flex-col">
           <p className="font-semibold">Validator</p>
-          <p className="text-primary-outline">
-            {validator.description.moniker || validator.operator_address}
-          </p>
+          <p className="text-primary-outline">{validator.description.moniker || validator.operator_address}</p>
         </section>
 
         <section className="flex flex-col">
@@ -199,75 +183,59 @@ export function UnstakeForm({ validator }: { validator: Validator }) {
                           <thead>
                             <tr className="border-b border-primary-border">
                               <th className="pb-2 text-center"></th>
-                              <th className="pb-2 text-center text-sm font-medium">
-                                Staked Amount
-                              </th>
-                              <th className="pb-2 text-center text-sm font-medium">
-                                Staking Period Type
-                              </th>
+                              <th className="pb-2 text-center text-sm font-medium">Staked Amount</th>
+                              <th className="pb-2 text-center text-sm font-medium">Staking Period Type</th>
                               <th className="pb-2 text-center text-sm font-medium">Unstakable</th>
                             </tr>
                           </thead>
                           <tbody>
-                            {periodDelegations?.period_delegation_responses.map(
-                              (delegation: any, index: any) => {
-                                const isUnlocked =
-                                  new Date(delegation.period_delegation.end_time) <= new Date()
-                                const stakingPeriod = STAKING_PERIODS.find(
-                                  (period) =>
-                                    period.value ===
-                                    (delegation.period_delegation.period_type?.toString() ?? '0')
-                                )
+                            {periodDelegations?.period_delegation_responses.map((delegation: any, index: any) => {
+                              const isUnlocked = new Date(delegation.period_delegation.end_time) <= new Date()
+                              const stakingPeriod = STAKING_PERIODS.find(
+                                (period) =>
+                                  period.value === (delegation.period_delegation.period_type?.toString() ?? '0')
+                              )
 
-                                const unstakeAvailable =
-                                  (Number(stakedAmount?.delegation_response.balance.amount || 0) *
-                                    Number(delegation?.period_delegation.shares || 0)) /
-                                  Number(stakedAmount?.delegation_response.balance.amount || 1)
-                                return (
-                                  <tr
-                                    key={index}
-                                    className="border-b border-primary-border text-center last:border-b-0"
-                                  >
-                                    <td className="py-2">
-                                      <input
-                                        type="radio"
-                                        value={delegation.period_delegation.period_delegation_id}
-                                        checked={
-                                          field.value ===
-                                          delegation.period_delegation.period_delegation_id
-                                        }
-                                        disabled={!isUnlocked || isFormDisabled}
-                                        onChange={(e) => {
-                                          field.onChange(e.target.value)
-                                          form.setValue('unstakeAmount', '', {
-                                            shouldValidate: true,
-                                          })
-                                        }}
-                                      />
-                                    </td>
-                                    <td className="py-2 text-sm font-medium">
-                                      {formatLargeMetricsNumber(
-                                        parseFloat(
-                                          formatEther(BigInt(Math.floor(unstakeAvailable)), 'gwei')
-                                        ),
-                                        { useSuffix: false }
-                                      )}{' '}
-                                      IP
-                                    </td>
-                                    <td className="py-2 text-sm text-primary-outline">
-                                      {stakingPeriod
-                                        ? `${stakingPeriod.label} (${stakingPeriod.multiplier} rewards)`
-                                        : ''}
-                                    </td>
-                                    <td className="py-2 text-sm text-primary-outline">
-                                      {isUnlocked
-                                        ? 'Unstakable Now'
-                                        : `Unstakable on ${new Date(delegation.period_delegation.end_time).toLocaleString('en-US', { timeZone: 'UTC' })} UTC`}
-                                    </td>
-                                  </tr>
-                                )
-                              }
-                            )}
+                              const unstakeAvailable =
+                                (Number(stakedAmount?.delegation_response.balance.amount || 0) *
+                                  Number(delegation?.period_delegation.shares || 0)) /
+                                Number(stakedAmount?.delegation_response.balance.amount || 1)
+                              return (
+                                <tr key={index} className="border-b border-primary-border text-center last:border-b-0">
+                                  <td className="py-2">
+                                    <input
+                                      type="radio"
+                                      value={delegation.period_delegation.period_delegation_id}
+                                      checked={field.value === delegation.period_delegation.period_delegation_id}
+                                      disabled={!isUnlocked || isFormDisabled}
+                                      onChange={(e) => {
+                                        field.onChange(e.target.value)
+                                        form.setValue('unstakeAmount', '', {
+                                          shouldValidate: true,
+                                        })
+                                      }}
+                                    />
+                                  </td>
+                                  <td className="py-2 text-sm font-medium">
+                                    {formatLargeMetricsNumber(
+                                      parseFloat(formatEther(BigInt(Math.floor(unstakeAvailable)), 'gwei')),
+                                      { useSuffix: false }
+                                    )}{' '}
+                                    IP
+                                  </td>
+                                  <td className="py-2 text-sm text-primary-outline">
+                                    {stakingPeriod
+                                      ? `${stakingPeriod.label} (${stakingPeriod.multiplier} rewards)`
+                                      : ''}
+                                  </td>
+                                  <td className="py-2 text-sm text-primary-outline">
+                                    {isUnlocked
+                                      ? 'Unstakable Now'
+                                      : `Unstakable on ${new Date(delegation.period_delegation.end_time).toLocaleString('en-US', { timeZone: 'UTC' })} UTC`}
+                                  </td>
+                                </tr>
+                              )
+                            })}
                           </tbody>
                         </table>
                       </div>
@@ -285,9 +253,7 @@ export function UnstakeForm({ validator }: { validator: Validator }) {
           name="unstakeAmount"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="text-[16px] font-semibold text-white">
-                Amount to Unstake
-              </FormLabel>
+              <FormLabel className="text-[16px] font-semibold text-white">Amount to Unstake</FormLabel>
               <FormControl>
                 <div className="flex h-12 w-full items-center justify-between rounded-lg border-[1px] border-solid border-primary-border bg-black pr-2">
                   <Input
@@ -311,9 +277,7 @@ export function UnstakeForm({ validator }: { validator: Validator }) {
           className={cn(
             'flex w-full flex-row gap-2 font-semibold',
             isButtonDisabled ? 'pointer-events-none cursor-not-allowed opacity-50' : '',
-            txnReceipt.isSuccess
-              ? 'bg-green-500 text-white opacity-100 hover:bg-green-500'
-              : 'bg-primary'
+            txnReceipt.isSuccess ? 'bg-green-500 text-white opacity-100 hover:bg-green-500' : 'bg-primary'
           )}
           disabled={isButtonDisabled}
         >

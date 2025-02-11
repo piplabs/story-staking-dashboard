@@ -1,12 +1,6 @@
 import { Address } from 'viem'
 
-import {
-  ApiResponsePagination,
-  Delegation,
-  DelegationBalance,
-  PeriodDelegation,
-  Validator,
-} from '.'
+import { ApiResponsePagination, Delegation, DelegationBalance, PeriodDelegation, Validator } from '.'
 
 /* 
 	Get All Validators

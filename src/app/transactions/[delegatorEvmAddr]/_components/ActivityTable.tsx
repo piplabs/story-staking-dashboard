@@ -14,14 +14,7 @@ import { Address, formatEther, zeroAddress } from 'viem'
 import { useAccount } from 'wagmi'
 
 import { DataTablePagination } from '@/components/DataTablePagination'
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { useEvmOperations } from '@/lib/services/hooks/useEvmOperations'
 import { useIsSmallDevice } from '@/lib/services/hooks/useIsSmallDevice'
 import { EvmOperation } from '@/lib/types/networkApiTypes'
@@ -33,9 +26,7 @@ export default function ActivityTable(props: { delegatorEvmAddr: Address }) {
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const explorerUrl =
-    chain && chain.blockExplorers
-      ? chain.blockExplorers.default.url
-      : process.env.NEXT_PUBLIC_TESTNET_EXPLORER_URL
+    chain && chain.blockExplorers ? chain.blockExplorers.default.url : process.env.NEXT_PUBLIC_TESTNET_EXPLORER_URL
 
   const [{ pageIndex, pageSize }, setPagination] = useState({
     pageIndex: 0,
@@ -111,9 +102,7 @@ export default function ActivityTable(props: { delegatorEvmAddr: Address }) {
                       {operation.status_ok ? 'Success' : 'Fail'}
                     </span>
                   </TableCell>
-                  <TableCell className="text-center font-semibold">
-                    {operation.event_type}
-                  </TableCell>
+                  <TableCell className="text-center font-semibold">{operation.event_type}</TableCell>
                   <TableCell className="text-center">
                     {operation.amount ? `${formatEther(BigInt(operation.amount), 'gwei')} IP` : '-'}
                   </TableCell>

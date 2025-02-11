@@ -30,18 +30,13 @@ export async function getNetworkHealth(): Promise<GetNetworkHealthResponse> {
   return response.data.msg
 }
 
-export async function getEvmOperations(
-  params: GetEvmOperationsParams
-): Promise<GetEvmOperationsResponse> {
-  const response = await stakingDataAxios.get<GetEvmOperationsApiResponse>(
-    `/operations/${params.evmAddr}`,
-    {
-      params: {
-        page: params.page,
-        per_page: params.pageSize,
-      },
-    }
-  )
+export async function getEvmOperations(params: GetEvmOperationsParams): Promise<GetEvmOperationsResponse> {
+  const response = await stakingDataAxios.get<GetEvmOperationsApiResponse>(`/operations/${params.evmAddr}`, {
+    params: {
+      page: params.page,
+      per_page: params.pageSize,
+    },
+  })
 
   if (response.data.code === 200) {
     return response.data.msg
@@ -50,15 +45,10 @@ export async function getEvmOperations(
   return {} as GetEvmOperationsResponse
 }
 
-export async function getTokenTotalSupply(
-  params: GetTokenTotalSupplyParams
-): Promise<GetTokenTotalSupplyResponse> {
-  const response = await stakingDataAxios.get<GetTokenTotalSupplyApiResponse>(
-    `/bank/supply/by_denom`,
-    {
-      params,
-    }
-  )
+export async function getTokenTotalSupply(params: GetTokenTotalSupplyParams): Promise<GetTokenTotalSupplyResponse> {
+  const response = await stakingDataAxios.get<GetTokenTotalSupplyApiResponse>(`/bank/supply/by_denom`, {
+    params,
+  })
   if (response.status !== 200) {
     throw new Error(`Failed to get token supply: ${response.status}`)
   }

@@ -34,9 +34,7 @@ export default function Page({ params }: { params: { delegatorEvmAddr: Address }
             height={48}
           />
           <div className="my-auto flex w-full flex-row break-words pr-8 text-xl">
-            <h2>
-              {isSmallDevice ? truncateAddress(params.delegatorEvmAddr) : params.delegatorEvmAddr}{' '}
-            </h2>
+            <h2>{isSmallDevice ? truncateAddress(params.delegatorEvmAddr) : params.delegatorEvmAddr} </h2>
             <CopyStringButton value={params.delegatorEvmAddr} />
           </div>
         </div>

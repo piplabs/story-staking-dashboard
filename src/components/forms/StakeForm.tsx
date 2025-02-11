@@ -11,22 +11,9 @@ import { useAccount, useBalance, useWaitForTransactionReceipt } from 'wagmi'
 import { z } from 'zod'
 
 import { Button, buttonVariants } from '@/components/ui/button'
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form'
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { useReadIpTokenStakeMinStakeAmount, useWriteIpTokenStakeStake } from '@/lib/contracts'
 import { useValidatorDelegatorDelegations } from '@/lib/services/hooks/useValidatorDelegatorDelegations'
 import { Validator } from '@/lib/types'
@@ -83,10 +70,9 @@ const createFormSchema = ({
   })
 
 export function StakeForm(props: { validator?: Validator; isFlexible?: boolean }) {
-  const { writeContractAsync: ipTokenStake, isPending: isWaitingForWalletConfirmation } =
-    useWriteIpTokenStakeStake()
+  const { writeContractAsync: ipTokenStake, isPending: isWaitingForWalletConfirmation } = useWriteIpTokenStakeStake()
   const { data: minStakeAmount } = useReadIpTokenStakeMinStakeAmount()
-
+  console.log({ minStakeAmount })
   const [stakeTxHash, setStakeTxHash] = useState<Hex | undefined>(undefined)
   const { address } = useAccount()
   const { data: balance, refetch: refetchBalance } = useBalance({
@@ -180,10 +166,7 @@ export function StakeForm(props: { validator?: Validator; isFlexible?: boolean }
   }
 
   const isButtonDisabled =
-    isTxnPending ||
-    isWaitingForWalletConfirmation ||
-    !form.formState.isValid ||
-    txnReceipt.isSuccess
+    isTxnPending || isWaitingForWalletConfirmation || !form.formState.isValid || txnReceipt.isSuccess
 
   const isFormDisabled = isTxnPending || isWaitingForWalletConfirmation || txnReceipt.isSuccess
 
@@ -202,8 +185,7 @@ export function StakeForm(props: { validator?: Validator; isFlexible?: boolean }
             <section className="flex flex-col">
               <p className="text font-semibold">Supported Staking Periods</p>
               <p className="text-primary-outline">
-                {props.validator?.support_token_type === undefined ||
-                props.validator?.support_token_type === 0
+                {props.validator?.support_token_type === undefined || props.validator?.support_token_type === 0
                   ? 'Flexible Only'
                   : 'All (Flexible and locked periods)'}
               </p>
@@ -215,9 +197,7 @@ export function StakeForm(props: { validator?: Validator; isFlexible?: boolean }
             name="stakingPeriod"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-[16px] font-semibold text-white">
-                  Staking Period
-                </FormLabel>
+                <FormLabel className="text-[16px] font-semibold text-white">Staking Period</FormLabel>
                 <FormControl>
                   {props.isFlexible ? (
                     <div className="h-12 w-full rounded-lg border border-solid border-primary-border bg-black px-4 py-3 text-white opacity-50">
@@ -225,10 +205,7 @@ export function StakeForm(props: { validator?: Validator; isFlexible?: boolean }
                     </div>
                   ) : (
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
-                      <SelectTrigger
-                        disabled={isFormDisabled}
-                        className="h-12 w-full border-primary-border bg-black"
-                      >
+                      <SelectTrigger disabled={isFormDisabled} className="h-12 w-full border-primary-border bg-black">
                         <SelectValue placeholder="Select a staking period" />
                       </SelectTrigger>
                       <SelectContent className="border-primary-border bg-black">
@@ -243,18 +220,12 @@ export function StakeForm(props: { validator?: Validator; isFlexible?: boolean }
                           </SelectItem>
                         ) : (
                           STAKING_PERIODS.map((period) => (
-                            <SelectItem
-                              key={period.value}
-                              value={period.value}
-                              className="text-white"
-                            >
+                            <SelectItem key={period.value} value={period.value} className="text-white">
                               <div className="flex flex-row items-center gap-2">
                                 <span className="font-medium">
                                   {period.label} ({period.multiplier} rewards)
                                 </span>
-                                <span className="text-sm text-gray-400">
-                                  - {period.description}
-                                </span>
+                                <span className="text-sm text-gray-400">- {period.description}</span>
                               </div>
                             </SelectItem>
                           ))
@@ -264,8 +235,8 @@ export function StakeForm(props: { validator?: Validator; isFlexible?: boolean }
                   )}
                 </FormControl>
                 <p className="mt-1 text-sm text-gray-400">
-                  Longer staking periods earn higher rewards. After the period ends, you continue
-                  earning the same rate until you unstake. For more information, please visit{' '}
+                  Longer staking periods earn higher rewards. After the period ends, you continue earning the same rate
+                  until you unstake. For more information, please visit{' '}
                   <a
                     href="https://docs.story.foundation/docs/tokenomics-staking#staking-period"
                     target="_blank"
@@ -287,10 +258,8 @@ export function StakeForm(props: { validator?: Validator; isFlexible?: boolean }
               <FormItem>
                 <FormLabel className="text-[16px] text-primary-outline">
                   <span className="font-semibold text-white">Amount to Stake</span> (
-                  {balance
-                    ? formatLargeMetricsNumber(parseFloat(formatEther(balance.value)).toFixed(3))
-                    : '-'}{' '}
-                  IP available)
+                  {balance ? formatLargeMetricsNumber(parseFloat(formatEther(balance.value)).toFixed(3)) : '-'} IP
+                  available)
                 </FormLabel>
                 <FormControl>
                   <div className="flex h-12 w-full items-center justify-between rounded-lg border-[1px] border-solid border-primary-border bg-black pr-2">
@@ -325,9 +294,7 @@ export function StakeForm(props: { validator?: Validator; isFlexible?: boolean }
                     Staked! View your delegations
                   </Button>
                 </Link>
-                <DialogClose className={cn(buttonVariants({ variant: 'secondary' }), 'w-full')}>
-                  Close
-                </DialogClose>
+                <DialogClose className={cn(buttonVariants({ variant: 'secondary' }), 'w-full')}>Close</DialogClose>
               </>
             ) : (
               <Button
@@ -345,9 +312,7 @@ export function StakeForm(props: { validator?: Validator; isFlexible?: boolean }
                   }
                 }}
               >
-                {(isTxnPending || isWaitingForWalletConfirmation) && (
-                  <LoaderCircle className="animate-spin" />
-                )}
+                {(isTxnPending || isWaitingForWalletConfirmation) && <LoaderCircle className="animate-spin" />}
                 {buttonText}
               </Button>
             )}
@@ -359,13 +324,7 @@ export function StakeForm(props: { validator?: Validator; isFlexible?: boolean }
   )
 }
 
-function ValidatorSelectFormField({
-  form,
-  isFormDisabled,
-}: {
-  form: any
-  isFormDisabled: boolean
-}) {
+function ValidatorSelectFormField({ form, isFormDisabled }: { form: any; isFormDisabled: boolean }) {
   const { data: filteredValidators } = useAllValidators({ tokenType: 'UNLOCKED' })
   const allValidators = filteredValidators?.allValidators
 
@@ -388,15 +347,9 @@ function ValidatorSelectFormField({
                         </div>
                       </th>
                       <th className="pb-2 text-left text-sm font-medium"></th>
-                      <th className="pb-2 text-left text-sm font-medium text-primary-outline">
-                        Total Stake
-                      </th>
-                      <th className="pb-2 text-left text-sm font-medium text-primary-outline">
-                        Uptime
-                      </th>
-                      <th className="pb-2 text-left text-sm font-medium text-primary-outline">
-                        Commission
-                      </th>
+                      <th className="pb-2 text-left text-sm font-medium text-primary-outline">Total Stake</th>
+                      <th className="pb-2 text-left text-sm font-medium text-primary-outline">Uptime</th>
+                      <th className="pb-2 text-left text-sm font-medium text-primary-outline">Commission</th>
                     </tr>
                   </thead>
                   <tbody className="bg-black">
@@ -407,10 +360,7 @@ function ValidatorSelectFormField({
                           ? truncateAddress(validator.operator_address)
                           : validator.operator_address
                       return (
-                        <tr
-                          key={index}
-                          className="border-b border-primary-border last:border-b-0 h-12 w-full"
-                        >
+                        <tr key={index} className="border-b border-primary-border last:border-b-0 h-12 w-full">
                           <td className="px-3 py-2">
                             <input
                               type="radio"
@@ -422,10 +372,7 @@ function ValidatorSelectFormField({
                           </td>
                           <td className="py-2 text-sm font-medium">{validatorName}</td>
                           <td className="py-2 text-sm font-medium">
-                            {formatLargeMetricsNumber(
-                              formatEther(BigInt(validator.tokens), 'gwei')
-                            )}{' '}
-                            IP
+                            {formatLargeMetricsNumber(formatEther(BigInt(validator.tokens), 'gwei'))} IP
                           </td>
                           <td className="py-2 text-sm">{validator.uptime}</td>
                           <td className="py-2 text-sm">

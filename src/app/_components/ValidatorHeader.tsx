@@ -19,11 +19,7 @@ export default function ValidatorHeader() {
       <h1 className="w-full">Validators</h1>
       {!isSmallDevice && (
         <div className="my-auto flex flex-row gap-8">
-          {isConnected ? (
-            <StakeDialog text={'Stake Now'} />
-          ) : (
-            <ConnectWalletButton text={'Stake Now'} />
-          )}
+          {isConnected ? <StakeDialog text={'Stake Now'} /> : <ConnectWalletButton text={'Stake Now'} />}
 
           <Link
             href={'https://docs.story.foundation/docs/node-setup-dev-mainnet'}

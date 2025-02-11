@@ -12,11 +12,7 @@ import { RedelegateForm } from '../forms/RedelegateForm'
 import { Dialog, DialogContent, DialogTitle, DialogTrigger } from '../ui/dialog'
 import StyledCard from '../cards/StyledCard'
 
-export function RedelegateDialog(props: {
-  validator: Validator
-  delegationId?: string
-  delegatedAmount?: string
-}) {
+export function RedelegateDialog(props: { validator: Validator; delegationId?: string; delegatedAmount?: string }) {
   const { isConnected } = useAccount()
   const singularity = useSingularity()
   const isSingularity = singularity.error != true && singularity.isSingularity
@@ -52,10 +48,7 @@ export function RedelegateDialog(props: {
           <ConnectWalletButton />
         )}
       </DialogTrigger>
-      <DialogContent
-        onPointerDownOutside={(e) => e.preventDefault()}
-        className="sm:max-w-[825px] p-0"
-      >
+      <DialogContent onPointerDownOutside={(e) => e.preventDefault()} className="sm:max-w-[825px] p-0">
         <StyledCard className="border-none border-0">
           <RedelegateForm
             validator={props.validator}

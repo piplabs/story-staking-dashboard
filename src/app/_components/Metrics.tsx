@@ -33,12 +33,9 @@ export default function Metrics({ tokenType }: { tokenType: 'UNLOCKED' | 'LOCKED
         title="Total Staked"
         data={
           stakingPool
-            ? formatLargeMetricsNumber(
-                formatEther(BigInt(stakingPool.pool.bonded_tokens), 'gwei'),
-                {
-                  useSuffix: isSmallDevice,
-                }
-              ) + ' IP'
+            ? formatLargeMetricsNumber(formatEther(BigInt(stakingPool.pool.bonded_tokens), 'gwei'), {
+                useSuffix: isSmallDevice,
+              }) + ' IP'
             : undefined
         }
         className="grow"

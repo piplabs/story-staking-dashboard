@@ -8,14 +8,7 @@ import Link from 'next/link'
 import { useState } from 'react'
 import { Address, formatEther, zeroAddress } from 'viem'
 
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { useIsSmallDevice } from '@/lib/services/hooks/useIsSmallDevice'
 import { useUnbondedDelegatorDelegations } from '@/lib/services/hooks/useUnbondedDelegatorDelegations'
 import { cn, formatLargeMetricsNumber, truncateAddress } from '@/lib/utils'
@@ -85,16 +78,11 @@ export default function UnbondedDelegationsTable(props: { delegatorEvmAddr: Addr
                     IP
                   </TableCell> */}
                   <TableCell className="break-words">
-                    {formatLargeMetricsNumber(formatEther(BigInt(parseInt(entry.balance)), 'gwei'))}{' '}
-                    IP
+                    {formatLargeMetricsNumber(formatEther(BigInt(parseInt(entry.balance)), 'gwei'))} IP
                   </TableCell>
                   <TableCell className="break-words">
                     <span
-                      className={
-                        new Date(entry.completion_time) < new Date()
-                          ? 'text-green-500'
-                          : 'text-yellow-500'
-                      }
+                      className={new Date(entry.completion_time) < new Date() ? 'text-green-500' : 'text-yellow-500'}
                     >
                       {new Date(entry.completion_time) < new Date() ? (
                         'Completed'
@@ -105,9 +93,7 @@ export default function UnbondedDelegationsTable(props: { delegatorEvmAddr: Addr
                             const now = new Date()
                             const diffMs = endTime.getTime() - now.getTime()
                             const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24))
-                            const diffHours = Math.floor(
-                              (diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-                            )
+                            const diffHours = Math.floor((diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
 
                             const timeLeftText =
                               diffDays > 0

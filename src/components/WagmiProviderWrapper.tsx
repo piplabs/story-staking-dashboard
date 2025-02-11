@@ -104,11 +104,7 @@ const queryClient = new QueryClient()
 export default function WagmiProviderWrapper({ children }: { children: React.ReactNode }) {
   return (
     <WagmiProvider
-      config={
-        process.env.NEXT_PUBLIC_CHAIN_ID == storyMainnet.id.toString()
-          ? mainnetConfig
-          : testnetConfig
-      }
+      config={process.env.NEXT_PUBLIC_CHAIN_ID == storyMainnet.id.toString() ? mainnetConfig : testnetConfig}
     >
       <QueryClientProvider client={queryClient}>
         <RainbowKitProvider>{children}</RainbowKitProvider>

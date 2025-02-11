@@ -8,20 +8,10 @@ export default function Footer() {
       <div className="flex w-full flex-row justify-between">
         <div className="uppercase">© Story Foundation 2025</div>
         <section className="flex flex-row gap-4">
-          <Link
-            href={links.privacy}
-            className="hover:cursor-pointer"
-            target="_blank"
-            rel="noreferrer noopener"
-          >
+          <Link href={links.privacy} className="hover:cursor-pointer" target="_blank" rel="noreferrer noopener">
             Privacy Policy
           </Link>
-          <Link
-            href={links.terms}
-            className="hover:cursor-pointer"
-            target="_blank"
-            rel="noreferrer noopener"
-          >
+          <Link href={links.terms} className="hover:cursor-pointer" target="_blank" rel="noreferrer noopener">
             Terms of Service
           </Link>
         </section>

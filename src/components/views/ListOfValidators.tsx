@@ -18,10 +18,7 @@ export default function SelectValidators(props: SelectValidatorsProps) {
       name="validators"
       render={({ field }) => (
         <FormItem>
-          <ListOfValidators
-            form={props.form}
-            setIsSelectingValidators={props.setIsSelectingValidators}
-          />
+          <ListOfValidators form={props.form} setIsSelectingValidators={props.setIsSelectingValidators} />
           <FormMessage />
         </FormItem>
       )}

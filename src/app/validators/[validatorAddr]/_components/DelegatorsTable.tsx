@@ -19,14 +19,7 @@ import { useState } from 'react'
 import { Address, formatEther, isAddressEqual } from 'viem'
 
 import { DataTablePagination } from '@/components/DataTablePagination'
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { useIsSmallDevice } from '@/lib/services/hooks/useIsSmallDevice'
 import { useValidatorDelegations } from '@/lib/services/hooks/useValidatorDelegations'
 import { Delegation, DelegationBalance, Validator } from '@/lib/types'
@@ -50,9 +43,7 @@ export default function DelegatorsTable(props: { validator: Validator }) {
     {
       accessorKey: 'delegation.delegator_address',
       header: ({ column }) => {
-        return (
-          <HeaderWithSortArrows column={column} header={'Address'} sorting={sorting} className="" />
-        )
+        return <HeaderWithSortArrows column={column} header={'Address'} sorting={sorting} className="" />
       },
       cell: ({ row }) => {
         let delegatorText
@@ -65,10 +56,7 @@ export default function DelegatorsTable(props: { validator: Validator }) {
         }
 
         return (
-          <Link
-            href={`/delegations/${row.original?.delegation.delegator_address}`}
-            className="flex flex-row gap-2"
-          >
+          <Link href={`/delegations/${row.original?.delegation.delegator_address}`} className="flex flex-row gap-2">
             <Image
               src={`https://cdn.stamp.fyi/avatar/${row.original?.delegation.delegator_address}`}
               alt="Avatar thumbnail"
@@ -88,20 +76,11 @@ export default function DelegatorsTable(props: { validator: Validator }) {
     {
       accessorKey: 'balance.amount',
       header: ({ column }) => {
-        return (
-          <HeaderWithSortArrows
-            column={column}
-            header={'Total Stake'}
-            sorting={sorting}
-            className=""
-          />
-        )
+        return <HeaderWithSortArrows column={column} header={'Total Stake'} sorting={sorting} className="" />
       },
       cell: ({ row }) => {
         return (
-          <p className="">
-            {formatLargeMetricsNumber(formatEther(BigInt(row.original.balance.amount), 'gwei'))} IP
-          </p>
+          <p className="">{formatLargeMetricsNumber(formatEther(BigInt(row.original.balance.amount), 'gwei'))} IP</p>
         )
       },
     },
@@ -132,9 +111,7 @@ export default function DelegatorsTable(props: { validator: Validator }) {
                 {headerGroup.headers.map((header, index) => {
                   return (
                     <TableHead key={header.id} className="bg-transparent">
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(header.column.columnDef.header, header.getContext())}
+                      {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
                     </TableHead>
                   )
                 })}
@@ -156,9 +133,7 @@ export default function DelegatorsTable(props: { validator: Validator }) {
                   className="border-none transition-colors hover:bg-primary-grey/10"
                 >
                   {row.getVisibleCells().map((cell, index) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                    </TableCell>
+                    <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
                   ))}
                 </TableRow>
               ))
@@ -172,9 +147,7 @@ export default function DelegatorsTable(props: { validator: Validator }) {
           </TableBody>
         </Table>
         {validatorDelegations?.delegation_responses?.length &&
-          validatorDelegations?.delegation_responses?.length > 0 && (
-            <DataTablePagination table={table} />
-          )}
+          validatorDelegations?.delegation_responses?.length > 0 && <DataTablePagination table={table} />}
       </StyledCard>
     </>
   )

@@ -9,22 +9,11 @@ interface ConnectWalletButtonProps {
   isShowNetwork?: boolean
 }
 
-export default function ConnectWalletButton({
-  text,
-  isShowNetwork = false,
-}: ConnectWalletButtonProps) {
+export default function ConnectWalletButton({ text, isShowNetwork = false }: ConnectWalletButtonProps) {
   const isSmallDevice = useIsSmallDevice()
   return (
     <ConnectButton.Custom>
-      {({
-        account,
-        chain,
-        openAccountModal,
-        openChainModal,
-        openConnectModal,
-        authenticationStatus,
-        mounted,
-      }) => {
+      {({ account, chain, openAccountModal, openChainModal, openConnectModal, authenticationStatus, mounted }) => {
         const ready = mounted
         const connected = ready && account && chain
         return (

@@ -1,9 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 
-import {
-  GetDelegatorRewardsParams,
-  GetDelegatorRewardsResponse,
-} from '@/lib/types/delegatorApiTypes'
+import { GetDelegatorRewardsParams, GetDelegatorRewardsResponse } from '@/lib/types/delegatorApiTypes'
 
 import { getDelegatorRewards } from '../api/delegatorApi'
 

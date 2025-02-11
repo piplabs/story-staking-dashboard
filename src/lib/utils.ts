@@ -11,10 +11,7 @@ export function truncateAddress(address: string | undefined, startLength = 6, en
   return `${address.slice(0, startLength)}...${address.slice(-endLength)}`
 }
 
-export function formatLargeMetricsNumber(
-  value: number | string,
-  options: { useSuffix?: boolean } = {}
-): string {
+export function formatLargeMetricsNumber(value: number | string, options: { useSuffix?: boolean } = {}): string {
   const num = Number(value)
 
   if (isNaN(num)) {

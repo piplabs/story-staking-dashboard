@@ -45,18 +45,10 @@ export interface ButtonProps
 }
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  (
-    { className, variant, size, asChild = false, isLoading, isSuccess, children, ...props },
-    ref
-  ) => {
+  ({ className, variant, size, asChild = false, isLoading, isSuccess, children, ...props }, ref) => {
     const Comp = asChild ? Slot : 'button'
     return (
-      <Comp
-        className={cn(buttonVariants({ variant, size, className }))}
-        ref={ref}
-        {...props}
-        disabled={isSuccess}
-      >
+      <Comp className={cn(buttonVariants({ variant, size, className }))} ref={ref} {...props} disabled={isSuccess}>
         <div className={cn('my-auto flex flex-row items-center gap-2')}>
           {children}
           {isLoading && <Loader className="my-auto flex animate-spin" />}

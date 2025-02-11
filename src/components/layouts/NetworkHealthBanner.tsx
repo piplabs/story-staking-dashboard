@@ -30,19 +30,13 @@ export default function NetworkHealthBanner() {
     text: {
       Normal: (
         <p className="flex items-center">
-          Network is operating normally. Current block height is{' '}
-          {networkHealth.execution_block_height}.
+          Network is operating normally. Current block height is {networkHealth.execution_block_height}.
         </p>
       ),
       Degraded: (
         <p className="">
           Network is experiencing delays. Follow our{' '}
-          <Link
-            href={links.twitter}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="underline"
-          >
+          <Link href={links.twitter} target="_blank" rel="noopener noreferrer" className="underline">
             X/Twitter
           </Link>
           for updates.
@@ -51,12 +45,7 @@ export default function NetworkHealthBanner() {
       Down: (
         <p className="">
           Network is down. Follow our{' '}
-          <Link
-            href={links.twitter}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="underline"
-          >
+          <Link href={links.twitter} target="_blank" rel="noopener noreferrer" className="underline">
             X/Twitter
           </Link>{' '}
           for immediate updates.

@@ -20,12 +20,7 @@ export type UnstakeDialogProps = {
   isMatured?: boolean
 }
 
-export function UnstakeDialog({
-  validator,
-  isUnstakeDisabled,
-  delegationId,
-  isMatured,
-}: UnstakeDialogProps) {
+export function UnstakeDialog({ validator, isUnstakeDisabled, delegationId, isMatured }: UnstakeDialogProps) {
   const { isConnected } = useAccount()
   const singularity = useSingularity()
   const isSingularity = singularity.error != true && singularity.isSingularity
@@ -64,10 +59,7 @@ export function UnstakeDialog({
         )}
       </DialogTrigger>
 
-      <DialogContent
-        onPointerDownOutside={(e) => e.preventDefault()}
-        className=" sm:max-w-[825px] p-0"
-      >
+      <DialogContent onPointerDownOutside={(e) => e.preventDefault()} className=" sm:max-w-[825px] p-0">
         <StyledCard>
           {delegationId ? (
             <UnstakeDelegationIdForm validator={validator} delegationId={delegationId} />
