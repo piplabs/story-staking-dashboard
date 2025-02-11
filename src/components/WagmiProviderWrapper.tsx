@@ -48,7 +48,7 @@ export const storyMainnet = defineChain({
   },
   rpcUrls: {
     default: {
-      http: ['https://mainnet.storyrpc.io'],
+      http: [process.env.NEXT_PUBLIC_CHAIN_RPC_URL],
     },
   },
   blockExplorers: {
