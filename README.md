@@ -4,7 +4,7 @@
 
 Website: https://aeneid.staking.story.foundation
 
-API: Coming Soon
+API: https://github.com/piplabs/story-staking-api
 
 ## Overview
 

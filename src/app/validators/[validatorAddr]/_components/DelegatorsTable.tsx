@@ -32,6 +32,7 @@ import { useValidatorDelegations } from '@/lib/services/hooks/useValidatorDelega
 import { Delegation, DelegationBalance, Validator } from '@/lib/types'
 import { cn, formatLargeMetricsNumber, truncateAddress } from '@/lib/utils'
 import StyledCard from '@/components/cards/StyledCard'
+import HeaderWithSortArrows from '@/components/HeaderWithSortArrows'
 
 export default function DelegatorsTable(props: { validator: Validator }) {
   const [sorting, setSorting] = useState<SortingState>([])
@@ -176,51 +177,5 @@ export default function DelegatorsTable(props: { validator: Validator }) {
           )}
       </StyledCard>
     </>
-  )
-}
-
-function HeaderWithSortArrows({
-  column,
-  header,
-  sorting,
-  className,
-}: {
-  column: Column<{ delegation: Delegation; balance: DelegationBalance }, unknown>
-  header: string
-  sorting: SortingState
-  className?: string
-}) {
-  const isAscSorted = sorting.some((sort) => sort.id === column.id && sort.desc === false)
-  const isDescSorted = sorting.some((sort) => sort.id === column.id && sort.desc === true)
-
-  const hideArrows = true
-
-  if (hideArrows)
-    return (
-      <div className={cn('flex flex-row items-center', className)}>
-        <p className="mr-1 font-bold">{header}</p>
-      </div>
-    )
-
-  return (
-    <div className={cn('flex flex-row items-center', className)}>
-      <p className="mr-1 font-bold">{header}</p>
-      <div className="flex flex-col">
-        <ArrowUp
-          className={cn(
-            'h-3 w-3 cursor-pointer stroke-1',
-            isAscSorted ? 'stroke-white' : 'stroke-gray-400'
-          )}
-          onClick={() => column.toggleSorting(false)}
-        />
-        <ArrowDown
-          className={cn(
-            'h-3 w-3 cursor-pointer stroke-1',
-            isDescSorted ? 'stroke-white' : 'stroke-gray-400'
-          )}
-          onClick={() => column.toggleSorting(true)}
-        />
-      </div>
-    </div>
   )
 }

@@ -13,10 +13,11 @@ import {
 */
 export type GetAllValidatorsParams = {
   status?: string
-  bondedOnly?: boolean
-  tokenType?: 'LOCKED' | 'UNLOCKED'
+  tokenType?: 'LOCKED' | 'UNLOCKED' | 'ALL'
+  isActiveValidator?: boolean
   sortDescending?: boolean
-  sortSupportedToken?: true
+  sortSupportedToken?: boolean
+  filterLockedTokens?: boolean
 }
 
 export type GetAllValidatorsApiResponse = {

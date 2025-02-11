@@ -9,13 +9,12 @@ import { useIsSmallDevice } from '@/lib/services/hooks/useIsSmallDevice'
 import { useStakingPool } from '@/lib/services/hooks/useStakingPool'
 import { formatLargeMetricsNumber } from '@/lib/utils'
 
-export default function Metrics() {
+export default function Metrics({ tokenType }: { tokenType: 'UNLOCKED' | 'LOCKED' | 'ALL' }) {
   const {
     data: allValidators,
     isFetching: isFetchingValidators,
     isError: isErrorValidators,
-  } = useAllValidators({})
-
+  } = useAllValidators({ tokenType })
   const { data: stakingPool, isFetching: isFetchingStake, isError: isErrorStake } = useStakingPool()
   const { data: apr, isFetching: isFetchingApr, isError: isErrorApr } = useApr()
 
@@ -25,7 +24,7 @@ export default function Metrics() {
     <div className="flex grow flex-col gap-8 lg:flex-row">
       <StakingDataCard
         title="Validators"
-        data={allValidators?.pagination?.total}
+        data={allValidators?.allValidators?.length.toString()}
         className="grow"
         isFetching={isFetchingValidators}
         isError={isErrorValidators}

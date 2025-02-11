@@ -14,7 +14,7 @@ import {
 } from '@tanstack/react-table'
 import Image from 'next/image'
 import Link from 'next/link'
-import { ReactNode, useState } from 'react'
+import React, { ReactNode, useState } from 'react'
 import { useWindowSize } from 'react-use'
 import { formatEther } from 'viem'
 
@@ -32,20 +32,36 @@ import { useAllValidators } from '@/lib/services/hooks/useAllValidators'
 import { Validator } from '@/lib/types'
 import { cn, formatLargeMetricsNumber, truncateAddress } from '@/lib/utils'
 import StyledCard from '@/components/cards/StyledCard'
+import { ArrowDown, ArrowUp } from 'lucide-react'
+import HeaderWithSortArrows from '@/components/HeaderWithSortArrows'
 
-export function ValidatorsTable() {
+export function ValidatorsTable({
+  tokenType,
+  showLockedTokens,
+  setShowLockedTokens,
+}: {
+  tokenType: 'UNLOCKED' | 'LOCKED' | 'ALL'
+  showLockedTokens: boolean
+  setShowLockedTokens: React.Dispatch<React.SetStateAction<boolean>>
+}) {
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+  const [hideLocked, setHideLocked] = useState(true)
 
   const {
     data: validators,
     isFetched,
     isPending,
-  } = useAllValidators({ sortDescending: true, sortSupportedToken: true })
+  } = useAllValidators({ sortDescending: true, sortSupportedToken: true, tokenType })
   const size = useWindowSize()
 
+  // Filter validators based on the toggle.
+  // A validator with locked tokens is defined as having support_token_type undefined or 0.
   const columns: ColumnDef<Validator>[] = [
     {
+      accessorFn: (row: Validator) =>
+        row.description.moniker ||
+        (row.operator_address ? truncateAddress(row.operator_address, 6, 4) : ''),
       accessorKey: 'name',
       header: ({ column }) => {
         return (
@@ -107,26 +123,26 @@ export function ValidatorsTable() {
         )
       },
     },
-    {
-      accessorKey: 'supportedToken',
-      header: ({ column }) => {
-        return (
-          <HeaderWithSortArrows
-            column={column}
-            header={'Supported Token Type'}
-            sorting={sorting}
-            className="justify-center"
-          />
-        )
-      },
-      cell: ({ row }) => {
-        const text =
-          row.original.support_token_type === undefined || row.original.support_token_type === 0
-            ? 'Locked'
-            : 'Unlocked'
-        return <div className="text-center">{text}</div>
-      },
-    },
+    // {
+    //   accessorKey: 'supportedToken',
+    //   header: ({ column }) => {
+    //     return (
+    //       <HeaderWithSortArrows
+    //         column={column}
+    //         header={'Supported Token Type'}
+    //         sorting={sorting}
+    //         className="justify-center"
+    //       />
+    //     )
+    //   },
+    //   cell: ({ row }) => {
+    //     const text =
+    //       row.original.support_token_type === undefined || row.original.support_token_type === 0
+    //         ? 'Locked'
+    //         : 'Unlocked'
+    //     return <div className="text-center">{text}</div>
+    //   },
+    // },
     {
       accessorKey: 'uptime',
       header: ({ column }) => {
@@ -144,7 +160,8 @@ export function ValidatorsTable() {
       },
     },
     {
-      accessorKey: 'commission',
+      accessorFn: (row: Validator) => Number(row.commission.commission_rates.rate),
+      id: 'commission',
       header: ({ column }) => {
         return (
           <HeaderWithSortArrows
@@ -155,12 +172,9 @@ export function ValidatorsTable() {
           />
         )
       },
-      cell: ({ row }) => {
-        return (
-          <div className="text-center">
-            {(Number(row.original.commission.commission_rates.rate) * 100).toFixed(2)}%{' '}
-          </div>
-        )
+      cell: ({ row, getValue }) => {
+        const value = getValue() as number
+        return <div className="text-center">{(value * 100).toFixed(2)}% </div>
       },
     },
   ]
@@ -184,10 +198,6 @@ export function ValidatorsTable() {
 
   return (
     <>
-      <section className="flex w-full flex-row gap-8">
-        {/* <ValidatorSearchBar table={table} className='w-full' /> */}
-        {/* <SelectValidatorsFilter /> */}
-      </section>
       <StyledCard className="relative flex max-h-[620px] flex-col text-base overflow-y-auto scrollbar-hide">
         <Table>
           <TableHeader className="bg-none">
@@ -231,44 +241,15 @@ export function ValidatorsTable() {
             )}
           </TableBody>
         </Table>
-        {table.getRowModel().rows?.length > 0 && <DataTablePagination table={table} />}
+        {table.getRowModel().rows?.length > 0 && (
+          <DataTablePagination
+            table={table}
+            showLockedTokens={showLockedTokens}
+            setShowLockedTokens={setShowLockedTokens}
+          />
+        )}
       </StyledCard>
     </>
-  )
-}
-
-function HeaderWithSortArrows({
-  column,
-  header,
-  sorting,
-  className,
-}: {
-  column: Column<Validator, unknown>
-  header: string | ReactNode
-  sorting: SortingState
-  className?: string
-}) {
-  const isAscSorted = sorting.some((sort) => sort.id === column.id && sort.desc === false)
-  const isDescSorted = sorting.some((sort) => sort.id === column.id && sort.desc === true)
-
-  return (
-    <div className={cn('flex flex-row', className)}>
-      <p className="text-center lg:text-xl">{header}</p>
-      {/* <ArrowUp
-        className={cn(
-          'my-auto h-4 w-4 stroke-1 hover:cursor-pointer hover:stroke-2 active:stroke-2',
-          isAscSorted && 'stroke-2',
-        )}
-        onClick={() => column.toggleSorting(false)}
-      />
-      <ArrowDown
-        className={cn(
-          'my-auto h-4 w-4 stroke-1 hover:cursor-pointer hover:stroke-2 active:stroke-2',
-          isDescSorted && 'stroke-2',
-        )}
-        onClick={() => column.toggleSorting(true)}
-      /> */}
-    </div>
   )
 }
 

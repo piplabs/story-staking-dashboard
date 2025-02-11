@@ -20,9 +20,11 @@ import {
 */
 
 export async function getAllValidators(params?: GetAllValidatorsParams): Promise<AllValidators> {
+  const status = params?.tokenType === 'LOCKED' || 'BOND_STATUS_BONDED'
+
   const response = await stakingDataAxios.get<GetAllValidatorsApiResponse>('/staking/validators', {
     params: {
-      // status: params?.status || 'BOND_STATUS_BONDED',
+      status: status,
       'pagination.limit': 500,
       'pagination.count_total': true,
     },
