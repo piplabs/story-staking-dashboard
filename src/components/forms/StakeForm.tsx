@@ -57,9 +57,10 @@ const createFormSchema = ({
       .string()
       .refine(
         (value): value is string => {
-          if (!minStakeAmount || !balance) return false
+          if (!balance) return false
           const amount = parseFloat(value)
-          return !isNaN(amount) && amount >= parseFloat(formatEther(minStakeAmount))
+          // return !isNaN(amount) && amount >= parseFloat(formatEther(minStakeAmount))
+          return !isNaN(amount)
         },
         {
           message: `Must input a valid amount ${minStakeAmount ? `(minimum: ${formatEther(minStakeAmount)})` : ''}`,
@@ -88,7 +89,6 @@ export function StakeForm(props: { validator?: Validator; isFlexible?: boolean }
 
   const [stakeTxHash, setStakeTxHash] = useState<Hex | undefined>(undefined)
   const { address } = useAccount()
-  const sign = useSignMessage()
   const { data: balance, refetch: refetchBalance } = useBalance({
     address: address,
   })
@@ -161,8 +161,6 @@ export function StakeForm(props: { validator?: Validator; isFlexible?: boolean }
     buttonText = `Minimum ${formatEther(minStakeAmount)} IP`
   } else if (balance && parseEther(form.watch('stakeAmount')) > balance.value) {
     buttonText = `Exceeds balance`
-  } else if (sign.isPending) {
-    buttonText = 'Sign message in wallet...'
   } else if (isWaitingForWalletConfirmation) {
     buttonText = 'Confirm transaction in wallet...'
   } else if (isTxnPending) {
@@ -184,12 +182,10 @@ export function StakeForm(props: { validator?: Validator; isFlexible?: boolean }
   const isButtonDisabled =
     isTxnPending ||
     isWaitingForWalletConfirmation ||
-    sign.isPending ||
     !form.formState.isValid ||
     txnReceipt.isSuccess
 
-  const isFormDisabled =
-    isTxnPending || isWaitingForWalletConfirmation || sign.isPending || txnReceipt.isSuccess
+  const isFormDisabled = isTxnPending || isWaitingForWalletConfirmation || txnReceipt.isSuccess
 
   return (
     <Form {...form}>
