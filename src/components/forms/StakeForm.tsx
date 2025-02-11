@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { Address, zeroAddress } from 'viem'
 import { Hex, formatEther, parseEther } from 'viem'
-import { useAccount, useBalance, useSignMessage, useWaitForTransactionReceipt } from 'wagmi'
+import { useAccount, useBalance, useWaitForTransactionReceipt } from 'wagmi'
 import { z } from 'zod'
 
 import { Button, buttonVariants } from '@/components/ui/button'
@@ -345,7 +345,7 @@ export function StakeForm(props: { validator?: Validator; isFlexible?: boolean }
                   }
                 }}
               >
-                {(isTxnPending || isWaitingForWalletConfirmation || sign.isPending) && (
+                {(isTxnPending || isWaitingForWalletConfirmation) && (
                   <LoaderCircle className="animate-spin" />
                 )}
                 {buttonText}
