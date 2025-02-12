@@ -25,8 +25,7 @@ export default function ActivityTable(props: { delegatorEvmAddr: Address }) {
   const { chain } = useAccount()
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
-  const explorerUrl =
-    chain && chain.blockExplorers ? chain.blockExplorers.default.url : process.env.NEXT_PUBLIC_TESTNET_EXPLORER_URL
+  const explorerUrl = process.env.NEXT_PUBLIC_TESTNET_EXPLORER_URL
 
   const [{ pageIndex, pageSize }, setPagination] = useState({
     pageIndex: 0,

@@ -93,15 +93,7 @@ const testnetConfig = createConfig({
 const mainnetConfig = createConfig({
   chains: [storyMainnet],
   transports: {
-    [1514]: fallback([
-      http('https://internal-full.storyrpc.io', {
-        fetchOptions: {
-          headers: {
-            Origin: 'staking.story.foundation',
-          },
-        },
-      }),
-    ]),
+    [1514]: fallback([http('https://internal-full.storyrpc.io'), http('https://mainnet.storyrpc.io')]),
   },
   connectors,
   ssr: true,
