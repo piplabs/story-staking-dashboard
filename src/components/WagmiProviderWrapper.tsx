@@ -95,18 +95,17 @@ const mainnetConfig = createConfig({
   transports: {
     [1514]: fallback([
       http('https://internal-full.storyrpc.io', {
-        fetchOptions: {
+        fetchOptions: () => ({
           headers: {
-            origin: 'story-staking',
+            Origin: 'story-staking', // Use 'Origin' instead of 'origin'
           },
-        },
+        }),
       }),
     ]),
   },
   connectors,
   ssr: true,
 })
-
 const queryClient = new QueryClient()
 
 export default function WagmiProviderWrapper({ children }: { children: React.ReactNode }) {
