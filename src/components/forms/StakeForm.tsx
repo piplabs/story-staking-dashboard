@@ -254,7 +254,7 @@ export function StakeForm(props: { validator?: Validator; isFlexible?: boolean }
               <FormItem>
                 <FormLabel className="text-[16px] text-primary-outline">
                   <span className="font-semibold text-white">Amount to Stake</span> (
-                  {balance ? formatLargeMetricsNumber(parseFloat(formatEther(balance.value)).toFixed(3)) : '-'} IP
+                  {balance ? formatLargeMetricsNumber(parseFloat(formatEther(balance.value)).toFixed(2)) : '-'} IP
                   available)
                 </FormLabel>
                 <FormControl>

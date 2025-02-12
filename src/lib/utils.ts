@@ -24,19 +24,19 @@ export function formatLargeMetricsNumber(value: number | string, options: { useS
 
   if (useSuffix) {
     if (absValue >= 1e12) {
-      formattedValue = (num / 1e12).toFixed(3)
+      formattedValue = (num / 1e12).toFixed(2)
       return parseFloat(formattedValue) + 'T'
     } else if (absValue >= 1e9) {
-      formattedValue = (num / 1e9).toFixed(3)
+      formattedValue = (num / 1e9).toFixed(2)
       return parseFloat(formattedValue) + 'B'
     } else if (absValue >= 1e6) {
-      formattedValue = (num / 1e6).toFixed(3)
+      formattedValue = (num / 1e6).toFixed(2)
       return parseFloat(formattedValue) + 'M'
     } else if (absValue >= 1e3) {
-      formattedValue = (num / 1e3).toFixed(3)
+      formattedValue = (num / 1e3).toFixed(2)
       return parseFloat(formattedValue) + 'K'
     } else {
-      formattedValue = num.toFixed(3)
+      formattedValue = num.toFixed(2)
       return parseFloat(formattedValue).toString()
     }
   } else {
