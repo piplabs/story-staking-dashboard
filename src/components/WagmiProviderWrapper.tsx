@@ -97,7 +97,7 @@ const mainnetConfig = createConfig({
       http('https://internal-full.storyrpc.io', {
         fetchOptions: {
           headers: {
-            Origin: 'story-staking',
+            Origin: 'staking.story.foundation',
           },
         },
       }),
