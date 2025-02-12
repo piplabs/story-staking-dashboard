@@ -141,7 +141,7 @@ export function ValidatorsTable({
         return <HeaderWithSortArrows column={column} header={'Uptime'} sorting={sorting} className="justify-center" />
       },
       cell: ({ row }) => {
-        return <div className="text-center">{row.getValue('uptime')}</div>
+        return <div className="text-center">{row.getValue('uptime') || '-'}</div>
       },
     },
     {
@@ -183,7 +183,7 @@ export function ValidatorsTable({
 
   return (
     <>
-      <StyledCard className="relative flex max-h-[620px] flex-col text-base overflow-y-auto scrollbar-hide">
+      <StyledCard className="relative flex max-h-[780px] flex-col text-base overflow-y-auto scrollbar-hide">
         <Table>
           <TableHeader className="bg-none">
             {table.getHeaderGroups().map((headerGroup) => (
@@ -238,6 +238,6 @@ export function ValidatorsTable({
 
 function TableSkeleton() {
   return (
-    <Skeleton className="min-h-[600px] rounded-[32px] border-none bg-primary-grey p-2 text-base text-white lg:p-8" />
+    <Skeleton className="min-h-[600px] rounded-[32px] border border-primary-border p-2 text-base text-white lg:p-8" />
   )
 }

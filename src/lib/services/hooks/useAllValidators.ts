@@ -9,6 +9,6 @@ export function useAllValidators(params: GetAllValidatorsParams) {
   return useQuery<AllValidators, Error>({
     queryKey: ['allValidators', params.sortDescending, params.tokenType, params.sortSupportedToken],
     queryFn: () => getAllValidators(params),
-    // staleTime: 1000 * 60 * 5,
+    staleTime: 60 * 5,
   })
 }

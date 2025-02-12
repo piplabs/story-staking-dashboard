@@ -12,11 +12,12 @@ import { useValidator } from '@/lib/services/hooks/useValidator'
 
 import { YourStakeCard } from './_components/ValidatorCtaCard'
 import { AddressesCard, CommissionCard, OverviewCard, StakeInfoCard } from './_components/ValidatorDataCards'
+import DelegatorsTable from './_components/DelegatorsTable'
 
-const DelegatorsTable = dynamic(() => import('./_components/DelegatorsTable'), {
-  ssr: false,
-})
-export const fetchCache = 'force-no-store'
+// const DelegatorsTable = dynamic(() => import('./_components/DelegatorsTable'), {
+//   ssr: false,
+// })
+//
 
 export default function Page({ params }: { params: { validatorAddr: Address } }) {
   const { data: validator, isFetched, isPending } = useValidator({ validatorAddr: params.validatorAddr })
@@ -94,8 +95,8 @@ function ValidatorStatus({ status }: { status: number }) {
   let statusText
   let statusStyle
   if (status == 1) {
-    statusText = 'INACTIVE'
-    statusStyle = 'text-red-50'
+    statusText = 'UNBONDED'
+    statusStyle = 'text-white'
   } else if (status == 2) {
     statusText = 'DEGRADED'
     statusStyle = 'text-yellow-500'
