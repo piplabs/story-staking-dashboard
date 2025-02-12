@@ -12,14 +12,18 @@ import ConnectWalletButton from '@/components/buttons/ConnectWalletButton'
 
 export default function ValidatorHeader() {
   const isSmallDevice = useIsSmallDevice()
-  const { isConnected } = useAccount()
+  const { isConnected, chainId } = useAccount()
 
   return (
     <section className="flex w-full flex-row gap-4">
       <h1 className="w-full">Validators</h1>
       {!isSmallDevice && (
         <div className="my-auto flex flex-row gap-8">
-          {isConnected ? <StakeDialog text={'Stake Now'} /> : <ConnectWalletButton text={'Stake Now'} />}
+          {isConnected && chainId?.toString() == process.env.NEXT_PUBLIC_CHAIN_ID ? (
+            <StakeDialog text={'Stake Now'} />
+          ) : (
+            <ConnectWalletButton text={'Stake Now'} />
+          )}
 
           <Link
             href={'https://docs.story.foundation/docs/node-setup-dev-mainnet'}

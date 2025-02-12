@@ -36,11 +36,23 @@ export function formatLargeMetricsNumber(value: number | string, options: { useS
       formattedValue = (num / 1e3).toFixed(2)
       return parseFloat(formattedValue) + 'K'
     } else {
+      if (absValue < 1) {
+        const thirdDecimal = Math.floor((absValue * 1000) % 10)
+        if (thirdDecimal > 0) {
+          return num.toFixed(3)
+        }
+      }
       formattedValue = num.toFixed(2)
       return parseFloat(formattedValue).toString()
     }
   } else {
     // Format with commas for long form
+    if (absValue < 1) {
+      const thirdDecimal = Math.floor((absValue * 1000) % 10)
+      if (thirdDecimal > 0) {
+        return num.toFixed(3)
+      }
+    }
     return num.toLocaleString(undefined, {
       minimumFractionDigits: 0,
       maximumFractionDigits: 2,

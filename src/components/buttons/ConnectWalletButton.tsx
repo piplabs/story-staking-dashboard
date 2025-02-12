@@ -39,7 +39,7 @@ export default function ConnectWalletButton({ text, isShowNetwork = false }: Con
               if (chain.unsupported) {
                 return (
                   <Button variant="primary" onClick={openChainModal} type="button">
-                    Wrong network
+                    Connect to Story
                   </Button>
                 )
               }

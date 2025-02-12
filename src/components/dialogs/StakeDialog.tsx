@@ -12,11 +12,12 @@ import { StakeForm } from '../forms/StakeForm'
 import StyledCard from '../cards/StyledCard'
 
 export function StakeDialog(props: { text?: string; validator?: Validator; isFlexible?: boolean }) {
-  const { isConnected } = useAccount()
+  const { isConnected, chainId } = useAccount()
+
   return (
     <Dialog modal>
       <DialogTrigger asChild>
-        {isConnected ? (
+        {isConnected && chainId?.toString() == process.env.NEXT_PUBLIC_CHAIN_ID ? (
           <Button className="" variant="primary">
             {props.text || 'Stake'}
           </Button>

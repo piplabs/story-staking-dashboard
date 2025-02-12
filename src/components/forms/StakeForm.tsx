@@ -135,7 +135,9 @@ export function StakeForm(props: { validator?: Validator; isFlexible?: boolean }
   const isTxnPending = txnReceipt.isPending && !!stakeTxHash
 
   let buttonText
-  if (balance && minStakeAmount && balance.value < minStakeAmount) {
+  if (chainId?.toString() != process.env.NEXT_PUBLIC_CHAIN_ID) {
+    buttonText = 'Wrong network. Switch to Story'
+  } else if (balance && minStakeAmount && balance.value < minStakeAmount) {
     buttonText = 'Not enough IP'
   } else if (minStakeAmount && parseEther(form.watch('stakeAmount')) < minStakeAmount) {
     buttonText = `Minimum ${formatEther(minStakeAmount)} IP`
@@ -185,7 +187,7 @@ export function StakeForm(props: { validator?: Validator; isFlexible?: boolean }
               </p>
             </section>
           )}
-          <ValidatorSelectFormField form={form} isFormDisabled={isFormDisabled} />
+          {!props.validator && <ValidatorSelectFormField form={form} isFormDisabled={isFormDisabled} />}
           <FormField
             control={form.control}
             name="stakingPeriod"

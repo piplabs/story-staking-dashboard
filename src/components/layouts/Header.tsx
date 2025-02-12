@@ -7,14 +7,7 @@ import Link from 'next/link'
 import { useState } from 'react'
 import { useAccount } from 'wagmi'
 
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 
 const StoryConnectWalletButton = dynamic(() => import('../buttons/ConnectWalletButton'), {
   ssr: false,
