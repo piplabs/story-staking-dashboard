@@ -43,7 +43,7 @@ export function formatLargeMetricsNumber(value: number | string, options: { useS
     // Format with commas for long form
     return num.toLocaleString(undefined, {
       minimumFractionDigits: 0,
-      maximumFractionDigits: 3,
+      maximumFractionDigits: 2,
     })
   }
 }
