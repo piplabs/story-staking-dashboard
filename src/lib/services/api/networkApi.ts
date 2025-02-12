@@ -57,5 +57,10 @@ export async function getTokenTotalSupply(params: GetTokenTotalSupplyParams): Pr
 
 export async function getStakingPool(): Promise<GetStakingPoolResponse> {
   const response = await stakingDataAxios.get<GetStakingPoolApiResponse>('/staking/pool')
-  return response.data.msg
+
+  const totalStaked = BigInt(response.data.msg.pool.bonded_tokens) + BigInt(response.data.msg.pool.not_bonded_tokens)
+  return {
+    ...response.data.msg,
+    totalStaked: totalStaked.toString(),
+  }
 }

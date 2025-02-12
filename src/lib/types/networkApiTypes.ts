@@ -80,6 +80,7 @@ export type GetStakingPoolResponse = {
     not_bonded_tokens: string
     bonded_tokens: string
   }
+  totalStaked: string
 }
 
 export type GetStakingPoolApiResponse = {

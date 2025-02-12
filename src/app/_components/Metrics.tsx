@@ -33,7 +33,7 @@ export default function Metrics({ tokenType }: { tokenType: 'UNLOCKED' | 'LOCKED
         title="Total Staked"
         data={
           stakingPool
-            ? formatLargeMetricsNumber(formatEther(BigInt(stakingPool.pool.bonded_tokens), 'gwei'), {
+            ? formatLargeMetricsNumber(formatEther(BigInt(stakingPool.totalStaked), 'gwei'), {
                 useSuffix: isSmallDevice,
               }) + ' IP'
             : undefined
