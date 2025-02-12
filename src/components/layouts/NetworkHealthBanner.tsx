@@ -77,7 +77,7 @@ function SingularityIndicator() {
 
   if (isSingularity) {
     return (
-      <TooltipWrapper content="The first 1,580,851 blocks after the genesis is called Singularity, during which everyone can create a validator and stake tokens but the active validator set will only have the genesis validators. Unstake and redelegate are not supported during this time. Learn more about network Singularity in the documentation (https://docs.story.foundation/docs/tokenomics-staking#singularity)">
+      <TooltipWrapper content="During Singularity, only Genesis validators are active. No rewards are distributed and unstake/redelegate operations are not supported. Learn more about network Singularity in the documentation (https://docs.story.foundation/docs/tokenomics-staking#singularity)">
         <span className="flex items-center justify-center rounded-full text-[]">
           <YellowWarning />
           <div className="ml-2" />
