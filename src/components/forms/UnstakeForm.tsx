@@ -12,15 +12,14 @@ import { z } from 'zod'
 import { Button } from '@/components/ui/button'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { feeEther, feeWei } from '@/lib/constants'
+import { feeEther, feeWei, STAKING_PERIODS } from '@/lib/constants'
 import { useWriteIpTokenStakeUnstake } from '@/lib/contracts'
 import { useDelegatorPeriodDelegationsOnValidator } from '@/lib/services/hooks/useDelegatorPeriodDelegationsOnValidator'
 import { useValidatorDelegatorDelegations } from '@/lib/services/hooks/useValidatorDelegatorDelegations'
-import { PeriodDelegation, Validator } from '@/lib/types'
+import { StakingPeriodMultiplierInfo, Validator } from '@/lib/types'
 import { base64ToHex, cn, formatLargeMetricsNumber } from '@/lib/utils'
 
 import ViewTransaction from '../buttons/ViewTransaction'
-import { STAKING_PERIODS } from './StakeForm'
 
 const createFormSchema = ({ totalStaked }: { totalStaked?: string }) =>
   z.object({
@@ -191,8 +190,8 @@ export function UnstakeForm({ validator }: { validator: Validator }) {
                           <tbody>
                             {periodDelegations?.period_delegation_responses.map((delegation: any, index: any) => {
                               const isUnlocked = new Date(delegation.period_delegation.end_time) <= new Date()
-                              const stakingPeriod = STAKING_PERIODS.find(
-                                (period) =>
+                              const stakingPeriod = STAKING_PERIODS[process.env.NEXT_PUBLIC_CHAIN_ID].find(
+                                (period: StakingPeriodMultiplierInfo) =>
                                   period.value === (delegation.period_delegation.period_type?.toString() ?? '0')
                               )
 

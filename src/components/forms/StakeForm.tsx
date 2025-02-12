@@ -16,7 +16,7 @@ import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { useReadIpTokenStakeMinStakeAmount, useWriteIpTokenStakeStake } from '@/lib/contracts'
 import { useValidatorDelegatorDelegations } from '@/lib/services/hooks/useValidatorDelegatorDelegations'
-import { Validator } from '@/lib/types'
+import { StakingPeriodMultiplierInfo, Validator } from '@/lib/types'
 import { base64ToHex, cn, formatLargeMetricsNumber, truncateAddress } from '@/lib/utils'
 
 import ViewTransaction from '../buttons/ViewTransaction'
@@ -24,13 +24,7 @@ import { DialogClose } from '../ui/dialog'
 import { useAllValidators } from '@/lib/services/hooks/useAllValidators'
 import { useIsSmallDevice } from '@/lib/services/hooks/useIsSmallDevice'
 import { getValidator } from '@/lib/services/api/validatorApi'
-
-export const STAKING_PERIODS = [
-  { value: '0', label: 'Flexible', multiplier: '1.0x', description: 'Unstake anytime' },
-  { value: '1', label: '90 Days', multiplier: '1.051x', description: 'Lock for 90 days' },
-  { value: '2', label: '360 Days', multiplier: '1.16x', description: 'Lock for 360 days' },
-  { value: '3', label: '540 Days', multiplier: '1.34x', description: 'Lock for 540 days' },
-] as const
+import { STAKING_PERIODS } from '@/lib/constants'
 
 const createFormSchema = ({
   minStakeAmount,
@@ -74,7 +68,7 @@ export function StakeForm(props: { validator?: Validator; isFlexible?: boolean }
   const { data: minStakeAmount } = useReadIpTokenStakeMinStakeAmount()
   console.log({ minStakeAmount })
   const [stakeTxHash, setStakeTxHash] = useState<Hex | undefined>(undefined)
-  const { address } = useAccount()
+  const { address, chainId } = useAccount()
   const { data: balance, refetch: refetchBalance } = useBalance({
     address: address,
   })
@@ -219,16 +213,18 @@ export function StakeForm(props: { validator?: Validator; isFlexible?: boolean }
                             </div>
                           </SelectItem>
                         ) : (
-                          STAKING_PERIODS.map((period) => (
-                            <SelectItem key={period.value} value={period.value} className="text-white">
-                              <div className="flex flex-row items-center gap-2">
-                                <span className="font-medium">
-                                  {period.label} ({period.multiplier} rewards)
-                                </span>
-                                <span className="text-sm text-gray-400">- {period.description}</span>
-                              </div>
-                            </SelectItem>
-                          ))
+                          STAKING_PERIODS[process.env.NEXT_PUBLIC_CHAIN_ID].map(
+                            (period: StakingPeriodMultiplierInfo) => (
+                              <SelectItem key={period.value} value={period.value} className="text-white">
+                                <div className="flex flex-row items-center gap-2">
+                                  <span className="font-medium">
+                                    {period.label} ({period.multiplier} rewards)
+                                  </span>
+                                  <span className="text-sm text-gray-400">- {period.description}</span>
+                                </div>
+                              </SelectItem>
+                            )
+                          )
                         )}
                       </SelectContent>
                     </Select>

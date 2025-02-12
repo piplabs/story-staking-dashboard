@@ -1,6 +1,5 @@
 'use client'
 
-import { ExternalLinkIcon } from '@radix-ui/react-icons'
 import {
   ColumnFiltersState,
   SortingState,
@@ -15,12 +14,9 @@ import { useEffect, useMemo, useState } from 'react'
 import { Address, formatEther, isAddressEqual, zeroAddress } from 'viem'
 import { useAccount } from 'wagmi'
 
-import { DataTablePagination } from '@/components/DataTablePagination'
 import TooltipWrapper from '@/components/TooltipWrapper'
 import { RedelegateDialog } from '@/components/dialogs/RedelegateDialog'
-import { StakeDialog } from '@/components/dialogs/StakeDialog'
 import { UnstakeDialog } from '@/components/dialogs/UnstakeDialog'
-import { STAKING_PERIODS } from '@/components/forms/StakeForm'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { getValidator } from '@/lib/services/api/validatorApi'
 import { useDelegatorPeriodDelegations } from '@/lib/services/hooks/useDelegatorPeriodDelegations'
@@ -28,6 +24,8 @@ import { useIsSmallDevice } from '@/lib/services/hooks/useIsSmallDevice'
 import { formatLargeMetricsNumber, truncateAddress } from '@/lib/utils'
 import StyledCard from '@/components/cards/StyledCard'
 import { useSingularity } from '@/lib/services/hooks/useSingularity'
+import { StakingPeriodMultiplierInfo } from '@/lib/types'
+import { STAKING_PERIODS } from '@/lib/constants'
 
 export default function DelegationsTable(props: { delegatorEvmAddr: Address }) {
   const [sorting, setSorting] = useState<SortingState>([])
@@ -200,15 +198,17 @@ export default function DelegationsTable(props: { delegatorEvmAddr: Address }) {
                       </TableCell>
                       <TableCell className="break-words text-center">
                         {periodDelegation.period_delegation.period_type !== undefined
-                          ? STAKING_PERIODS.find(
-                              (period) => period.value === periodDelegation.period_delegation.period_type.toString()
+                          ? STAKING_PERIODS[process.env.NEXT_PUBLIC_CHAIN_ID].find(
+                              (period: StakingPeriodMultiplierInfo) =>
+                                period.value === periodDelegation.period_delegation.period_type.toString()
                             )?.label + ''
                           : 'Flexible'}
                       </TableCell>
                       <TableCell className="hidden break-words text-center md:table-cell">
                         {periodDelegation.period_delegation.period_type !== undefined
-                          ? STAKING_PERIODS.find(
-                              (period) => period.value === periodDelegation.period_delegation.period_type.toString()
+                          ? STAKING_PERIODS[process.env.NEXT_PUBLIC_CHAIN_ID].find(
+                              (period: StakingPeriodMultiplierInfo) =>
+                                period.value === periodDelegation.period_delegation.period_type.toString()
                             )?.multiplier
                           : '1.0x'}
                       </TableCell>

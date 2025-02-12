@@ -113,3 +113,5 @@ export type PeriodDelegation = {
   shares: string
   period_type?: number
 }
+
+export type StakingPeriodMultiplierInfo = { value: string; label: string; multiplier: string; description: string }
