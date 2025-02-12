@@ -374,7 +374,7 @@ function ValidatorSelectFormField({ form, isFormDisabled }: { form: any; isFormD
                           <td className="py-2 text-sm font-medium">
                             {formatLargeMetricsNumber(formatEther(BigInt(validator.tokens), 'gwei'))} IP
                           </td>
-                          <td className="py-2 text-sm">{validator.uptime}</td>
+                          <td className="py-2 text-sm">{validator.uptime || '-'}</td>
                           <td className="py-2 text-sm">
                             {(Number(validator.commission.commission_rates.rate) * 100).toFixed(2)}%
                           </td>
