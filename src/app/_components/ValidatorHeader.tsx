@@ -26,7 +26,7 @@ export default function ValidatorHeader() {
           )}
 
           <Link
-            href={'https://docs.story.foundation/docs/node-setup-dev-mainnet'}
+            href={'https://docs.story.foundation/docs/node-setup-mainnet'}
             target="_blank"
             rel="noreferrer noopener"
           >
