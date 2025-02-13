@@ -12,6 +12,7 @@ import { useValidatorDelegatorDelegations } from '@/lib/services/hooks/useValida
 import { Validator } from '@/lib/types'
 import { base64ToHex, formatLargeMetricsNumber, formatPercentage, truncateAddress } from '@/lib/utils'
 import StyledCard from '@/components/cards/StyledCard'
+import TooltipWrapper from '@/components/TooltipWrapper'
 
 export function AddressesCard({ validator }: { validator: Validator }) {
   return (
@@ -78,13 +79,13 @@ export function StakeInfoCard({ validator }: { validator: Validator }) {
 
         <DataRow
           title="Delegated Stake"
-          value={delegatedStakeAmount || '-'}
+          value={delegatedStakeAmount ? `${delegatedStakeAmount} IP` : '-'}
           tooltipInfo="The total amount of tokens delegated to the validator by other users"
         />
         <DataRow
           title="Self-Staked"
-          value={selfStakeAmount || '-'}
-          tooltipInfo="The tokens that the validator has staked themselves."
+          value={selfStakeAmount ? `${selfStakeAmount} IP` : '-'}
+          tooltipInfo="The tokens that the validator has staked on themselves."
         />
       </section>
     </StyledCard>
@@ -111,12 +112,12 @@ export function DataRow({
         <span>{title}</span>
         {tooltipInfo && (
           <span className="my-auto ml-2 flex">
-            <TooltipProvider>
+            <TooltipProvider delayDuration={50}>
               <Tooltip>
                 <TooltipTrigger>
                   <InfoCircledIcon />
                 </TooltipTrigger>
-                <TooltipContent className="max-w-prose bg-white text-black">
+                <TooltipContent className="max-w-64 bg-gray-900 text-gray-50 border-gray-700 text-xs leading-4 tracking-[0.48px]">
                   <p>{tooltipInfo}</p>
                 </TooltipContent>
               </Tooltip>
@@ -168,7 +169,7 @@ export function OverviewCard({ validator }: { validator: Validator }) {
           value={
             validator.support_token_type === undefined || validator.support_token_type === 0 ? 'Locked' : 'Unlocked'
           }
-          tooltipInfo="Whether this validator accepts unlocked or locked tokens for staking. Only validators that support unlocked tokens allow for all types of staking periods. Please view our documentation for more details: https://docs.story.foundation/docs/tokenomics-staking."
+          tooltipInfo="Whether this validator accepts unlocked or locked tokens for staking."
         />
         <DataRow
           title="Uptime"

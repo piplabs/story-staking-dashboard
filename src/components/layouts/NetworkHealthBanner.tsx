@@ -1,4 +1,5 @@
 'use client'
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 
 import Link from 'next/link'
 import React from 'react'
@@ -19,7 +20,7 @@ export default function NetworkHealthBanner() {
   const statusDisplay = {
     icon: {
       Normal: GreenCheck(),
-      Degraded: YellowWarning(),
+      Degraded: YellowWarning({ cn: 'w-6 h-6' }),
       Down: RedAlert(),
     },
     style: {
@@ -79,7 +80,7 @@ function SingularityIndicator() {
     return (
       <TooltipWrapper content="During Singularity, only Genesis validators are active. No rewards are distributed and unstake/redelegate operations are not supported. Learn more about network Singularity in the documentation (https://docs.story.foundation/docs/tokenomics-staking#singularity)">
         <span className="flex items-center justify-center rounded-full text-[]">
-          <YellowWarning />
+          <YellowWarning cn={'w-6 h-6'} />
           <div className="ml-2" />
           Network is currently in&nbsp;
           <Link
@@ -110,15 +111,24 @@ function GreenCheck() {
   )
 }
 
-function YellowWarning() {
+export function YellowWarning(props: { cn: string; hoverToolTip?: React.ReactNode }) {
   return (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect x="1" y="1" width="22" height="22" rx="11" fill="#E4CE07" />
-      <path
-        d="M12.5 8V14C12.5 14.4219 12.1484 14.75 11.75 14.75C11.3281 14.75 11 14.4219 11 14V8C11 7.60156 11.3281 7.25 11.75 7.25C12.1484 7.25 12.5 7.60156 12.5 8ZM11.75 17.75C11.3984 17.75 11.0938 17.5859 10.9297 17.2812C10.7656 17 10.7656 16.6484 10.9297 16.3438C11.0938 16.0625 11.3984 15.875 11.75 15.875C12.0781 15.875 12.3828 16.0625 12.5469 16.3438C12.7109 16.6484 12.7109 17 12.5469 17.2812C12.3828 17.5859 12.0781 17.75 11.75 17.75Z"
-        fill="#1C1C1C"
-      />
-    </svg>
+    <TooltipProvider delayDuration={10}>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <div className={props.cn}>
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="1" y="1" width="22" height="22" rx="11" fill="#E4CE07" />
+              <path
+                d="M12.5 8V14C12.5 14.4219 12.1484 14.75 11.75 14.75C11.3281 14.75 11 14.4219 11 14V8C11 7.60156 11.3281 7.25 11.75 7.25C12.1484 7.25 12.5 7.60156 12.5 8ZM11.75 17.75C11.3984 17.75 11.0938 17.5859 10.9297 17.2812C10.7656 17 10.7656 16.6484 10.9297 16.3438C11.0938 16.0625 11.3984 15.875 11.75 15.875C12.0781 15.875 12.3828 16.0625 12.5469 16.3438C12.7109 16.6484 12.7109 17 12.5469 17.2812C12.3828 17.5859 12.0781 17.75 11.75 17.75Z"
+                fill="#1C1C1C"
+              />
+            </svg>
+          </div>
+        </TooltipTrigger>
+        <TooltipContent className="max-w-prose bg-white text-black">{props.hoverToolTip}</TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
   )
 }
 

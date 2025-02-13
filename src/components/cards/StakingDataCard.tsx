@@ -27,7 +27,7 @@ const dataCardVariants = cva('flex flex-col whitespace-nowrap', {
 export type StakingDataCardProps = {
   title: string
   data: string | undefined
-  tooltip?: string
+  tooltip?: string | React.ReactNode
   footer?: string
   className?: string
   isFetching?: boolean
@@ -38,7 +38,7 @@ export default function StakingDataCard(props: StakingDataCardProps) {
   return (
     <StyledCard className={cn('w-full flex flex-col whitespace-nowrap ')}>
       {props.tooltip ? (
-        <TooltipWrapper content={props.tooltip} className="bg-white">
+        <TooltipWrapper content={props.tooltip}>
           <p className="text-lg text-primary-outline">{props.title}</p>
         </TooltipWrapper>
       ) : (

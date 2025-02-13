@@ -36,7 +36,7 @@ export function UnstakeDialog({ validator, isUnstakeDisabled, delegationId, isMa
 
   if (isUnstakeDisabled || isSingularity) {
     return (
-      <TooltipProvider>
+      <TooltipProvider delayDuration={50}>
         <Tooltip>
           <TooltipTrigger className={disabledButtonVariant}>Unstake</TooltipTrigger>
           <TooltipContent className="border-none bg-black p-2">
@@ -74,7 +74,7 @@ export function UnstakeDialog({ validator, isUnstakeDisabled, delegationId, isMa
 
 function TemporaryDisable() {
   return (
-    <TooltipProvider>
+    <TooltipProvider delayDuration={50}>
       <Tooltip>
         <TooltipTrigger>
           {' '}

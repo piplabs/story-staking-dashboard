@@ -26,7 +26,7 @@ export function RedelegateDialog(props: { validator: Validator; delegationId?: s
 
   if (isSingularity) {
     return (
-      <TooltipProvider>
+      <TooltipProvider delayDuration={50}>
         <Tooltip>
           <TooltipTrigger className={disabledButtonVariant}>Redelegate</TooltipTrigger>
           <TooltipContent className="border-none bg-black p-2">

@@ -45,7 +45,13 @@ export default function Metrics({ tokenType }: { tokenType: 'UNLOCKED' | 'LOCKED
       <StakingDataCard
         title="APR"
         data={apr || '-'}
-        tooltip={'Latest APR based on current inflation and total bonded token amount.'}
+        tooltip={
+          <div>
+            Latest APR based on current inflation and total bonded token amount. <br />
+            <br />
+            <p className="">Note: No rewards are distributed during Singularity</p>
+          </div>
+        }
         className="grow"
         isFetching={isFetchingApr}
         isError={isErrorApr}
