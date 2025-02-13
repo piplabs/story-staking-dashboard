@@ -98,7 +98,7 @@ const mainnetConfig = createConfig({
       http('https://internal-full.storyrpc.io', {
         fetchOptions: {
           headers: {
-            'x-story': 'staking.story.foundation',
+            'x-origin': 'staking.story.foundation',
             'Access-Control-Allow-Headers': 'X-Story',
           },
         },
