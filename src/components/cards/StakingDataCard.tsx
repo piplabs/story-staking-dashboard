@@ -67,24 +67,3 @@ export default function StakingDataCard(props: StakingDataCardProps) {
     </StyledCard>
   )
 }
-
-export function StakingDataCardSkeleton(
-  props: { title?: string; className?: string } & VariantProps<typeof dataCardVariants>
-) {
-  return (
-    <div
-      className={cn(
-        dataCardVariants({
-          variant: props.variant,
-          size: props.size,
-          className: props.className,
-        })
-      )}
-    >
-      {props.title && <p className="text-lg text-primary-outline">{props.title}</p>}
-      <Skeleton className="h-12 w-full animate-pulse rounded-md bg-white/20" />
-    </div>
-  )
-
-  // <Skeleton className='h-40 w-40' />
-}
