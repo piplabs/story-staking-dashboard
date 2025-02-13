@@ -231,7 +231,7 @@ export default function DelegationsTable(props: { delegatorEvmAddr: Address }) {
                             hour12: true,
                           })
                           return (
-                            <TooltipWrapper content={formattedEndTime}>
+                            <TooltipWrapper content={`Matures ${formattedEndTime}`}>
                               <div className="">
                                 <span className="text-yellow-500">Maturing</span>
                               </div>
