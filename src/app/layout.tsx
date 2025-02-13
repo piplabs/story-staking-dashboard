@@ -54,7 +54,7 @@ export default function RootLayout({
           </div>
         </WagmiProviderWrapper>
       </body>
-      <GoogleAnalytics gaId="G-PXEQZ642TY" />
+      <GoogleAnalytics gaId={process.env.GOOGLE_ANALYTICS_ID} />
     </html>
   )
 }
