@@ -118,7 +118,6 @@ export function StakeForm(props: { validator?: Validator; isFlexible?: boolean }
     if (props.validator?.operator_address !== undefined) {
       form.setValue('validator', props.validator.operator_address)
     }
-    console.log(props.validator.operator_address)
 
     const { stakeAmount, stakingPeriod } = values
     let cmpPubkey: Hex = '0x'
