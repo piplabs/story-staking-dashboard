@@ -25,6 +25,16 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: 'Story Staking Dashboard',
   description: 'Story Staking Dashboard',
+  openGraph: {
+    images: [
+      {
+        url: 'https://www.story.foundation/_next/static/media/opengraph-image.b342695e.jpg',
+        width: 1200,
+        height: 600,
+        alt: 'Story Staking Dashboard',
+      },
+    ],
+  },
 }
 
 export default function RootLayout({
