@@ -94,7 +94,7 @@ const mainnetConfig = createConfig({
   chains: [storyMainnet],
   transports: {
     [1514]: fallback([
-      // http('https://mainnet.storyrpc.io'),
+      http('https://mainnet.storyrpc.io'),
       http('https://internal-full.storyrpc.io', {
         fetchOptions: {
           headers: {
