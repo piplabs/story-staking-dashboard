@@ -99,7 +99,6 @@ const mainnetConfig = createConfig({
         fetchOptions: {
           headers: {
             'X-Origin': 'staking.story.foundation',
-            'Access-Control-Allow-Headers': 'X-Story',
           },
         },
       }),
