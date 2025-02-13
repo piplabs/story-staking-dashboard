@@ -1,5 +1,4 @@
 import {
-  EvmOperation,
   GetAprApiResponse,
   GetAprResponse,
   GetEvmOperationsApiResponse,
@@ -7,6 +6,8 @@ import {
   GetEvmOperationsResponse,
   GetNetworkHealthApiResponse,
   GetNetworkHealthResponse,
+  GetNetworkStakingParamsApiResponse,
+  GetNetworkStakingParamsResponse,
   GetStakingPoolApiResponse,
   GetStakingPoolResponse,
   GetTokenTotalSupplyApiResponse,
@@ -15,6 +16,7 @@ import {
 } from '@/lib/types/networkApiTypes'
 
 import { stakingDataAxios } from '.'
+import { formatEther } from 'viem'
 
 export async function getApr(): Promise<GetAprResponse> {
   const response = await stakingDataAxios.get<GetAprApiResponse>(`estimated_apr`)
@@ -62,5 +64,21 @@ export async function getStakingPool(): Promise<GetStakingPoolResponse> {
   return {
     ...response.data.msg,
     totalStaked: totalStaked.toString(),
+  }
+}
+
+export async function getNetworkStakingParams(): Promise<GetNetworkStakingParamsResponse> {
+  const response = await stakingDataAxios.get<GetNetworkStakingParamsApiResponse>('/staking/params')
+  if (response.status !== 200) {
+    throw new Error(`Failed to get network staking params: ${response.status}`)
+  }
+  const msg = response.data.msg
+
+  return {
+    ...msg,
+    params: {
+      ...msg.params,
+      minDelegationEth: formatEther(BigInt(msg.params.min_delegation), 'gwei'),
+    },
   }
 }

@@ -6,12 +6,8 @@ export type ViewTransactionProps = {
 }
 
 export default function ViewTransaction(props: ViewTransactionProps) {
-  const { chain } = useAccount()
-
-  const explorerUrl = process.env.NEXT_PUBLIC_EXPLORER_URL
-
   return (
-    <Link href={`${explorerUrl}/tx/${props.txHash}`} target="_blank">
+    <Link href={`${process.env.NEXT_PUBLIC_EXPLORER_URL}/tx/${props.txHash}`} target="_blank">
       <p className="font-medium text-blue-600 hover:underline dark:text-blue-500">View transaction</p>
     </Link>
   )

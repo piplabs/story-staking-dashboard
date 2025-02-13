@@ -25,7 +25,6 @@ export default function ActivityTable(props: { delegatorEvmAddr: Address }) {
   const { chain } = useAccount()
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
-  const explorerUrl = process.env.NEXT_PUBLIC_TESTNET_EXPLORER_URL
 
   const [{ pageIndex, pageSize }, setPagination] = useState({
     pageIndex: 0,
@@ -119,7 +118,7 @@ export default function ActivityTable(props: { delegatorEvmAddr: Address }) {
                   <TableCell className="text-center">{operation.block_height}</TableCell>
                   <TableCell className="text-center">
                     <Link
-                      href={`${explorerUrl}/tx/${operation.tx_hash}`}
+                      href={`${process.env.NEXT_PUBLIC_EXPLORER_URL}/tx/${operation.tx_hash}`}
                       className="flex flex-row justify-center gap-2"
                     >
                       {truncateAddress(operation.tx_hash)}

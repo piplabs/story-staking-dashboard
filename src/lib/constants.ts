@@ -15,15 +15,15 @@ export const feeWei = parseEther(feeEther)
 
 export const STAKING_PERIODS: Record<string, StakingPeriodMultiplierInfo[]> = {
   1315: [
-    { value: '0', label: 'Flexible', multiplier: '1.0x', description: 'Unstake anytime' },
-    { value: '1', label: '90 Days', multiplier: '1.051x', description: 'Lock for 90 days' },
-    { value: '2', label: '360 Days', multiplier: '1.16x', description: 'Lock for 360 days' },
-    { value: '3', label: '540 Days', multiplier: '1.34x', description: 'Lock for 540 days' },
+    { value: '0', label: 'Flexible (Unstake anytime)', multiplier: '1.0x', description: '1.0x rewards' },
+    { value: '1', label: 'Lock for 90 Days', multiplier: '1.051x', description: '1.051x rewards' },
+    { value: '2', label: 'Lock for 360 Days', multiplier: '1.16x', description: '1.16x rewards' },
+    { value: '3', label: 'Lock for 540 Days', multiplier: '1.34x', description: '1.34x rewards' },
   ] as const,
   1514: [
-    { value: '0', label: 'Flexible', multiplier: '1.0x', description: 'Unstake anytime' },
-    { value: '1', label: '90 Days', multiplier: '1.1x', description: 'Lock for 90 days' },
-    { value: '2', label: '360 Days', multiplier: '1.5x', description: 'Lock for 360 days' },
-    { value: '3', label: '540 Days', multiplier: '2.0x', description: 'Lock for 540 days' },
+    { value: '0', label: 'Flexible (Unstake anytime)', multiplier: '1.0x', description: '1.0x rewards' },
+    { value: '1', label: 'Lock for 90 Days', multiplier: '1.1x', description: '1.1x rewards' },
+    { value: '2', label: 'Lock for 360 Days', multiplier: '1.5x', description: '1.5x rewards' },
+    { value: '3', label: 'Lock for 540 Days', multiplier: '2.0x', description: '2x rewards' },
   ] as const,
 }

@@ -25,12 +25,14 @@ import { useAllValidators } from '@/lib/services/hooks/useAllValidators'
 import { useIsSmallDevice } from '@/lib/services/hooks/useIsSmallDevice'
 import { getValidator } from '@/lib/services/api/validatorApi'
 import { STAKING_PERIODS } from '@/lib/constants'
+import { useNetworkStakingParams } from '@/lib/services/hooks/useNetworkStakingParams'
+import { useDelegatorPeriodDelegations } from '@/lib/services/hooks/useDelegatorPeriodDelegations'
 
 const createFormSchema = ({
   minStakeAmount,
   balance,
 }: {
-  minStakeAmount: bigint | undefined
+  minStakeAmount: string | undefined
   balance: bigint | undefined
 }) =>
   z.object({
@@ -40,21 +42,28 @@ const createFormSchema = ({
         (value): value is string => {
           if (!balance) return false
           const amount = parseFloat(value)
-          // return !isNaN(amount) && amount >= parseFloat(formatEther(minStakeAmount))
-          return !isNaN(amount)
-        },
-        {
-          message: `Must input a valid amount ${minStakeAmount ? `(minimum: ${formatEther(minStakeAmount)})` : ''}`,
-        }
-      )
-      .refine(
-        (value): value is string => {
-          if (!balance) return false
-          const amount = parseFloat(value)
           return amount <= parseFloat(formatEther(balance))
         },
         {
           message: 'Insufficient balance',
+        }
+      )
+      .refine(
+        (value): value is string => {
+          if (!balance || !minStakeAmount) return false
+          const amount = parseFloat(value)
+          return amount >= parseFloat(minStakeAmount)
+        },
+        {
+          message: `Amount below minimum stake amount ${minStakeAmount ? `(${minStakeAmount})` : ''}`,
+        }
+      )
+      .refine(
+        (value): value is string => {
+          return !!value
+        },
+        {
+          message: 'Enter an amount',
         }
       ),
     validator: z.string(),
@@ -65,8 +74,9 @@ const createFormSchema = ({
 
 export function StakeForm(props: { validator?: Validator; isFlexible?: boolean }) {
   const { writeContractAsync: ipTokenStake, isPending: isWaitingForWalletConfirmation } = useWriteIpTokenStakeStake()
-  const { data: minStakeAmount } = useReadIpTokenStakeMinStakeAmount()
-  console.log({ minStakeAmount })
+  const { data: stakingParams } = useNetworkStakingParams()
+  const minStakeAmount = stakingParams?.params.minDelegationEth
+
   const [stakeTxHash, setStakeTxHash] = useState<Hex | undefined>(undefined)
   const { address, chainId } = useAccount()
   const { data: balance, refetch: refetchBalance } = useBalance({
@@ -74,6 +84,9 @@ export function StakeForm(props: { validator?: Validator; isFlexible?: boolean }
   })
   const { refetch: refetchDelegatorStake } = useValidatorDelegatorDelegations({
     validatorAddr: props.validator?.operator_address || zeroAddress,
+    delegatorAddr: address || zeroAddress,
+  })
+  const { refetch: refetchDelegatorPeriodDelegations } = useDelegatorPeriodDelegations({
     delegatorAddr: address || zeroAddress,
   })
 
@@ -98,14 +111,16 @@ export function StakeForm(props: { validator?: Validator; isFlexible?: boolean }
   useEffect(() => {
     refetchDelegatorStake()
     refetchBalance()
+    refetchDelegatorPeriodDelegations()
   }, [txnReceipt.isSuccess])
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     if (props.validator?.operator_address !== undefined) {
       form.setValue('validator', props.validator.operator_address)
     }
-    const { stakeAmount, stakingPeriod } = values
+    console.log(props.validator.operator_address)
 
+    const { stakeAmount, stakingPeriod } = values
     let cmpPubkey: Hex = '0x'
     if (props.validator) {
       cmpPubkey = `0x${base64ToHex(props.validator.consensus_pubkey.value)}`
@@ -137,10 +152,10 @@ export function StakeForm(props: { validator?: Validator; isFlexible?: boolean }
   let buttonText
   if (chainId?.toString() != process.env.NEXT_PUBLIC_CHAIN_ID) {
     buttonText = 'Wrong network. Switch to Story'
-  } else if (balance && minStakeAmount && balance.value < minStakeAmount) {
+  } else if (balance && minStakeAmount && balance.value < parseEther(minStakeAmount)) {
     buttonText = 'Not enough IP'
-  } else if (minStakeAmount && parseEther(form.watch('stakeAmount')) < minStakeAmount) {
-    buttonText = `Minimum ${formatEther(minStakeAmount)} IP`
+  } else if (minStakeAmount && parseEther(form.watch('stakeAmount')) < parseEther(minStakeAmount)) {
+    buttonText = `Minimum ${minStakeAmount} IP`
   } else if (balance && parseEther(form.watch('stakeAmount')) > balance.value) {
     buttonText = `Exceeds balance`
   } else if (isWaitingForWalletConfirmation) {
@@ -174,7 +189,7 @@ export function StakeForm(props: { validator?: Validator; isFlexible?: boolean }
           {props.validator && minStakeAmount && (
             <section className="flex flex-col">
               <p className="font-semibold">Minimum Stake Amount</p>
-              <p className="text-primary-outline">{formatEther(minStakeAmount) + ' IP'} </p>
+              <p className="text-primary-outline">{minStakeAmount + ' IP'} </p>
             </section>
           )}
           {props.validator && (
@@ -217,11 +232,13 @@ export function StakeForm(props: { validator?: Validator; isFlexible?: boolean }
                         ) : (
                           STAKING_PERIODS[process.env.NEXT_PUBLIC_CHAIN_ID].map(
                             (period: StakingPeriodMultiplierInfo) => (
-                              <SelectItem key={period.value} value={period.value} className="text-white">
+                              <SelectItem
+                                key={period.value}
+                                value={period.value}
+                                className="text-white flex flex-row justify-between w-full"
+                              >
                                 <div className="flex flex-row items-center gap-2">
-                                  <span className="font-medium">
-                                    {period.label} ({period.multiplier} rewards)
-                                  </span>
+                                  <span className="font-medium">{period.label}</span>
                                   <span className="text-sm text-gray-400">- {period.description}</span>
                                 </div>
                               </SelectItem>
@@ -266,6 +283,7 @@ export function StakeForm(props: { validator?: Validator; isFlexible?: boolean }
                       className="border-none bg-black font-normal text-white placeholder-gray-500 outline-none placeholder:text-white placeholder:opacity-50 focus:border-0 focus:border-none focus:outline-none focus:ring-0 focus:ring-transparent"
                       placeholder="Enter amount..."
                       {...field}
+                      type="number"
                     />
                     <div className="flex items-center space-x-2">
                       <span className="ml-2 text-white text-opacity-50">IP</span>

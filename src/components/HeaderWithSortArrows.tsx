@@ -52,7 +52,7 @@ export default function HeaderWithSortArrows<T>({
 
   return (
     <div className={cn('flex flex-row', className)}>
-      <p className="text-center lg:text-xl">{header}</p>
+      <div className="text-center lg:text-xl">{header}</div>
       <ArrowUp
         className={cn(
           'my-auto h-4 w-4 stroke-1 hover:cursor-pointer hover:stroke-2 active:stroke-2',

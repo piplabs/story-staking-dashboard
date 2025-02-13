@@ -88,3 +88,24 @@ export type GetStakingPoolApiResponse = {
   msg: GetStakingPoolResponse
   error: string
 }
+
+export type GetNetworkStakingParamsResponse = {
+  params: {
+    unbonding_time: string
+    max_validators: number
+    max_entries: number
+    historical_entries: number
+    bond_denom: string
+    min_commision_rate: string
+    min_delegation: string
+    periods: { period_type: number; duration: string; rewards_multiplier: string }[]
+    token_types: { token_type: number; rewards_multiplier: string }[]
+    singularity_height: string
+    minDelegationEth: string
+  }
+}
+export type GetNetworkStakingParamsApiResponse = {
+  code: number
+  error: string
+  msg: GetNetworkStakingParamsResponse
+}
