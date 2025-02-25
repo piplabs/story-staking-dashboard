@@ -74,11 +74,7 @@ function OverviewCard({ delegatorAddr }: { delegatorAddr: Address }) {
 
         <DataRow
           title="Total Rewards Earned"
-          value={
-            isRewardsPending || !rewards
-              ? '-'
-              : `${Number(formatEther(rewards.accumulatedRewards, 'gwei')).toFixed(2)} IP`
-          }
+          value={!rewards ? '-' : `${Number(rewards.accumulatedRewards).toFixed(2)} IP`}
           tooltipInfo="The total IP rewards earned from staking on validators"
         />
       </section>

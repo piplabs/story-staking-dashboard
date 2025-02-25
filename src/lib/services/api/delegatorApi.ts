@@ -86,18 +86,17 @@ export async function getDelegatorRewards(params: GetDelegatorRewardsParams): Pr
 
   const rewards = response.data.msg
 
-  if (rewards.amount.includes('e')) {
-    const [mantissa, exponent] = rewards.amount.split('e')
-    const exp = parseInt(exponent)
-    const value = parseFloat(mantissa) * Math.pow(10, exp)
+  if (!rewards.amount) {
     return {
-      accumulatedRewards: BigInt(formatEther(BigInt(Math.floor(value)), 'gwei')),
+      accumulatedRewards: '0',
       lastUpdateHeight: rewards.last_update_height,
     }
   }
 
+  const accumulatedRewards = formatEther(BigInt(rewards.amount), 'gwei')
+
   return {
-    accumulatedRewards: BigInt(formatEther(BigInt(rewards.amount), 'gwei')),
+    accumulatedRewards: accumulatedRewards,
     lastUpdateHeight: rewards.last_update_height,
   }
 }

@@ -89,7 +89,7 @@ export type GetDelegatorRewardsApiResponse = {
 }
 
 export type GetDelegatorRewardsResponse = {
-  accumulatedRewards: bigint
+  accumulatedRewards: string
   lastUpdateHeight: number
 }
 
