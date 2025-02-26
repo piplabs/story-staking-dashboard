@@ -94,7 +94,6 @@ export default function DelegationsTable(props: { delegatorEvmAddr: Address }) {
   if (isLoading || isPending) {
     return <SkeletonTable />
   }
-
   return (
     <StyledCard className="text-base text-white">
       <h1 className="p-4 md:p-0">Bonded Delegations</h1>
@@ -134,7 +133,7 @@ export default function DelegationsTable(props: { delegatorEvmAddr: Address }) {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {!delegatorPeriodDelegations && !isLoading && !isPending ? (
+          {delegatorPeriodDelegations?.length === 0 && !isLoading && !isPending ? (
             <TableRow>
               <TableCell colSpan={7} className="h-24 text-center">
                 No delegations
