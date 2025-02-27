@@ -98,7 +98,7 @@ function ValidatorStatus({ status }: { status: number }) {
     statusText = 'UNBONDED'
     statusStyle = 'text-white'
   } else if (status == 2) {
-    statusText = 'DEGRADED'
+    statusText = 'JAILED'
     statusStyle = 'text-yellow-500'
   } else if (status == 3) {
     statusText = 'ACTIVE'
