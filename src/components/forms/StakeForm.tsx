@@ -72,11 +72,12 @@ const createFormSchema = ({
     }),
   })
 
-export function StakeForm(props: { validator?: Validator; isFlexible?: boolean }) {
+export function StakeForm(props: { validator?: Validator }) {
   const { writeContractAsync: ipTokenStake, isPending: isWaitingForWalletConfirmation } = useWriteIpTokenStakeStake()
   const { data: stakingParams } = useNetworkStakingParams()
   const minStakeAmount = stakingParams?.params.minDelegationEth
-
+  const isLockedTokenStaking =
+    props.validator?.support_token_type === undefined || props.validator?.support_token_type == 0
   const [stakeTxHash, setStakeTxHash] = useState<Hex | undefined>(undefined)
   const { address, chainId } = useAccount()
   const { data: balance, refetch: refetchBalance } = useBalance({
@@ -185,6 +186,12 @@ export function StakeForm(props: { validator?: Validator; isFlexible?: boolean }
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 text-white">
         <>
           <h2 className="text-2xl font-bold">Stake IP</h2>
+          {isLockedTokenStaking && (
+            <div className="w-full rounded-lg border border-yellow-600 bg-yellow-900/20 p-4 text-yellow-200">
+              Warning: Locked token staking incurs 0.5x rewards. If you do not intend to stake on a locked token
+              validator, please stake on a validator that supports unlocked tokens.
+            </div>
+          )}
           {props.validator && minStakeAmount && (
             <section className="flex flex-col">
               <p className="font-semibold">Minimum Stake Amount</p>
@@ -209,58 +216,50 @@ export function StakeForm(props: { validator?: Validator; isFlexible?: boolean }
               <FormItem>
                 <FormLabel className="text-[16px] font-semibold text-white">Staking Period</FormLabel>
                 <FormControl>
-                  {props.isFlexible ? (
-                    <div className="h-12 w-full rounded-lg border border-solid border-primary-border bg-black px-4 py-3 text-white opacity-50">
-                      Flexible (1.0x rewards) - Unstake anytime
-                    </div>
-                  ) : (
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
-                      <SelectTrigger disabled={isFormDisabled} className="h-12 w-full border-primary-border bg-black">
-                        <SelectValue placeholder="Select a staking period" />
-                      </SelectTrigger>
-                      <SelectContent className="border-primary-border bg-black">
-                        {props.validator &&
-                        (props.validator?.support_token_type === undefined ||
-                          props.validator?.support_token_type === 0) ? (
-                          <SelectItem key="0" value="0" className="text-white">
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <SelectTrigger disabled={isFormDisabled} className="h-12 w-full border-primary-border bg-black">
+                      <SelectValue placeholder="Select a staking period" />
+                    </SelectTrigger>
+                    <SelectContent className="border-primary-border bg-black">
+                      {isLockedTokenStaking ? (
+                        <SelectItem key="0" value="0" className="text-white">
+                          <div className="flex flex-row items-center gap-2">
+                            <span className="font-medium">Flexible (0.5x rewards)</span>
+                            <span className="text-sm text-gray-400">- Unstake anytime</span>
+                          </div>
+                        </SelectItem>
+                      ) : (
+                        STAKING_PERIODS[process.env.NEXT_PUBLIC_CHAIN_ID].map((period: StakingPeriodMultiplierInfo) => (
+                          <SelectItem
+                            key={period.value}
+                            value={period.value}
+                            className="text-white flex flex-row justify-between w-full"
+                          >
                             <div className="flex flex-row items-center gap-2">
-                              <span className="font-medium">Flexible (1.0x rewards)</span>
-                              <span className="text-sm text-gray-400">- Unstake anytime</span>
+                              <span className="font-medium">{period.label}</span>
+                              <span className="text-sm text-gray-400">- {period.description}</span>
                             </div>
                           </SelectItem>
-                        ) : (
-                          STAKING_PERIODS[process.env.NEXT_PUBLIC_CHAIN_ID].map(
-                            (period: StakingPeriodMultiplierInfo) => (
-                              <SelectItem
-                                key={period.value}
-                                value={period.value}
-                                className="text-white flex flex-row justify-between w-full"
-                              >
-                                <div className="flex flex-row items-center gap-2">
-                                  <span className="font-medium">{period.label}</span>
-                                  <span className="text-sm text-gray-400">- {period.description}</span>
-                                </div>
-                              </SelectItem>
-                            )
-                          )
-                        )}
-                      </SelectContent>
-                    </Select>
-                  )}
+                        ))
+                      )}
+                    </SelectContent>
+                  </Select>
                 </FormControl>
-                <p className="mt-1 text-sm text-gray-400">
-                  Longer staking periods earn higher rewards. After the period ends, you continue earning the same rate
-                  until you unstake. For more information, please visit{' '}
-                  <a
-                    href="https://docs.story.foundation/docs/tokenomics-staking#staking-period"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-sp-purple hover:underline"
-                  >
-                    our documentation
-                  </a>
-                  .
-                </p>
+                {!isLockedTokenStaking && (
+                  <p className="mt-1 text-sm text-gray-400">
+                    Longer staking periods earn higher rewards. After the period ends, you continue earning the same
+                    rate until you unstake. For more information, please visit{' '}
+                    <a
+                      href="https://docs.story.foundation/docs/tokenomics-staking#staking-period"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-sp-purple hover:underline"
+                    >
+                      our documentation
+                    </a>
+                    .
+                  </p>
+                )}
                 <FormMessage />
               </FormItem>
             )}
