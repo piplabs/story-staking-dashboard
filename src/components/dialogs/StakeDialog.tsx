@@ -28,12 +28,7 @@ export function StakeDialog(props: { text?: string; validator?: Validator; isFle
 
       <DialogContent onPointerDownOutside={(e) => e.preventDefault()} className="sm:max-w-[825px] p-0">
         <StyledCard>
-          {props.validator &&
-          (props.validator?.support_token_type === undefined || props.validator?.support_token_type == 0) ? (
-            <LockedTokenStakeForm validator={props.validator} />
-          ) : (
-            <StakeForm validator={props.validator} isFlexible={props.isFlexible} />
-          )}
+          <StakeForm validator={props.validator} />
         </StyledCard>
       </DialogContent>
     </Dialog>
