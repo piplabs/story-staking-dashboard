@@ -27,3 +27,8 @@ export const STAKING_PERIODS: Record<string, StakingPeriodMultiplierInfo[]> = {
     { value: '3', label: 'Lock for 540 Days', multiplier: '2.0x', description: '2x rewards' },
   ] as const,
 }
+
+export const LOCKED_STAKING_PERIODS: Record<string, StakingPeriodMultiplierInfo[]> = {
+  1315: [{ value: '0', label: 'Flexible (Unstake anytime)', multiplier: '0.5x', description: '0.5x rewards' }] as const,
+  1514: [{ value: '0', label: 'Flexible (Unstake anytime)', multiplier: '0.5x', description: '0.5x rewards' }] as const,
+}

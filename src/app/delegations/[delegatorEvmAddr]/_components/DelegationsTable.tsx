@@ -25,7 +25,7 @@ import { formatLargeMetricsNumber, truncateAddress } from '@/lib/utils'
 import StyledCard from '@/components/cards/StyledCard'
 import { useSingularity } from '@/lib/services/hooks/useSingularity'
 import { StakingPeriodMultiplierInfo } from '@/lib/types'
-import { STAKING_PERIODS } from '@/lib/constants'
+import { LOCKED_STAKING_PERIODS, STAKING_PERIODS } from '@/lib/constants'
 
 export default function DelegationsTable(props: { delegatorEvmAddr: Address }) {
   const [sorting, setSorting] = useState<SortingState>([])
@@ -148,7 +148,10 @@ export default function DelegationsTable(props: { delegatorEvmAddr: Address }) {
                   const isMatured = new Date(periodDelegation.period_delegation.end_time) < new Date()
 
                   const validator = validatorDetails[periodDelegation.period_delegation.validator_address]
+                  const isLockedTokenStaking =
+                    validator?.support_token_type === undefined || validator?.support_token_type == 0
 
+                  const stakingPeriods = isLockedTokenStaking ? LOCKED_STAKING_PERIODS : STAKING_PERIODS
                   return (
                     <TableRow key={pIndex} className="border-none">
                       <TableCell className="break-words">
@@ -197,7 +200,7 @@ export default function DelegationsTable(props: { delegatorEvmAddr: Address }) {
                       </TableCell>
                       <TableCell className="break-words text-center">
                         {periodDelegation.period_delegation.period_type !== undefined
-                          ? STAKING_PERIODS[process.env.NEXT_PUBLIC_CHAIN_ID].find(
+                          ? stakingPeriods[process.env.NEXT_PUBLIC_CHAIN_ID].find(
                               (period: StakingPeriodMultiplierInfo) =>
                                 period.value === periodDelegation.period_delegation.period_type.toString()
                             )?.label + ''
@@ -205,7 +208,7 @@ export default function DelegationsTable(props: { delegatorEvmAddr: Address }) {
                       </TableCell>
                       <TableCell className="hidden break-words text-center md:table-cell">
                         {periodDelegation.period_delegation.period_type !== undefined
-                          ? STAKING_PERIODS[process.env.NEXT_PUBLIC_CHAIN_ID].find(
+                          ? stakingPeriods[process.env.NEXT_PUBLIC_CHAIN_ID].find(
                               (period: StakingPeriodMultiplierInfo) =>
                                 period.value === periodDelegation.period_delegation.period_type.toString()
                             )?.multiplier

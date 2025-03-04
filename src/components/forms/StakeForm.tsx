@@ -186,7 +186,7 @@ export function StakeForm(props: { validator?: Validator }) {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 text-white">
         <>
           <h2 className="text-2xl font-bold">Stake IP</h2>
-          {isLockedTokenStaking && (
+          {props.validator !== undefined && isLockedTokenStaking && (
             <div className="w-full rounded-lg border border-yellow-600 bg-yellow-900/20 p-4 text-yellow-200">
               Warning: Locked token staking incurs 0.5x rewards. If you do not intend to stake on a locked token
               validator, please stake on a validator that supports unlocked tokens.
@@ -221,7 +221,7 @@ export function StakeForm(props: { validator?: Validator }) {
                       <SelectValue placeholder="Select a staking period" />
                     </SelectTrigger>
                     <SelectContent className="border-primary-border bg-black">
-                      {isLockedTokenStaking ? (
+                      {props.validator !== undefined && isLockedTokenStaking ? (
                         <SelectItem key="0" value="0" className="text-white">
                           <div className="flex flex-row items-center gap-2">
                             <span className="font-medium">Flexible (0.5x rewards)</span>

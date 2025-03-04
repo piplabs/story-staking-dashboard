@@ -126,6 +126,7 @@ export function ValidatorsTable({
                   header={'Supported Token Type'}
                   sorting={sorting}
                   className="justify-center"
+                  isShowArrows={false}
                 />
               )
             },

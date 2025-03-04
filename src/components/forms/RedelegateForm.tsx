@@ -177,7 +177,7 @@ export function RedelegateForm(props: { validator: Validator; delegationId?: str
           </p>
 
           <section className="flex flex-col">
-            <p className="font-semibold">Unstaking Fee</p>
+            <p className="font-semibold">Redelegation Fee</p>
             <p className="text-primary-outline">{feeEther} IP</p>
           </section>
 

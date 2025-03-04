@@ -10,11 +10,13 @@ export default function HeaderWithSortArrows<T>({
   header,
   sorting,
   className,
+  isShowArrows = true,
 }: {
   column: Column<T, unknown>
   header: string | ReactNode
   sorting: SortingState
   className?: string
+  isShowArrows?: boolean
 }) {
   const isAscSorted = sorting.some((sort) => sort.id === column.id && sort.desc === false)
   const isDescSorted = sorting.some((sort) => sort.id === column.id && sort.desc === true)
@@ -53,20 +55,24 @@ export default function HeaderWithSortArrows<T>({
   return (
     <div className={cn('flex flex-row', className)}>
       <div className="text-center lg:text-xl">{header}</div>
-      <ArrowUp
-        className={cn(
-          'my-auto h-4 w-4 stroke-1 hover:cursor-pointer hover:stroke-2 active:stroke-2',
-          isAscSorted && 'stroke-2'
-        )}
-        onClick={() => handleSort(false)}
-      />
-      <ArrowDown
-        className={cn(
-          'my-auto h-4 w-4 stroke-1 hover:cursor-pointer hover:stroke-2 active:stroke-2',
-          isDescSorted && 'stroke-2'
-        )}
-        onClick={() => handleSort(true)}
-      />
+      {isShowArrows && (
+        <>
+          <ArrowUp
+            className={cn(
+              'my-auto h-4 w-4 stroke-1 hover:cursor-pointer hover:stroke-2 active:stroke-2',
+              isAscSorted && 'stroke-2'
+            )}
+            onClick={() => handleSort(false)}
+          />
+          <ArrowDown
+            className={cn(
+              'my-auto h-4 w-4 stroke-1 hover:cursor-pointer hover:stroke-2 active:stroke-2',
+              isDescSorted && 'stroke-2'
+            )}
+            onClick={() => handleSort(true)}
+          />
+        </>
+      )}
     </div>
   )
 }
