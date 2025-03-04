@@ -115,26 +115,30 @@ export function ValidatorsTable({
         )
       },
     },
-    // {
-    //   accessorKey: 'supportedToken',
-    //   header: ({ column }) => {
-    //     return (
-    //       <HeaderWithSortArrows
-    //         column={column}
-    //         header={'Supported Token Type'}
-    //         sorting={sorting}
-    //         className="justify-center"
-    //       />
-    //     )
-    //   },
-    //   cell: ({ row }) => {
-    //     const text =
-    //       row.original.support_token_type === undefined || row.original.support_token_type === 0
-    //         ? 'Locked'
-    //         : 'Unlocked'
-    //     return <div className="text-center">{text}</div>
-    //   },
-    // },
+    ...(showLockedTokens
+      ? [
+          {
+            accessorKey: 'supportedToken',
+            header: ({ column }: any) => {
+              return (
+                <HeaderWithSortArrows
+                  column={column}
+                  header={'Supported Token Type'}
+                  sorting={sorting}
+                  className="justify-center"
+                />
+              )
+            },
+            cell: ({ row }: any) => {
+              const text =
+                row.original.support_token_type === undefined || row.original.support_token_type === 0
+                  ? 'Locked'
+                  : 'Unlocked'
+              return <div className="text-center">{text}</div>
+            },
+          },
+        ]
+      : []),
     {
       accessorKey: 'uptime',
       header: ({ column }) => {
