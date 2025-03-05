@@ -79,6 +79,7 @@ export function StakeForm(props: { validator?: Validator }) {
   const isLockedTokenStaking =
     props.validator?.support_token_type === undefined || props.validator?.support_token_type == 0
   const [stakeTxHash, setStakeTxHash] = useState<Hex | undefined>(undefined)
+  const [delegationsUpdated, setDelegationsUpdated] = useState(false)
   const { address, chainId } = useAccount()
   const { data: balance, refetch: refetchBalance } = useBalance({
     address: address,
@@ -110,12 +111,17 @@ export function StakeForm(props: { validator?: Validator }) {
   }, [form, props.validator, minStakeAmount])
 
   useEffect(() => {
-    refetchDelegatorStake()
-    refetchBalance()
-    refetchDelegatorPeriodDelegations()
+    if (txnReceipt.isSuccess) {
+      const timer = setTimeout(async () => {
+        await Promise.all([refetchDelegatorStake(), refetchBalance(), refetchDelegatorPeriodDelegations()])
+        setDelegationsUpdated(true)
+      }, 3000)
+      return () => clearTimeout(timer)
+    }
   }, [txnReceipt.isSuccess])
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    setDelegationsUpdated(false)
     if (props.validator?.operator_address !== undefined) {
       form.setValue('validator', props.validator.operator_address)
     }
@@ -148,6 +154,7 @@ export function StakeForm(props: { validator?: Validator }) {
   }
 
   const isTxnPending = txnReceipt.isPending && !!stakeTxHash
+  const isOverallPending = isTxnPending || (txnReceipt.isSuccess && !delegationsUpdated)
 
   let buttonText
   if (chainId?.toString() != process.env.NEXT_PUBLIC_CHAIN_ID) {
@@ -160,9 +167,9 @@ export function StakeForm(props: { validator?: Validator }) {
     buttonText = `Exceeds balance`
   } else if (isWaitingForWalletConfirmation) {
     buttonText = 'Confirm transaction in wallet...'
-  } else if (isTxnPending) {
+  } else if (isOverallPending) {
     buttonText = 'Transaction pending...'
-  } else if (txnReceipt.isSuccess) {
+  } else if (txnReceipt.isSuccess && delegationsUpdated) {
     buttonText = 'Staked! View your delegations'
   } else if (!form.formState.isValid) {
     if (form.getValues('stakeAmount') === '') {
@@ -176,10 +183,8 @@ export function StakeForm(props: { validator?: Validator }) {
     buttonText = 'Stake IP'
   }
 
-  const isButtonDisabled =
-    isTxnPending || isWaitingForWalletConfirmation || !form.formState.isValid || txnReceipt.isSuccess
-
-  const isFormDisabled = isTxnPending || isWaitingForWalletConfirmation || txnReceipt.isSuccess
+  const isButtonDisabled = isOverallPending || isWaitingForWalletConfirmation || !form.formState.isValid
+  const isFormDisabled = isOverallPending || isWaitingForWalletConfirmation
 
   return (
     <Form {...form}>
@@ -195,7 +200,7 @@ export function StakeForm(props: { validator?: Validator }) {
           {props.validator && minStakeAmount && (
             <section className="flex flex-col">
               <p className="font-semibold">Minimum Stake Amount</p>
-              <p className="text-primary-outline">{minStakeAmount + ' IP'} </p>
+              <p className="text-primary-outline">{minStakeAmount + ' IP'}</p>
             </section>
           )}
           {props.validator && (
@@ -301,12 +306,10 @@ export function StakeForm(props: { validator?: Validator }) {
             )}
           />
           <div className="mx-auto flex flex-row items-center gap-4 justify-center w-full">
-            {txnReceipt.isSuccess ? (
+            {txnReceipt.isSuccess && delegationsUpdated ? (
               <>
                 <Link href={`/delegations/${address}`} className="w-full">
-                  <Button className={cn('flex flex-row gap-2 bg-primary text-white w-full')}>
-                    Staked! View your delegations
-                  </Button>
+                  <Button className={cn('flex flex-row gap-2 bg-primary text-white w-full')}>{buttonText}</Button>
                 </Link>
                 <DialogClose className={cn(buttonVariants({ variant: 'secondary' }), 'w-full')}>Close</DialogClose>
               </>
@@ -326,14 +329,16 @@ export function StakeForm(props: { validator?: Validator }) {
                   }
                 }}
               >
-                {(isTxnPending || isWaitingForWalletConfirmation) && <LoaderCircle className="animate-spin" />}
+                {(isTxnPending || isWaitingForWalletConfirmation || (txnReceipt.isSuccess && !delegationsUpdated)) && (
+                  <LoaderCircle className="animate-spin" />
+                )}
                 {buttonText}
               </Button>
             )}
           </div>
         </>
       </form>
-      <p className="mt-4">{txnReceipt.isSuccess && <ViewTransaction txHash={stakeTxHash} />}</p>
+      <p className="mt-4">{txnReceipt.isSuccess && delegationsUpdated && <ViewTransaction txHash={stakeTxHash} />}</p>
     </Form>
   )
 }

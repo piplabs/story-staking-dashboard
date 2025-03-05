@@ -62,6 +62,8 @@ export function RedelegateForm(props: { validator: Validator; delegationId?: str
     useWriteIpTokenStakeRedelegate()
 
   const [stakeTxHash, setStakeTxHash] = useState<Hex | undefined>(undefined)
+  const [delegationsUpdated, setDelegationsUpdated] = useState(false)
+
   const { address } = useAccount()
 
   // Refetch data after successful redelegations
@@ -78,10 +80,14 @@ export function RedelegateForm(props: { validator: Validator; delegationId?: str
   })
 
   useEffect(() => {
-    refetchDelegatorPeriodDelegations()
-    refetchDelegations()
+    if (txnReceipt.isSuccess) {
+      const timer = setTimeout(async () => {
+        await Promise.all([refetchDelegatorPeriodDelegations(), refetchDelegations()])
+        setDelegationsUpdated(true)
+      }, 3000)
+      return () => clearTimeout(timer)
+    }
   }, [txnReceipt.isSuccess, refetchDelegatorPeriodDelegations, refetchDelegations])
-
   const formSchema = createFormSchema({ delegatedAmount: props.delegatedAmount })
 
   const supportedTokenType =
@@ -110,6 +116,7 @@ export function RedelegateForm(props: { validator: Validator; delegationId?: str
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     if (txnReceipt.isSuccess) return // Prevent resubmission if transaction was successful
+    setDelegationsUpdated(false)
 
     const { redelegateAmount, destinationValidator, delegationId } = values
 
@@ -135,15 +142,16 @@ export function RedelegateForm(props: { validator: Validator; delegationId?: str
   }
 
   const isTxnPending = txnReceipt.isPending && !!stakeTxHash
+  const isOverallPending = isTxnPending || (txnReceipt.isSuccess && !delegationsUpdated)
 
   let buttonText
   if (!props.delegatedAmount || parseFloat(props.delegatedAmount) === 0) {
     buttonText = 'No IP available to redelegate'
   } else if (isWaitingForWalletConfirmation && !txnReceipt.isSuccess) {
     buttonText = 'Confirm transaction in wallet...'
-  } else if (isTxnPending) {
+  } else if (isOverallPending) {
     buttonText = 'Transaction pending...'
-  } else if (txnReceipt.isSuccess) {
+  } else if (txnReceipt.isSuccess && delegationsUpdated) {
     buttonText = 'Redelegated!'
   } else {
     buttonText = 'Redelegate IP'
@@ -151,12 +159,11 @@ export function RedelegateForm(props: { validator: Validator; delegationId?: str
   const isButtonDisabled =
     isTxnPending ||
     (isWaitingForWalletConfirmation && !txnReceipt.isSuccess) ||
-    txnReceipt.isSuccess ||
+    (txnReceipt.isSuccess && !delegationsUpdated) ||
     !props.delegatedAmount ||
     parseFloat(props.delegatedAmount) === 0
 
-  const isFormDisabled = isTxnPending || isWaitingForWalletConfirmation || txnReceipt.isSuccess
-
+  const isFormDisabled = isTxnPending || isWaitingForWalletConfirmation || (txnReceipt.isSuccess && !delegationsUpdated)
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 text-white">

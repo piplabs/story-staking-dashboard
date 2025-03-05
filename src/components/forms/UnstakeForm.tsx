@@ -39,6 +39,8 @@ const createFormSchema = ({ totalStaked }: { totalStaked?: string }) =>
 export function UnstakeForm({ validator }: { validator: Validator }) {
   const { address } = useAccount()
   const [unstakeTxHash, setUnstakeTxHash] = useState<Hex | undefined>(undefined)
+  const [delegationsUpdated, setDelegationsUpdated] = useState(false)
+
   const sign = useSignMessage()
   const { writeContractAsync: unstake, isPending: isWaitingForWalletConfirmation } = useWriteIpTokenStakeUnstake()
 
@@ -75,9 +77,14 @@ export function UnstakeForm({ validator }: { validator: Validator }) {
   })
 
   useEffect(() => {
-    refetchDelegatorStake()
-    refetchDelegatorPeriodDelegations()
-  }, [txnReceipt.isSuccess, refetchDelegatorStake, refetchDelegatorPeriodDelegations])
+    if (txnReceipt.isSuccess) {
+      const timer = setTimeout(async () => {
+        await Promise.all([refetchDelegatorStake(), refetchDelegatorPeriodDelegations()])
+        setDelegationsUpdated(true)
+      }, 3000)
+      return () => clearTimeout(timer)
+    }
+  }, [txnReceipt.isSuccess])
 
   useEffect(() => {
     refetchDelegatorPeriodDelegations()
@@ -97,6 +104,7 @@ export function UnstakeForm({ validator }: { validator: Validator }) {
   }
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    setDelegationsUpdated(false)
     if (isButtonDisabled) return
 
     const { unstakeAmount, periodDelegationId } = values
@@ -120,6 +128,7 @@ export function UnstakeForm({ validator }: { validator: Validator }) {
   }
 
   const isTxnPending = txnReceipt.isPending && !!unstakeTxHash
+  const isOverallPending = isTxnPending || (txnReceipt.isSuccess && !delegationsUpdated)
   const isExceedsAllowableUnstake =
     selectedDelegation &&
     parseInt(form.watch('unstakeAmount')) >
@@ -136,24 +145,25 @@ export function UnstakeForm({ validator }: { validator: Validator }) {
     buttonText = 'Sign message in wallet...'
   } else if (isWaitingForWalletConfirmation) {
     buttonText = 'Confirm transaction in wallet...'
-  } else if (isTxnPending) {
+  } else if (isOverallPending) {
     buttonText = 'Unstaking...'
-  } else if (txnReceipt.isSuccess) {
+  } else if (txnReceipt.isSuccess && delegationsUpdated) {
     buttonText = 'Unstaked!'
   } else {
     buttonText = 'Unstake IP'
   }
+
   const isButtonDisabled =
     isTxnPending ||
     sign.isPending ||
     !form.formState.isValid ||
-    txnReceipt.isSuccess ||
+    (txnReceipt.isSuccess && !delegationsUpdated) ||
     !selectedPeriodId ||
     isExceedsAllowableUnstake ||
     isWaitingForWalletConfirmation
 
-  const isFormDisabled = isTxnPending || sign.isPending || txnReceipt.isSuccess || isWaitingForWalletConfirmation
-
+  const isFormDisabled =
+    isTxnPending || sign.isPending || (txnReceipt.isSuccess && !delegationsUpdated) || isWaitingForWalletConfirmation
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 text-white">
