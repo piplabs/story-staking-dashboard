@@ -294,7 +294,7 @@ export function UnstakeForm({ validator }: { validator: Validator }) {
           {buttonText}
         </Button>
       </form>
-      {txnReceipt.isSuccess && <ViewTransaction txHash={unstakeTxHash} />}
+      {txnReceipt.isSuccess && delegationsUpdated && <ViewTransaction txHash={unstakeTxHash} />}
     </Form>
   )
 }

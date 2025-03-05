@@ -304,7 +304,7 @@ export function RedelegateForm(props: { validator: Validator; delegationId?: str
           </Button>
         </>
       </form>
-      {txnReceipt.isSuccess && <ViewTransaction txHash={stakeTxHash} />}
+      {txnReceipt.isSuccess && delegationsUpdated && <ViewTransaction txHash={stakeTxHash} />}
     </Form>
   )
 }
