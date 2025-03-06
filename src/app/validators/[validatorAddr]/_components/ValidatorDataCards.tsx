@@ -191,18 +191,18 @@ export function CommissionCard({ validator }: { validator: Validator }) {
       <section className="flex flex-col gap-2">
         <DataRow
           title="Commission Rate"
-          value={`${(Number(formatLargeMetricsNumber(commission.commission_rates.rate)) * 100).toFixed(2)}%`}
+          value={`${parseFloat((Number(formatLargeMetricsNumber(commission.commission_rates.rate)) * 100).toFixed(2))}%`}
           tooltipInfo="Commission is the percentage a validator receives from the rewards earned by their delegators"
         />
         <DataRow
           title="Max Rate"
-          value={`${(Number(formatLargeMetricsNumber(commission.commission_rates.max_rate)) * 100).toFixed(2)}%`}
+          value={`${parseFloat((Number(formatLargeMetricsNumber(commission.commission_rates.max_rate)) * 100).toFixed(2))}%`}
           tooltipInfo="The maximum commission rate which this validator can ever charge"
         />
 
         <DataRow
           title="Max Daily Change Rate"
-          value={`${(Number(formatLargeMetricsNumber(commission.commission_rates.max_change_rate)) * 100).toFixed(2)}%`}
+          value={`${parseFloat((Number(formatLargeMetricsNumber(commission.commission_rates.max_change_rate)) * 100).toFixed(2))}%`}
           tooltipInfo="The maximum daily increase of the validator commission"
         />
       </section>

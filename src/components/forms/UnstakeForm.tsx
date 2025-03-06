@@ -23,16 +23,11 @@ import ViewTransaction from '../buttons/ViewTransaction'
 
 const createFormSchema = ({ totalStaked }: { totalStaked?: string }) =>
   z.object({
-    unstakeAmount: z.string().refine(
-      (value): value is string => {
-        if (!totalStaked) return false
-        const amount = parseFloat(value)
-        return !isNaN(amount) && amount >= 1024 && amount <= parseFloat(totalStaked)
-      },
-      {
-        message: `Must input a valid amount (minimum: 1024 IP)`,
-      }
-    ),
+    unstakeAmount: z.string().refine((value): value is string => {
+      if (!totalStaked) return false
+      const amount = parseFloat(value)
+      return !isNaN(amount) && amount >= 1024 && amount <= parseFloat(totalStaked)
+    }),
     periodDelegationId: z.string(),
   })
 
@@ -97,7 +92,7 @@ export function UnstakeForm({ validator }: { validator: Validator }) {
     )
 
     if (selectedDelegation) {
-      form.setValue('unstakeAmount', selectedDelegation.period_delegation.shares, {
+      form.setValue('unstakeAmount', selectedDelegation.balance.amount, {
         shouldValidate: true,
       })
     }
@@ -132,7 +127,7 @@ export function UnstakeForm({ validator }: { validator: Validator }) {
   const isExceedsAllowableUnstake =
     selectedDelegation &&
     parseInt(form.watch('unstakeAmount')) >
-      parseInt(formatEther(BigInt(parseInt(selectedDelegation.period_delegation.shares).toString()), 'gwei'))
+      parseInt(formatEther(BigInt(parseInt(selectedDelegation.balance.amount).toString()), 'gwei'))
 
   let buttonText
   if (!selectedPeriodId) {
@@ -157,7 +152,7 @@ export function UnstakeForm({ validator }: { validator: Validator }) {
     isTxnPending ||
     sign.isPending ||
     !form.formState.isValid ||
-    (txnReceipt.isSuccess && !delegationsUpdated) ||
+    txnReceipt.isSuccess ||
     !selectedPeriodId ||
     isExceedsAllowableUnstake ||
     isWaitingForWalletConfirmation
@@ -207,8 +202,9 @@ export function UnstakeForm({ validator }: { validator: Validator }) {
 
                               const unstakeAvailable =
                                 (Number(stakedAmount?.delegation_response.balance.amount || 0) *
-                                  Number(delegation?.period_delegation.shares || 0)) /
+                                  Number(delegation?.balance.amount || 0)) /
                                 Number(stakedAmount?.delegation_response.balance.amount || 1)
+
                               return (
                                 <tr key={index} className="border-b border-primary-border text-center last:border-b-0">
                                   <td className="py-2">
@@ -219,9 +215,6 @@ export function UnstakeForm({ validator }: { validator: Validator }) {
                                       disabled={!isUnlocked || isFormDisabled}
                                       onChange={(e) => {
                                         field.onChange(e.target.value)
-                                        form.setValue('unstakeAmount', '', {
-                                          shouldValidate: true,
-                                        })
                                       }}
                                     />
                                   </td>
@@ -262,13 +255,15 @@ export function UnstakeForm({ validator }: { validator: Validator }) {
           name="unstakeAmount"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="text-[16px] font-semibold text-white">Amount to Unstake</FormLabel>
+              <FormLabel className="text-[16px] font-semibold text-white">
+                Amount to Unstake (Minimum 1024 IP)
+              </FormLabel>
               <FormControl>
                 <div className="flex h-12 w-full items-center justify-between rounded-lg border-[1px] border-solid border-primary-border bg-black pr-2">
                   <Input
                     disabled={isFormDisabled}
                     className="border-none bg-black font-normal text-white placeholder-gray-500 outline-none placeholder:text-white placeholder:opacity-50 focus:border-0 focus:border-none focus:outline-none focus:ring-0 focus:ring-transparent"
-                    placeholder="Enter amount..."
+                    placeholder="Enter amount (minimum 1024 IP)..."
                     {...field}
                   />
                   <div className="flex items-center space-x-2">
@@ -276,7 +271,7 @@ export function UnstakeForm({ validator }: { validator: Validator }) {
                   </div>
                 </div>
               </FormControl>
-              <FormMessage />
+              <FormMessage className="text-red-500" />
             </FormItem>
           )}
         />
@@ -290,10 +285,11 @@ export function UnstakeForm({ validator }: { validator: Validator }) {
           )}
           disabled={isButtonDisabled}
         >
-          {(isTxnPending || sign.isPending) && <LoaderCircle className="animate-spin" />}
+          {(isOverallPending || sign.isPending) && <LoaderCircle className="animate-spin" />}
           {buttonText}
         </Button>
       </form>
+      <div className="h-4" />
       {txnReceipt.isSuccess && delegationsUpdated && <ViewTransaction txHash={unstakeTxHash} />}
     </Form>
   )

@@ -23,6 +23,7 @@ import { base64ToHex, cn, formatLargeMetricsNumber, truncateAddress } from '@/li
 
 import ViewTransaction from '../buttons/ViewTransaction'
 import { getValidator } from '@/lib/services/api/validatorApi'
+import { useDelegatorPeriodDelegations } from '@/lib/services/hooks/useDelegatorPeriodDelegations'
 
 const createFormSchema = ({ delegatedAmount }: { delegatedAmount: string | undefined }) =>
   z.object({
@@ -66,12 +67,14 @@ export function RedelegateForm(props: { validator: Validator; delegationId?: str
 
   const { address } = useAccount()
 
-  // Refetch data after successful redelegations
-  const { refetch: refetchDelegatorPeriodDelegations } = useDelegatorPeriodDelegationsOnValidator({
+  const { refetch: refetchDelegatorPeriodDelegationsOnValidator } = useDelegatorPeriodDelegationsOnValidator({
     validatorAddr: props.validator.operator_address,
     delegatorAddr: address || zeroAddress,
   })
   const { refetch: refetchDelegations } = useDelegatorDelegations({
+    delegatorAddr: address || zeroAddress,
+  })
+  const { refetch: refetchDelegatorPeriodDelegations } = useDelegatorPeriodDelegations({
     delegatorAddr: address || zeroAddress,
   })
 
@@ -82,12 +85,16 @@ export function RedelegateForm(props: { validator: Validator; delegationId?: str
   useEffect(() => {
     if (txnReceipt.isSuccess) {
       const timer = setTimeout(async () => {
-        await Promise.all([refetchDelegatorPeriodDelegations(), refetchDelegations()])
+        await Promise.all([
+          refetchDelegatorPeriodDelegations(),
+          refetchDelegations(),
+          refetchDelegatorPeriodDelegationsOnValidator(),
+        ])
         setDelegationsUpdated(true)
       }, 3000)
       return () => clearTimeout(timer)
     }
-  }, [txnReceipt.isSuccess, refetchDelegatorPeriodDelegations, refetchDelegations])
+  }, [txnReceipt.isSuccess])
   const formSchema = createFormSchema({ delegatedAmount: props.delegatedAmount })
 
   const supportedTokenType =
@@ -159,7 +166,7 @@ export function RedelegateForm(props: { validator: Validator; delegationId?: str
   const isButtonDisabled =
     isTxnPending ||
     (isWaitingForWalletConfirmation && !txnReceipt.isSuccess) ||
-    (txnReceipt.isSuccess && !delegationsUpdated) ||
+    (txnReceipt.isSuccess && delegationsUpdated) ||
     !props.delegatedAmount ||
     parseFloat(props.delegatedAmount) === 0
 
@@ -290,11 +297,13 @@ export function RedelegateForm(props: { validator: Validator; delegationId?: str
             className={cn(
               'flex w-full flex-row gap-2 font-semibold',
               isButtonDisabled ? 'cursor-not-allowed opacity-50' : '',
-              txnReceipt.isSuccess ? 'bg-green-500 text-white opacity-100 hover:bg-green-500' : 'bg-primary'
+              txnReceipt.isSuccess && delegationsUpdated
+                ? 'bg-green-500 text-white opacity-100 hover:bg-green-500'
+                : 'bg-primary'
             )}
             disabled={isButtonDisabled}
             onClick={(e) => {
-              if (txnReceipt.isSuccess) {
+              if (txnReceipt.isSuccess && delegationsUpdated) {
                 e.preventDefault()
               }
             }}

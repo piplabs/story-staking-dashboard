@@ -142,7 +142,6 @@ export default function DelegationsTable(props: { delegatorEvmAddr: Address }) {
           ) : (
             table.getRowModel().rows.map((row: any) => {
               const validatorDelegation = row.original
-
               return validatorDelegation.periodDelegations?.period_delegation_responses?.map(
                 (periodDelegation: any, pIndex: number) => {
                   const isMatured = new Date(periodDelegation.period_delegation.end_time) < new Date()
@@ -194,7 +193,7 @@ export default function DelegationsTable(props: { delegatorEvmAddr: Address }) {
                       </TableCell>
                       <TableCell className="break-words text-center align-middle">
                         {formatLargeMetricsNumber(
-                          formatEther(BigInt(parseInt(periodDelegation.period_delegation.shares.toString())), 'gwei')
+                          formatEther(BigInt(parseInt(periodDelegation.balance.amount.toString())), 'gwei')
                         )}{' '}
                         IP
                       </TableCell>
@@ -255,7 +254,7 @@ export default function DelegationsTable(props: { delegatorEvmAddr: Address }) {
                               validator={validator}
                               delegationId={periodDelegation.period_delegation.period_delegation_id}
                               delegatedAmount={formatEther(
-                                BigInt(parseInt(periodDelegation.period_delegation.shares.toString())),
+                                BigInt(parseInt(periodDelegation.balance.amount.toString())),
                                 'gwei'
                               )}
                             />

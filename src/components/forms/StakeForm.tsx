@@ -84,6 +84,9 @@ export function StakeForm(props: { validator?: Validator }) {
   const { data: balance, refetch: refetchBalance } = useBalance({
     address: address,
   })
+
+  const { refetch: refetchAllUnlockedValidators } = useAllValidators({ tokenType: 'UNLOCKED' })
+
   const { refetch: refetchDelegatorStake } = useValidatorDelegatorDelegations({
     validatorAddr: props.validator?.operator_address || zeroAddress,
     delegatorAddr: address || zeroAddress,
@@ -113,7 +116,12 @@ export function StakeForm(props: { validator?: Validator }) {
   useEffect(() => {
     if (txnReceipt.isSuccess) {
       const timer = setTimeout(async () => {
-        await Promise.all([refetchDelegatorStake(), refetchBalance(), refetchDelegatorPeriodDelegations()])
+        await Promise.all([
+          refetchDelegatorStake(),
+          refetchBalance(),
+          refetchDelegatorPeriodDelegations(),
+          refetchAllUnlockedValidators(),
+        ])
         setDelegationsUpdated(true)
       }, 3000)
       return () => clearTimeout(timer)

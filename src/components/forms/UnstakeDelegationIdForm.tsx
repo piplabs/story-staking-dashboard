@@ -27,27 +27,20 @@ const createFormSchema = ({ totalStaked }: { totalStaked?: string }) =>
   z.object({
     unstakeAmount: z.string().refine(
       (value): value is string => {
-        if (!totalStaked) return false
         const amount = parseFloat(value)
-        return !isNaN(amount) && amount >= 1024 && amount <= parseFloat(totalStaked)
+        return !isNaN(amount) && amount >= 1024
       },
       {
-        message: `Must input a valid amount (minimum: 1024 IP)`,
+        message: `Amount must be at least 1024 IP`,
       }
     ),
   })
 
-export function UnstakeDelegationIdForm({
-  validator,
-  delegationId,
-  onSuccess,
-}: {
-  validator: Validator
-  delegationId: string
-  onSuccess?: () => void
-}) {
+export function UnstakeDelegationIdForm({ validator, delegationId }: { validator: Validator; delegationId: string }) {
   const { address } = useAccount()
   const [unstakeTxHash, setUnstakeTxHash] = useState<Hex | undefined>(undefined)
+  const [delegationsUpdated, setDelegationsUpdated] = useState(false)
+
   const sign = useSignMessage()
 
   const { writeContractAsync: unstake, isPending: isWaitingForWalletConfirmation } = useWriteIpTokenStakeUnstake()
@@ -76,7 +69,7 @@ export function UnstakeDelegationIdForm({
   )
 
   const formSchema = createFormSchema({
-    totalStaked: selectedDelegation?.period_delegation.shares,
+    totalStaked: selectedDelegation?.balance.amount,
   })
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -85,7 +78,6 @@ export function UnstakeDelegationIdForm({
       unstakeAmount: '1024',
     },
     mode: 'onChange',
-    shouldUseNativeValidation: true,
   })
 
   const txnReceipt = useWaitForTransactionReceipt({
@@ -93,17 +85,39 @@ export function UnstakeDelegationIdForm({
   })
 
   useEffect(() => {
+    form.trigger(['unstakeAmount'])
+  }, [form, validator, delegationId])
+
+  useEffect(() => {
     if (txnReceipt.isSuccess) {
-      refetchDelegatorStake()
-      refetchDelegatorPeriodDelegationsOnValidator()
-      refetchDelegations()
-      refetchUnbondingDelegations()
-      onSuccess?.()
+      let cycles = 0
+      const interval = setInterval(async () => {
+        cycles++
+        await Promise.all([
+          refetchDelegatorStake(),
+          refetchDelegatorPeriodDelegationsOnValidator(),
+          refetchDelegations(),
+          refetchUnbondingDelegations(),
+        ])
+        setDelegationsUpdated(true)
+        if (cycles >= 3) {
+          clearInterval(interval)
+        }
+      }, 3000)
+
+      return () => clearInterval(interval)
     }
-  }, [txnReceipt.isSuccess, refetchDelegatorStake, refetchDelegatorPeriodDelegationsOnValidator, onSuccess])
+  }, [
+    txnReceipt.isSuccess,
+    refetchDelegatorStake,
+    refetchDelegatorPeriodDelegationsOnValidator,
+    refetchDelegations,
+    refetchUnbondingDelegations,
+  ])
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     if (isButtonDisabled) return
+    setDelegationsUpdated(false)
 
     const { unstakeAmount } = values
     const unstakeInputs: [Address, bigint, bigint, Hex] = [
@@ -125,12 +139,12 @@ export function UnstakeDelegationIdForm({
   }
 
   const isTxnPending = txnReceipt.isPending && !!unstakeTxHash
+  const isOverallPending = isTxnPending || (txnReceipt.isSuccess && !delegationsUpdated)
+
   const isExceedsAllowableUnstake =
     selectedDelegation &&
     parseInt(form.watch('unstakeAmount')) >
-      Math.round(
-        parseFloat(formatEther(BigInt(parseInt(selectedDelegation.period_delegation.shares).toString()), 'gwei'))
-      )
+      Math.round(parseFloat(formatEther(BigInt(parseInt(selectedDelegation.balance.amount).toString()), 'gwei')))
   let buttonText
   if (!form.formState.isValid && form.formState.isDirty) {
     buttonText = 'Invalid amount'
@@ -140,9 +154,9 @@ export function UnstakeDelegationIdForm({
     buttonText = 'Sign message in wallet...'
   } else if (isWaitingForWalletConfirmation) {
     buttonText = 'Confirm transaction in wallet...'
-  } else if (isTxnPending) {
+  } else if (isOverallPending) {
     buttonText = 'Unstaking...'
-  } else if (txnReceipt.isSuccess) {
+  } else if (txnReceipt.isSuccess && delegationsUpdated) {
     buttonText = 'Unstaked!'
   } else {
     buttonText = 'Unstake IP'
@@ -150,6 +164,7 @@ export function UnstakeDelegationIdForm({
 
   const isButtonDisabled =
     isTxnPending ||
+    isOverallPending ||
     sign.isPending ||
     !form.formState.isValid ||
     txnReceipt.isSuccess ||
@@ -159,7 +174,7 @@ export function UnstakeDelegationIdForm({
   const isFormDisabled = isTxnPending || sign.isPending || txnReceipt.isSuccess || isWaitingForWalletConfirmation
 
   const availableToUnstake = selectedDelegation
-    ? formatEther(BigInt(parseInt(selectedDelegation.period_delegation.shares).toString()), 'gwei')
+    ? formatEther(BigInt(parseInt(selectedDelegation.balance.amount).toString()), 'gwei')
     : '0'
 
   return (
@@ -218,15 +233,16 @@ export function UnstakeDelegationIdForm({
           className={cn(
             'flex w-full flex-row gap-2 font-semibold',
             isButtonDisabled ? 'pointer-events-none cursor-not-allowed opacity-50' : '',
-            txnReceipt.isSuccess ? 'bg-green-500 text-white opacity-100 hover:bg-green-500' : 'bg-primary'
+            txnReceipt.isSuccess && delegationsUpdated ? 'bg-green-500/40 text-white opacity-100' : 'bg-primary'
           )}
           disabled={isButtonDisabled}
         >
-          {(isTxnPending || sign.isPending) && <LoaderCircle className="animate-spin" />}
+          {(isOverallPending || sign.isPending) && <LoaderCircle className="animate-spin" />}
           {buttonText}
         </Button>
       </form>
-      {txnReceipt.isSuccess && <ViewTransaction txHash={unstakeTxHash} />}
+      <div className="h-4" />
+      {txnReceipt.isSuccess && delegationsUpdated && <ViewTransaction txHash={unstakeTxHash} />}
     </Form>
   )
 }

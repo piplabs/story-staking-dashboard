@@ -6,12 +6,14 @@ import { Button, disabledButtonVariant } from '@/components/ui/button'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { useSingularity } from '@/lib/services/hooks/useSingularity'
 import { Validator } from '@/lib/types'
+import { zeroAddress } from 'viem'
 
 import ConnectWalletButton from '../buttons/ConnectWalletButton'
 import { UnstakeDelegationIdForm } from '../forms/UnstakeDelegationIdForm'
 import { UnstakeForm } from '../forms/UnstakeForm'
 import { Dialog, DialogContent, DialogTrigger } from '../ui/dialog'
 import StyledCard from '../cards/StyledCard'
+import { useDelegatorPeriodDelegations } from '@/lib/services/hooks/useDelegatorPeriodDelegations'
 
 export type UnstakeDialogProps = {
   validator: Validator
@@ -21,9 +23,13 @@ export type UnstakeDialogProps = {
 }
 
 export function UnstakeDialog({ validator, isUnstakeDisabled, delegationId, isMatured }: UnstakeDialogProps) {
-  const { isConnected } = useAccount()
+  const { isConnected, address } = useAccount()
   const singularity = useSingularity()
   const isSingularity = singularity.error != true && singularity.isSingularity
+
+  const { refetch: refetchDelegatorPeriodDelegations } = useDelegatorPeriodDelegations({
+    delegatorAddr: address || zeroAddress,
+  })
 
   let disabledText
   if (isSingularity) {
@@ -48,7 +54,14 @@ export function UnstakeDialog({ validator, isUnstakeDisabled, delegationId, isMa
   }
 
   return (
-    <Dialog modal>
+    <Dialog
+      modal
+      onOpenChange={(open) => {
+        if (!open) {
+          refetchDelegatorPeriodDelegations()
+        }
+      }}
+    >
       <DialogTrigger asChild>
         {isConnected ? (
           <Button className="" variant="primary">
