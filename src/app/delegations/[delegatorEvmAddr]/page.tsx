@@ -10,7 +10,7 @@ import CopyStringButton from '@/components/buttons/CopyStringButton'
 import { useDelegatorTotalDelegationAmount } from '@/lib/services/hooks/useDelegatorTotalDelegationAmount'
 import { useDelegatorRewards } from '@/lib/services/hooks/useDelegatorTotalRewards'
 import { useIsSmallDevice } from '@/lib/services/hooks/useIsSmallDevice'
-import { truncateAddress } from '@/lib/utils'
+import { formatLargeMetricsNumber, truncateAddress } from '@/lib/utils'
 
 import DelegationsTable from './_components/DelegationsTable'
 import UnbondedDelegationsTable from './_components/UnbondedDelegationsTable'
@@ -68,13 +68,21 @@ function OverviewCard({ delegatorAddr }: { delegatorAddr: Address }) {
       <section className="flex flex-col gap-2">
         <DataRow
           title="Total Staked"
-          value={isPending || totalStake === undefined ? '-' : `${formatEther(totalStake, 'gwei')} IP`}
+          value={
+            isPending || totalStake === undefined
+              ? '-'
+              : `${formatLargeMetricsNumber(formatEther(totalStake, 'gwei'))} IP`
+          }
           tooltipInfo="The total amount of IP staked across validators"
         />
 
         <DataRow
           title="Total Rewards Earned"
-          value={!rewards ? '-' : `${parseFloat(Number(rewards.accumulatedRewards).toFixed(2)).toString()} IP`}
+          value={
+            !rewards
+              ? '-'
+              : `${formatLargeMetricsNumber(parseFloat(Number(rewards.accumulatedRewards).toFixed(2)).toString())} IP`
+          }
           tooltipInfo="The total IP rewards earned from staking on validators"
         />
       </section>
