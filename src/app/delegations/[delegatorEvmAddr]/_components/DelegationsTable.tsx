@@ -26,6 +26,7 @@ import StyledCard from '@/components/cards/StyledCard'
 import { useSingularity } from '@/lib/services/hooks/useSingularity'
 import { StakingPeriodMultiplierInfo } from '@/lib/types'
 import { LOCKED_STAKING_PERIODS, STAKING_PERIODS } from '@/lib/constants'
+import { DataTablePagination } from '@/components/DataTablePagination'
 
 export default function DelegationsTable(props: { delegatorEvmAddr: Address }) {
   const [sorting, setSorting] = useState<SortingState>([])
@@ -269,7 +270,7 @@ export default function DelegationsTable(props: { delegatorEvmAddr: Address }) {
           )}
         </TableBody>
       </Table>
-      {/* {delegatorPeriodDelegations && <DataTablePagination table={table} />} */}
+      {delegatorPeriodDelegations && <DataTablePagination table={table} />}
     </StyledCard>
   )
 }

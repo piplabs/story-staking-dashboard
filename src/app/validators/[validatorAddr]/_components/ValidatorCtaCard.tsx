@@ -11,7 +11,7 @@ import { Validator } from '@/lib/types'
 import { formatLargeMetricsNumber } from '@/lib/utils'
 
 export function YourStakeCard(props: { validator: Validator }) {
-  const { address } = useAccount()
+  const { address, isConnected } = useAccount()
   const { data: balance, error } = useBalance({
     address: address,
     query: {
@@ -43,10 +43,11 @@ export function YourStakeCard(props: { validator: Validator }) {
           <div className="flex w-full flex-col gap-2">
             <p className="font-medium text-primary-outline">Available to Stake</p>
             <p className="text-xl font-medium text-white md:text-4xl">
-              {balance &&
-                formatLargeMetricsNumber(parseFloat(formatEther(balance.value)), {
-                  useSuffix: false,
-                }) + ' IP'}
+              {balance
+                ? formatLargeMetricsNumber(parseFloat(formatEther(balance.value)), {
+                    useSuffix: false,
+                  }) + ' IP'
+                : '-'}
             </p>
           </div>
           <div className="my-auto">
@@ -57,7 +58,7 @@ export function YourStakeCard(props: { validator: Validator }) {
         <div className="flex flex-row">
           <div className="flex w-full flex-col gap-2">
             <p className="font-medium text-primary-outline">Your Staked Amount</p>
-            <p className="text-xl font-medium text-white md:text-4xl">{`${stakedAmount} IP`}</p>
+            <p className="text-xl font-medium text-white md:text-4xl">{isConnected ? `${stakedAmount} IP` : '-'}</p>
           </div>
           <div className="my-auto">
             <UnstakeDialog validator={props.validator} isUnstakeDisabled={isUnstakeDisabled} />
