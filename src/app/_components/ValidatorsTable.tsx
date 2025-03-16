@@ -93,7 +93,8 @@ export function ValidatorsTable({
       },
     },
     {
-      accessorKey: 'totalStakedAmount',
+      accessorFn: (row: Validator) => Number(formatEther(BigInt(row.tokens), 'gwei')),
+      id: 'totalStakedAmount',
       header: ({ column }) => {
         return (
           <HeaderWithSortArrows
