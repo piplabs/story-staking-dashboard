@@ -163,6 +163,10 @@ export function UnstakeForm({ validator }: { validator: Validator }) {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 text-white">
         <h2 className="text-2xl font-bold">Unstake IP</h2>
+        <p className=" text-primary-outline">
+          After unstaking, there is a 14 day unbonding period before your tokens are withdrawn back into your wallet
+          automatically.
+        </p>
         <section className="flex flex-col">
           <p className="font-semibold">Validator</p>
           <p className="text-primary-outline">{validator.description.moniker || validator.operator_address}</p>
@@ -281,7 +285,9 @@ export function UnstakeForm({ validator }: { validator: Validator }) {
           className={cn(
             'flex w-full flex-row gap-2 font-semibold',
             isButtonDisabled ? 'pointer-events-none cursor-not-allowed opacity-50' : '',
-            txnReceipt.isSuccess ? 'bg-green-500 text-white opacity-100 hover:bg-green-500' : 'bg-primary'
+            txnReceipt.isSuccess && delegationsUpdated
+              ? 'bg-green-500 text-white opacity-100 hover:bg-green-500'
+              : 'bg-primary'
           )}
           disabled={isButtonDisabled}
         >
