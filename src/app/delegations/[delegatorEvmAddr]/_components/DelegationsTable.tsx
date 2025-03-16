@@ -270,7 +270,7 @@ export default function DelegationsTable(props: { delegatorEvmAddr: Address }) {
           )}
         </TableBody>
       </Table>
-      {delegatorPeriodDelegations && <DataTablePagination table={table} />}
+      {delegatorPeriodDelegations && delegatorPeriodDelegations.length > 0 && <DataTablePagination table={table} />}
     </StyledCard>
   )
 }
