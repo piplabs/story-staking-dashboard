@@ -30,7 +30,6 @@
     "blockies-react-svg": "^0.0.13",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-    "eth-crypto": "^2.7.0",
     "fs": "0.0.1-security",
     "lucide-react": "^0.379.0",
     "minimist": "^1.2.8",
