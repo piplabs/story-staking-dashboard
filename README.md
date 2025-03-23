@@ -1,8 +1,9 @@
 # Story Staking Dashboard
 
-> **Note**: This project is still under active development and not all features are complete. Breaking changes may occur.
+Website:
 
-Website: https://aeneid.staking.story.foundation
+- Mainnet: https://staking.story.foundation
+- Aeneid (Testnet): https://aeneid.staking.story.foundation
 
 API: https://github.com/piplabs/story-staking-api
 
@@ -17,3 +18,7 @@ For details on Story staking mechanics and tokenomics, please visit the [documen
 1. Set up environment variables (look at `.env.example`)
 2. `pnpm install`
 3. `pnpm run dev`
+
+## License
+
+This project is licensed under the [MIT License](./LICENSE).
