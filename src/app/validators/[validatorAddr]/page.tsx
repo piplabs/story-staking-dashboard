@@ -57,8 +57,9 @@ export default function Page({ params }: { params: { validatorAddr: Address } })
                 {params.validatorAddr} <CopyStringButton value={params.validatorAddr} />
               </h2>
             )}
-            <div className="my-auto">
+            <div className="my-auto flex flex-row gap-2">
               <ValidatorStatus status={validator.status} />
+              <JailedStatus isJailed={validator.jailed} />
             </div>
           </div>
         </div>
@@ -87,23 +88,35 @@ export default function Page({ params }: { params: { validatorAddr: Address } })
 }
 
 function ValidatorStatus({ status }: { status: number }) {
+  if (status == 2 || status == 0) return null // UNBONDING or UNDEFINED
+
   let statusText
   let statusStyle
   if (status == 1) {
     statusText = 'UNBONDED'
     statusStyle = 'text-white'
-  } else if (status == 2) {
-    statusText = 'JAILED'
-    statusStyle = 'text-yellow-500'
   } else if (status == 3) {
     statusText = 'ACTIVE'
     statusStyle = 'text-green-500'
   }
+  // else if (status == 2) {
+  //   statusText = 'UNBONDING'
+  //   statusStyle = 'text-yellow-500'
+  // }
 
   return (
     <div className="">
-      {/* <p>Status</p> */}
       <h2 className={statusStyle}>{statusText}</h2>
+    </div>
+  )
+}
+
+function JailedStatus({ isJailed }: { isJailed: boolean }) {
+  if (!isJailed) return null
+
+  return (
+    <div className="">
+      <h2 className={'text-yellow-500'}>JAILED</h2>
     </div>
   )
 }
