@@ -28,7 +28,12 @@ import StyledCard from '@/components/cards/StyledCard'
 import HeaderWithSortArrows from '@/components/HeaderWithSortArrows'
 
 export default function DelegatorsTable(props: { validator: Validator }) {
-  const [sorting, setSorting] = useState<SortingState>([])
+  const [sorting, setSorting] = useState<SortingState>([
+    {
+      id: 'balance',
+      desc: true,
+    },
+  ])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const isSmallDevice = useIsSmallDevice()
 
@@ -41,7 +46,8 @@ export default function DelegatorsTable(props: { validator: Validator }) {
     balance: DelegationBalance
   }>[] = [
     {
-      accessorKey: 'delegation.delegator_address',
+      accessorFn: (row) => row.delegation.delegator_address,
+      id: 'delegator_address',
       header: ({ column }) => {
         return <HeaderWithSortArrows column={column} header={'Address'} sorting={sorting} className="" />
       },
@@ -64,17 +70,21 @@ export default function DelegatorsTable(props: { validator: Validator }) {
               width={24}
               height={24}
             />
-            <p className="">
-              {(isSmallDevice
-                ? truncateAddress(row.original?.delegation.delegator_address, 10, 4)
-                : row.original?.delegation.delegator_address) + delegatorText}
+            <p>
+              <span className="font-robotoMono">
+                {isSmallDevice
+                  ? truncateAddress(row.original?.delegation.delegator_address, 10, 4)
+                  : row.original?.delegation.delegator_address}
+              </span>
+              {delegatorText}
             </p>
           </Link>
         )
       },
     },
     {
-      accessorKey: 'balance.amount',
+      accessorFn: (row) => Number(formatEther(BigInt(row.balance.amount), 'gwei')),
+      id: 'balance',
       header: ({ column }) => {
         return <HeaderWithSortArrows column={column} header={'Total Stake'} sorting={sorting} className="" />
       },
@@ -93,8 +103,19 @@ export default function DelegatorsTable(props: { validator: Validator }) {
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+    onSortingChange: setSorting,
+    getSortedRowModel: getSortedRowModel(),
     state: {
       columnFilters,
+      sorting,
+    },
+    initialState: {
+      sorting: [
+        {
+          id: 'balance',
+          desc: true,
+        },
+      ],
     },
   })
 

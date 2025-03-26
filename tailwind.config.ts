@@ -18,6 +18,7 @@ const config = {
       fontFamily: {
         archivo: ['var(--font-archivo)'],
         inter: ['var(--font-inter)'],
+        robotoMono: ['var(--font-roboto-mono)'],
       },
       colors: {
         primary: {

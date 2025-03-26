@@ -165,7 +165,7 @@ export function ValidatorsTable({
       },
       cell: ({ row, getValue }) => {
         const value = getValue() as number
-        return <div className="text-center">{(value * 100).toFixed(2)}% </div>
+        return <div className="text-center">{Number((value * 100).toFixed(2))}% </div>
       },
     },
   ]

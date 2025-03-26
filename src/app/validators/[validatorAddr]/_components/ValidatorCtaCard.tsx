@@ -32,7 +32,6 @@ export function YourStakeCard(props: { validator: Validator }) {
     : '0'
 
   const isUnstakeDisabled = stakedAmount === '0'
-  const isLockedTokenOnly = props.validator.support_token_type === 0
 
   return (
     <div className="flex w-full flex-col grow rounded-[16px] bg-primary-surface px-8 py-6 border border-primary-border">

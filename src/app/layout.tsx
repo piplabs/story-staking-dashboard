@@ -1,6 +1,6 @@
 import { GoogleAnalytics } from '@next/third-parties/google'
 import type { Metadata } from 'next'
-import { Archivo, Inter } from 'next/font/google'
+import { Archivo, Inter, Roboto_Mono } from 'next/font/google'
 
 import Footer from '@/components/layouts/Footer'
 import Header from '@/components/layouts/Header'
@@ -20,6 +20,12 @@ const inter = Inter({
   subsets: ['latin'],
   display: 'swap',
   variable: '--font-inter',
+})
+
+const robotoMono = Roboto_Mono({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-roboto-mono',
 })
 
 export const metadata: Metadata = {
@@ -44,7 +50,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={cn(inter.className, archivo.variable, inter.variable, 'bg-gray-950')}>
+      <body className={cn(inter.className, archivo.variable, inter.variable, robotoMono.variable, 'bg-gray-950')}>
         {/* <script src="https://unpkg.com/react-scan/dist/auto.global.js"></script> */}
 
         <div className="bg-dot-gray-700 absolute left-0 top-0 -z-10 h-[100vh] w-full" />

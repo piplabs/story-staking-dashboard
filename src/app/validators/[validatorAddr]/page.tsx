@@ -14,11 +14,6 @@ import { YourStakeCard } from './_components/ValidatorCtaCard'
 import { AddressesCard, CommissionCard, OverviewCard, StakeInfoCard } from './_components/ValidatorDataCards'
 import DelegatorsTable from './_components/DelegatorsTable'
 
-// const DelegatorsTable = dynamic(() => import('./_components/DelegatorsTable'), {
-//   ssr: false,
-// })
-//
-
 export default function Page({ params }: { params: { validatorAddr: Address } }) {
   const { data: validator, isFetched, isPending } = useValidator({ validatorAddr: params.validatorAddr })
 
