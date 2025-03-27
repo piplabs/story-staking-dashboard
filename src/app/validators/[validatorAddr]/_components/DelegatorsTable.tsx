@@ -64,7 +64,7 @@ export default function DelegatorsTable(props: { validator: Validator }) {
         return (
           <Link href={`/delegations/${row.original?.delegation.delegator_address}`} className="flex flex-row gap-2">
             <Image
-              src={`https://cdn.stamp.fyi/avatar/${row.original?.delegation.delegator_address}`}
+              src={`https://cdn.stamp.fyi/avatar/${row.original?.delegation?.delegator_address || 'foobar'}`}
               alt="Avatar thumbnail"
               className="rounded-[4px]"
               width={24}
