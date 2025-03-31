@@ -1,4 +1,5 @@
-'use client'
+'use client';
+import { use } from "react";
 
 import { MoveLeftIcon } from 'lucide-react'
 import Image from 'next/image'
@@ -16,7 +17,8 @@ import DelegationsTable from './_components/DelegationsTable'
 import UnbondedDelegationsTable from './_components/UnbondedDelegationsTable'
 import StyledCard from '@/components/cards/StyledCard'
 
-export default function Page({ params }: { params: { delegatorEvmAddr: Address } }) {
+export default function Page(props: { params: Promise<{ delegatorEvmAddr: Address }> }) {
+  const params = use(props.params);
   const isSmallDevice = useIsSmallDevice()
   return (
     <div className="max-w-screen flex h-full w-full flex-col gap-8 text-white">

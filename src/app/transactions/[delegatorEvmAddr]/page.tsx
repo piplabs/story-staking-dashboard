@@ -1,4 +1,5 @@
-'use client'
+'use client';
+import { use } from "react";
 
 import { MoveLeftIcon } from 'lucide-react'
 import Image from 'next/image'
@@ -11,7 +12,8 @@ import { truncateAddress } from '@/lib/utils'
 
 import ActivityTable from './_components/ActivityTable'
 
-export default function Page({ params }: { params: { delegatorEvmAddr: Address } }) {
+export default function Page(props: { params: Promise<{ delegatorEvmAddr: Address }> }) {
+  const params = use(props.params);
   const isSmallDevice = useIsSmallDevice()
 
   return (

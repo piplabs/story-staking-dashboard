@@ -1,4 +1,5 @@
 'use client'
+import { use } from 'react'
 
 import { MoveLeftIcon } from 'lucide-react'
 import dynamic from 'next/dynamic'
@@ -14,7 +15,8 @@ import { YourStakeCard } from './_components/ValidatorCtaCard'
 import { AddressesCard, CommissionCard, OverviewCard, StakeInfoCard } from './_components/ValidatorDataCards'
 import DelegatorsTable from './_components/DelegatorsTable'
 
-export default function Page({ params }: { params: { validatorAddr: Address } }) {
+export default function Page(props: { params: Promise<{ validatorAddr: Address }> }) {
+  const params = use(props.params)
   const { data: validator, isFetched, isPending } = useValidator({ validatorAddr: params.validatorAddr })
 
   const moniker = validator?.description?.moniker
