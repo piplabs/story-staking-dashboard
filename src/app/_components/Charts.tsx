@@ -6,7 +6,6 @@ import { formatLargeMetricsNumber } from '@/lib/utils'
 export default function Charts() {
   return (
     <div>
-      Charts
       <TotalStakeHistory />
     </div>
   )
@@ -18,6 +17,9 @@ function TotalStakeHistory() {
     isFetching: isFetchingTotalStakeHistory,
     isError: isErrorTotalStakeHistory,
   } = useTotalStakeHistory({ interval: '30d' })
+
+  if (!totalStakeHistory) return null
+
   console.log({ totalStakeHistory })
   const formatDate = (date: Date) => {
     return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
@@ -47,8 +49,8 @@ function TotalStakeHistory() {
   }
 
   return (
-    <div className="flex grow flex-col rounded-lg bg-gray-800 p-4">
-      <h2 className="mb-4 text-lg font-semibold text-white">Total Stake History</h2>
+    <div className="flex grow flex-col rounded-lg bg-primary-grey p-4">
+      <h2 className="mb-4 text-lg font-semibold text-white">Total Stake</h2>
       {isErrorTotalStakeHistory ? (
         <div className="flex h-[200px] items-center justify-center text-red-500">Failed to load data</div>
       ) : isFetchingTotalStakeHistory ? (
