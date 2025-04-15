@@ -41,6 +41,7 @@
     "react-query": "^3.39.3",
     "react-redux": "^9.2.0",
     "react-use": "^17.6.0",
+    "recharts": "^2.15.2",
     "tailwind-merge": "^2.6.0",
     "tailwindcss-animate": "^1.0.7",
     "viem": "^2.22.16",

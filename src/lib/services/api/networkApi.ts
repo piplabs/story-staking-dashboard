@@ -8,6 +8,8 @@ import {
   GetNetworkHealthResponse,
   GetNetworkStakingParamsApiResponse,
   GetNetworkStakingParamsResponse,
+  GetNetworkTotalStakeHistoryApiResponse,
+  GetNetworkTotalStakeHistoryResponse,
   GetStakingPoolApiResponse,
   GetStakingPoolResponse,
   GetTokenTotalSupplyApiResponse,
@@ -80,5 +82,29 @@ export async function getNetworkStakingParams(): Promise<GetNetworkStakingParams
       ...msg.params,
       minDelegationEth: formatEther(BigInt(msg.params.min_delegation), 'gwei'),
     },
+  }
+}
+
+// Historical data
+export interface GetNetworkTotalStakeHistoryParams {
+  interval?: '1d' | '7d' | '30d' | 'all'
+}
+
+export async function getNetworkTotalStakeHistory(
+  params?: GetNetworkTotalStakeHistoryParams
+): Promise<GetNetworkTotalStakeHistoryResponse> {
+  const response = await stakingDataAxios.get<GetNetworkTotalStakeHistoryApiResponse>('/staking/total_stake/history', {
+    params: {
+      interval: params?.interval || '1d',
+      ...params,
+    },
+  })
+
+  if (response.status !== 200) {
+    throw new Error(`Failed to get network total stake history: ${response.status}`)
+  }
+
+  return {
+    totalStakeAmountHistory: response.data.msg.total_stake_amount_history,
   }
 }

@@ -109,3 +109,20 @@ export type GetNetworkStakingParamsApiResponse = {
   error: string
   msg: GetNetworkStakingParamsResponse
 }
+
+export type TotalStakeHistoryItem = {
+  total_stake_amount: string
+  update_at: string
+}
+
+export type GetNetworkTotalStakeHistoryApiResponse = {
+  code: number
+  msg: {
+    total_stake_amount_history: TotalStakeHistoryItem[]
+  }
+  error: string
+}
+
+export type GetNetworkTotalStakeHistoryResponse = {
+  totalStakeAmountHistory: TotalStakeHistoryItem[]
+}
