@@ -115,6 +115,10 @@ export type TotalStakeHistoryItem = {
   update_at: string
 }
 
+export type GetNetworkTotalStakeHistoryParams = {
+  interval?: '1d' | '7d' | '30d' | 'all'
+}
+
 export type GetNetworkTotalStakeHistoryApiResponse = {
   code: number
   msg: {
@@ -125,4 +129,18 @@ export type GetNetworkTotalStakeHistoryApiResponse = {
 
 export type GetNetworkTotalStakeHistoryResponse = {
   totalStakeAmountHistory: TotalStakeHistoryItem[]
+}
+
+export interface GetNetworkTotalStakeApiResponse {
+  code: number
+  msg: {
+    total_stake_amount: string
+    last_update_time: string
+  }
+  error: string
+}
+
+export interface GetNetworkTotalStakeResponse {
+  totalStakeAmount: string
+  lastUpdateTime: string
 }

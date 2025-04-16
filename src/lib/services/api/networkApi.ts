@@ -8,6 +8,8 @@ import {
   GetNetworkHealthResponse,
   GetNetworkStakingParamsApiResponse,
   GetNetworkStakingParamsResponse,
+  GetNetworkTotalStakeApiResponse,
+  GetNetworkTotalStakeResponse,
   GetNetworkTotalStakeHistoryApiResponse,
   GetNetworkTotalStakeHistoryResponse,
   GetStakingPoolApiResponse,
@@ -15,6 +17,7 @@ import {
   GetTokenTotalSupplyApiResponse,
   GetTokenTotalSupplyParams,
   GetTokenTotalSupplyResponse,
+  GetNetworkTotalStakeHistoryParams,
 } from '@/lib/types/networkApiTypes'
 
 import { stakingDataAxios } from '.'
@@ -85,11 +88,6 @@ export async function getNetworkStakingParams(): Promise<GetNetworkStakingParams
   }
 }
 
-// Historical data
-export interface GetNetworkTotalStakeHistoryParams {
-  interval?: '1d' | '7d' | '30d' | 'all'
-}
-
 export async function getNetworkTotalStakeHistory(
   params?: GetNetworkTotalStakeHistoryParams
 ): Promise<GetNetworkTotalStakeHistoryResponse> {
@@ -106,5 +104,18 @@ export async function getNetworkTotalStakeHistory(
 
   return {
     totalStakeAmountHistory: response.data.msg.total_stake_amount_history,
+  }
+}
+
+export async function getNetworkTotalStake(): Promise<GetNetworkTotalStakeResponse> {
+  const response = await stakingDataAxios.get<GetNetworkTotalStakeApiResponse>('/staking/total_stake')
+
+  if (response.status !== 200) {
+    throw new Error(`Failed to get network total stake: ${response.status}`)
+  }
+
+  return {
+    totalStakeAmount: response.data.msg.total_stake_amount,
+    lastUpdateTime: response.data.msg.last_update_time,
   }
 }
