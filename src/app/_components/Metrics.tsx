@@ -6,8 +6,8 @@ import StakingDataCard from '@/components/cards/StakingDataCard'
 import { useAllValidators } from '@/lib/services/hooks/useAllValidators'
 import useApr from '@/lib/services/hooks/useApr'
 import { useIsSmallDevice } from '@/lib/services/hooks/useIsSmallDevice'
-import { useStakingPool } from '@/lib/services/hooks/useStakingPool'
 import { formatLargeMetricsNumber } from '@/lib/utils'
+import { useNetworkTotalStake } from '@/lib/services/hooks/useNetworkTotalStake'
 
 export default function Metrics({ tokenType }: { tokenType: 'UNLOCKED' | 'LOCKED' | 'ALL' }) {
   const {
@@ -15,9 +15,8 @@ export default function Metrics({ tokenType }: { tokenType: 'UNLOCKED' | 'LOCKED
     isFetching: isFetchingValidators,
     isError: isErrorValidators,
   } = useAllValidators({ tokenType })
-  const { data: stakingPool, isFetching: isFetchingStake, isError: isErrorStake } = useStakingPool()
+  const { data: networkTotalStake, isFetching: isFetchingStake, isError: isErrorStake } = useNetworkTotalStake()
   const { data: apr, isFetching: isFetchingApr, isError: isErrorApr } = useApr()
-
   const isSmallDevice = useIsSmallDevice()
 
   return (
@@ -32,8 +31,8 @@ export default function Metrics({ tokenType }: { tokenType: 'UNLOCKED' | 'LOCKED
       <StakingDataCard
         title="Total Staked"
         data={
-          stakingPool
-            ? formatLargeMetricsNumber(formatEther(BigInt(stakingPool.totalStaked), 'gwei'), {
+          networkTotalStake
+            ? formatLargeMetricsNumber(formatEther(BigInt(networkTotalStake?.totalStakeAmount), 'gwei'), {
                 useSuffix: isSmallDevice,
               }) + ' IP'
             : undefined
