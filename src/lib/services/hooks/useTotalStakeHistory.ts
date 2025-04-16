@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { formatEther } from 'viem'
-import { getNetworkTotalStakeHistory, GetNetworkTotalStakeHistoryParams } from '../api/networkApi'
-import { TotalStakeHistoryItem } from '@/lib/types/networkApiTypes'
+import { getNetworkTotalStakeHistory } from '../api/networkApi'
+import { GetNetworkTotalStakeHistoryParams, TotalStakeHistoryItem } from '@/lib/types/networkApiTypes'
 
 interface FormattedStakeHistoryDataPoint {
   date: Date
