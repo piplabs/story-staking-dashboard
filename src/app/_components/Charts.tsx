@@ -20,7 +20,7 @@ function useWindowWidth() {
 
 export default function Charts() {
   return (
-    <div>
+    <div className="w-full">
       <TotalStakeHistory />
     </div>
   )
@@ -102,7 +102,7 @@ function TotalStakeHistory() {
   }
 
   return (
-    <StyledCard className="flex grow flex-col">
+    <StyledCard className="flex flex-col w-full grow">
       <section className="flex justify-between mb-4">
         <h2 className="text-lg font-medium text-primary-outline my-auto flex">Total Staked</h2>
         <DropdownMenu>
