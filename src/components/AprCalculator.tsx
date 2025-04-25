@@ -180,9 +180,9 @@ export default function AprCalculator() {
                   type="number"
                   value={stakeAmount}
                   onChange={(e) => {
-                    let v = Number(e.target.value)
-                    if (isNaN(v)) v = 0
-                    setStakeAmount(v)
+                    let stakeValue = Number(e.target.value)
+                    if (isNaN(stakeValue)) stakeValue = 0
+                    setStakeAmount(stakeValue)
                   }}
                   className="w-32 bg-transparent border-none text-white text-xl focus:ring-0 focus:outline-none text-center h-full"
                   placeholder="Amount"
