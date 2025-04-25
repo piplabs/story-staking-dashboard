@@ -27,7 +27,11 @@ export async function getApr(): Promise<GetAprResponse> {
   const response = await stakingDataAxios.get<GetAprApiResponse>(`estimated_apr`)
 
   if (response.data.code == 200) {
-    return response.data.msg
+    let apr = response.data.msg
+    if (typeof apr === 'string' && apr.includes('%')) {
+      apr = apr.replace('%', '').trim()
+    }
+    return apr
   }
   return '-'
 }

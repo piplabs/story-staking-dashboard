@@ -98,8 +98,15 @@ export type GetNetworkStakingParamsResponse = {
     bond_denom: string
     min_commision_rate: string
     min_delegation: string
-    periods: { period_type: number; duration: string; rewards_multiplier: string }[]
-    token_types: { token_type: number; rewards_multiplier: string }[]
+    periods: {
+      period_type: 0 | 1 | 2 | 3
+      duration: string
+      rewards_multiplier: string
+    }[]
+    token_types: {
+      token_type: 0 | 1
+      rewards_multiplier: string
+    }[]
     singularity_height: string
     minDelegationEth: string
   }
