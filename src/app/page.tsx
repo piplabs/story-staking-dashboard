@@ -4,10 +4,8 @@ import Metrics from './_components/Metrics'
 import ValidatorHeader from './_components/ValidatorHeader'
 import { ValidatorsTable } from './_components/ValidatorsTable'
 import { useState } from 'react'
-// import Charts from './_components/Charts'
-// import AprCharts from './_components/AprCharts'
-import AprCalculator from '../components/AprCalculator'
 import Charts from './_components/Charts'
+
 export default function Page() {
   const [showLockedTokens, setShowLockedTokens] = useState(false)
   const tokenType = showLockedTokens ? 'ALL' : 'UNLOCKED'
