@@ -21,7 +21,6 @@ interface LockupOption {
   apr: number
 }
 
-// Map period_type to label according to API: 0 = Flexible, 1 = Short-term, 2 = Medium-term, 3 = Long-term
 const getPeriodTypeLabel = (periodType: number) => {
   switch (periodType) {
     case 0:
@@ -37,7 +36,6 @@ const getPeriodTypeLabel = (periodType: number) => {
   }
 }
 
-// Simple slider component (native input[type=range])
 function StakeSlider({
   min,
   max,
@@ -81,13 +79,11 @@ export default function AprCalculator() {
   const [stakeAmount, setStakeAmount] = useState(30000)
   const [activeTab, setActiveTab] = useState('daily')
 
-  // Memoize lockup options from API
   const lockupOptions: LockupOption[] = useMemo(() => {
     if (!stakingParams?.params?.periods) return []
     return stakingParams.params.periods.map((period: Period) => {
       const id = `period-${period.period_type}`
       const name = getPeriodTypeLabel(period.period_type)
-      // duration is in nanoseconds, convert to seconds, then to days
       const durationSeconds = Number(period.duration) / 1e9
       const days = Math.round(durationSeconds / 86400)
       const multiplier = Number(period.rewards_multiplier)
@@ -101,15 +97,12 @@ export default function AprCalculator() {
     })
   }, [stakingParams, baseAPR])
 
-  // Selected lockup option
   const [selectedLockupId, setSelectedLockupId] = useState<string | undefined>(undefined)
-  // Set default selected lockup when options change
   useEffect(() => {
     if (lockupOptions.length > 0) setSelectedLockupId(lockupOptions[0].id)
   }, [lockupOptions])
   const selectedLockup = lockupOptions.find((option) => option.id === selectedLockupId)
 
-  // Rewards calculation
   const rewards = useMemo(() => {
     if (!selectedLockup) return { daily: 0, monthly: 0, yearly: 0, total: 0 }
     const apr = selectedLockup.apr / 100
@@ -138,7 +131,6 @@ export default function AprCalculator() {
     }).format(value)
   }
 
-  // Slider min/max logic
   const SLIDER_MIN = 100
   const SLIDER_MAX = 1_000_000
   const SLIDER_STEP = 100
@@ -173,9 +165,7 @@ export default function AprCalculator() {
         </div>
       </section>
       <section className="flex flex-col gap-6">
-        {/* Staking Amount and Lock-up Period */}
         <div className="flex flex-col gap-6 w-full">
-          {/* Staking Amount */}
           <div className="flex-1 min-w-0">
             <Label htmlFor="stake-amount" className="text-lg font-semibold mb-2 block text-primary-outline">
               1. Enter Stake Amount
@@ -183,7 +173,7 @@ export default function AprCalculator() {
             <div className="flex flex-row items-center gap-4">
               <div
                 className="flex items-center gap-2 bg-gray-800 border border-gray-700 rounded-md px-3"
-                style={{ height: '48px' }} // Match radio group height (p-3 = 12px top/bottom + ~24px content)
+                style={{ height: '48px' }}
               >
                 <Input
                   id="stake-amount"
@@ -214,7 +204,6 @@ export default function AprCalculator() {
               </div>
             </div>
           </div>
-          {/* Lock-up Period */}
           <div className="flex-1 min-w-0">
             <Label className="text-lg font-semibold mb-2 block text-primary-outline">
               2. Choose Staking Lock-up Period
@@ -229,7 +218,7 @@ export default function AprCalculator() {
                       : 'border-gray-700 bg-gray-800/60 hover:bg-gray-800'
                   }`}
                   onClick={() => handleLockupChange(option.id)}
-                  style={{ height: '48px' }} // Ensure radio group option height is 48px
+                  style={{ height: '48px' }}
                 >
                   <RadioGroupItem value={option.id} id={option.id} className="sr-only" />
                   <Label htmlFor={option.id} className="flex flex-1 cursor-pointer items-center w-full">
@@ -254,14 +243,10 @@ export default function AprCalculator() {
             </RadioGroup>
           </div>
         </div>
-
-        {/* Results */}
         <div className="mt-6 space-y-4 text-white">
           <div className="flex items-center gap-2">
-            {/* <TrendingUp className="h-5 w-5 text-green-400" /> */}
             <h3 className="text-lg font-medium text-white">Estimated Rewards</h3>
           </div>
-
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full rounded-lg">
             <TabsList className="grid grid-cols-3 bg-gray-800 text-gray-300 rounded-lg">
               <TabsTrigger
@@ -284,13 +269,7 @@ export default function AprCalculator() {
               </TabsTrigger>
             </TabsList>
             <TabsContent value="daily" className="pt-4">
-              <RewardCard
-                title="Daily Rewards"
-                amount={rewards.daily}
-                apr={selectedLockup.apr}
-                period="day"
-                // icon={<Calendar className="h-5 w-5 text-blue-400" />}
-              />
+              <RewardCard title="Daily Rewards" amount={rewards.daily} apr={selectedLockup.apr} period="day" />
             </TabsContent>
             <TabsContent value="monthly" className="pt-4">
               <RewardCard title="Monthly Rewards" amount={rewards.monthly} apr={selectedLockup.apr} period="month" />
