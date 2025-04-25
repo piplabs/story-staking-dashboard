@@ -6,7 +6,8 @@ import { ValidatorsTable } from './_components/ValidatorsTable'
 import { useState } from 'react'
 // import Charts from './_components/Charts'
 // import AprCharts from './_components/AprCharts'
-import AprCalculator from './_components/AprCalculator'
+import AprCalculator from '../components/AprCalculator'
+import Charts from './_components/Charts'
 export default function Page() {
   const [showLockedTokens, setShowLockedTokens] = useState(false)
   const tokenType = showLockedTokens ? 'ALL' : 'UNLOCKED'
@@ -15,12 +16,8 @@ export default function Page() {
     <main className="flex w-full flex-col gap-8 text-white">
       <ValidatorHeader />
       <Metrics tokenType={tokenType} />
+      <Charts />
 
-      <section className="flex flex-row gap-4 w-full">
-        {/* <AprCharts /> */}
-        {/* <Charts /> */}
-        <AprCalculator />
-      </section>
       <ValidatorsTable
         tokenType={tokenType}
         showLockedTokens={showLockedTokens}

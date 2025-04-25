@@ -31,7 +31,11 @@ export default function ConnectWalletButton({ text, isShowNetwork = false }: Con
             {(() => {
               if (!connected) {
                 return (
-                  <Button variant="outline" onClick={openConnectModal} type="button">
+                  <Button
+                    variant={text && text.toLowerCase().includes('stake') ? 'primary' : 'outline'}
+                    onClick={openConnectModal}
+                    type="button"
+                  >
                     {text || 'Connect Wallet'}
                   </Button>
                 )

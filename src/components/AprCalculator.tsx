@@ -162,8 +162,8 @@ export default function AprCalculator() {
       </StyledCard>
     )
   return (
-    <StyledCard className="flex flex-col w-1/2">
-      <section className="flex flex-col gap-2 mb-4">
+    <StyledCard className="flex flex-col">
+      <section className="flex flex-col gap-4 mb-4">
         <div className="flex items-center gap-2">
           <Calculator className="h-6 w-6 text-blue-400" />
           <h2 className="text-lg font-medium text-primary-outline my-auto flex">APR Reward Calculator</h2>
@@ -237,7 +237,10 @@ export default function AprCalculator() {
                       <div className="flex items-center gap-2 flex-1">
                         <Clock className="h-4 w-4 text-gray-400" />
                         <span className="font-medium text-white">
-                          {option.name} <span className="text-gray-400 font-normal">({option.days} days)</span>
+                          {option.name}{' '}
+                          <span className="text-gray-400 font-normal">
+                            {option.name === 'Flexible' ? '(Unlock anytime)' : `(${option.days} days)`}
+                          </span>
                         </span>
                       </div>
                       <div className="flex items-center gap-2 justify-end">
@@ -253,21 +256,30 @@ export default function AprCalculator() {
         </div>
 
         {/* Results */}
-        <div className="mt-6 space-y-4">
+        <div className="mt-6 space-y-4 text-white">
           <div className="flex items-center gap-2">
-            <TrendingUp className="h-5 w-5 text-green-400" />
-            <h3 className="text-lg font-medium">Estimated Rewards</h3>
+            {/* <TrendingUp className="h-5 w-5 text-green-400" /> */}
+            <h3 className="text-lg font-medium text-white">Estimated Rewards</h3>
           </div>
 
-          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <TabsList className="grid grid-cols-3 bg-gray-800">
-              <TabsTrigger value="daily" className="data-[state=active]:bg-blue-600">
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full rounded-lg">
+            <TabsList className="grid grid-cols-3 bg-gray-800 text-gray-300 rounded-lg">
+              <TabsTrigger
+                value="daily"
+                className="data-[state=active]:bg-blue-600 text-gray-300 data-[state=active]:text-white"
+              >
                 Daily
               </TabsTrigger>
-              <TabsTrigger value="monthly" className="data-[state=active]:bg-blue-600">
+              <TabsTrigger
+                value="monthly"
+                className="data-[state=active]:bg-blue-600 text-gray-300 data-[state=active]:text-white"
+              >
                 Monthly
               </TabsTrigger>
-              <TabsTrigger value="yearly" className="data-[state=active]:bg-blue-600">
+              <TabsTrigger
+                value="yearly"
+                className="data-[state=active]:bg-blue-600 text-gray-300 data-[state=active]:text-white"
+              >
                 Yearly
               </TabsTrigger>
             </TabsList>
@@ -277,38 +289,16 @@ export default function AprCalculator() {
                 amount={rewards.daily}
                 apr={selectedLockup.apr}
                 period="day"
-                icon={<Calendar className="h-5 w-5 text-blue-400" />}
+                // icon={<Calendar className="h-5 w-5 text-blue-400" />}
               />
             </TabsContent>
             <TabsContent value="monthly" className="pt-4">
-              <RewardCard
-                title="Monthly Rewards"
-                amount={rewards.monthly}
-                apr={selectedLockup.apr}
-                period="month"
-                icon={<Calendar className="h-5 w-5 text-blue-400" />}
-              />
+              <RewardCard title="Monthly Rewards" amount={rewards.monthly} apr={selectedLockup.apr} period="month" />
             </TabsContent>
             <TabsContent value="yearly" className="pt-4">
-              <RewardCard
-                title="Yearly Rewards"
-                amount={rewards.yearly}
-                apr={selectedLockup.apr}
-                period="year"
-                icon={<Calendar className="h-5 w-5 text-blue-400" />}
-              />
+              <RewardCard title="Yearly Rewards" amount={rewards.yearly} apr={selectedLockup.apr} period="year" />
             </TabsContent>
           </Tabs>
-
-          {/* <div className="mt-6 p-4 bg-green-900/20 border border-green-800 rounded-lg">
-            <div className="flex justify-between items-center">
-              <div className="flex items-center gap-2">
-                <Clock className="h-5 w-5 text-green-400" />
-                <span className="font-medium">Total for {selectedLockup.days} days lock-up</span>
-              </div>
-              <div className="text-xl font-bold text-green-400">{formatCurrency(rewards.total)} IP</div>
-            </div>
-          </div> */}
         </div>
       </section>
     </StyledCard>
@@ -320,7 +310,7 @@ interface RewardCardProps {
   amount: number
   apr: number
   period: string
-  icon: React.ReactNode
+  icon?: React.ReactNode
 }
 
 function RewardCard({ title, amount, apr, period, icon }: RewardCardProps) {
@@ -333,16 +323,16 @@ function RewardCard({ title, amount, apr, period, icon }: RewardCardProps) {
   }
 
   return (
-    <div className="p-4 bg-gray-800/50 border border-gray-700 rounded-lg">
+    <div className="p-4 bg-gray-800/50 border border-gray-700 rounded-lg text-white">
       <div className="flex justify-between items-center mb-2">
         <div className="flex items-center gap-2">
           {icon}
-          <span className="font-medium">{title}</span>
+          <span className="font-medium text-white">{title}</span>
         </div>
-        <div className="text-sm text-gray-400">{apr.toFixed(2)}% APR</div>
+        <div className="text-sm text-gray-300">{apr.toFixed(2)}% APR</div>
       </div>
       <div className="text-3xl font-bold text-white">{formatCurrency(amount)} IP</div>
-      <div className="text-sm text-gray-400 mt-1">Estimated reward per {period}</div>
+      <div className="text-sm text-gray-300 mt-1">Estimated reward per {period}</div>
     </div>
   )
 }

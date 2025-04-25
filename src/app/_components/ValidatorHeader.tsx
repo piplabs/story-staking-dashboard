@@ -9,6 +9,7 @@ import { StakeDialog } from '@/components/dialogs/StakeDialog'
 import { useAccount } from 'wagmi'
 import { ConnectButton } from '@rainbow-me/rainbowkit'
 import ConnectWalletButton from '@/components/buttons/ConnectWalletButton'
+import AprCalculatorDialog from '@/components/dialogs/AprCalculatorDialog'
 
 export default function ValidatorHeader() {
   const isSmallDevice = useIsSmallDevice()
@@ -18,13 +19,13 @@ export default function ValidatorHeader() {
     <section className="flex w-full flex-row gap-4">
       <h1 className="w-full">Validators</h1>
       {!isSmallDevice && (
-        <div className="my-auto flex flex-row gap-8">
+        <div className="my-auto flex flex-row gap-4">
           {isConnected && chainId?.toString() == process.env.NEXT_PUBLIC_CHAIN_ID ? (
             <StakeDialog text={'Stake Now'} />
           ) : (
             <ConnectWalletButton text={'Stake Now'} />
           )}
-
+          <AprCalculatorDialog />
           <Link
             href={'https://docs.story.foundation/docs/node-setup-mainnet'}
             target="_blank"
