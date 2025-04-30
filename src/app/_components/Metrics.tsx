@@ -49,7 +49,7 @@ export default function Metrics({ tokenType }: { tokenType: 'UNLOCKED' | 'LOCKED
           {} as Record<string, string>
         )
       : {}
-
+  console.log(aprDataMap, aprOptions)
   return (
     <div className="flex grow flex-col gap-8 lg:flex-row">
       <StakingDataCard
@@ -76,7 +76,7 @@ export default function Metrics({ tokenType }: { tokenType: 'UNLOCKED' | 'LOCKED
         title="APR"
         options={aprOptions}
         dataMap={aprDataMap}
-        defaultValue="base"
+        defaultValue="0"
         tooltip={
           <div className="text-sm leading-snug space-y-2 text-wrap">
             <p>
