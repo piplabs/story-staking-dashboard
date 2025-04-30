@@ -96,12 +96,7 @@ export function StakingDataCardWithPopover({
   const data = dataMap[selected]
 
   return (
-    <StyledCard
-      className={cn(
-        'w-full flex flex-col whitespace-nowrap border border-primary-outline/10 transition-shadow hover:shadow-md hover:border-primary-outline/30',
-        className
-      )}
-    >
+    <StyledCard className={cn('w-full flex flex-col whitespace-nowrap transition-shadow hover:shadow-md', className)}>
       <Popover open={open} onOpenChange={setOpen}>
         <TooltipWrapper content={tooltip}>
           <PopoverTrigger asChild>
@@ -129,12 +124,10 @@ export function StakingDataCardWithPopover({
           </PopoverTrigger>
         </TooltipWrapper>
         <PopoverContent
-          className={cn(
-            'max-w-[350px] lg:max-w-prose bg-gray-900 text-gray-50 border-gray-700 text-xs leading-[18px] tracking-[0.48px] px-3'
-          )}
+          className={cn(' bg-gray-900 text-gray-50 border-gray-700 text-xs leading-[18px] tracking-[0.48px] px-3')}
           align="start"
         >
-          <div className="flex flex-col gap-2 max-w-[350px] lg:max-w-prose">
+          <div className="flex flex-col gap-2">
             {options.map((opt) => (
               <Button
                 key={opt.value}
