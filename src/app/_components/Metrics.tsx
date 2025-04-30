@@ -49,7 +49,28 @@ export default function Metrics({ tokenType }: { tokenType: 'UNLOCKED' | 'LOCKED
           {} as Record<string, string>
         )
       : {}
-  console.log(aprDataMap, aprOptions)
+  // Build the lock period/multiplier list for the tooltip dynamically from API data
+  const lockPeriodList =
+    stakingPeriods && stakingPeriods.length > 0
+      ? stakingPeriods
+          .filter((period) => period.duration !== '0')
+          .sort((a, b) => Number(a.duration) - Number(b.duration))
+          .map((period) => {
+            // duration is in nanoseconds, convert to days
+            const days = Math.floor(Number(period.duration) / 86400 / 1e9)
+            // Show as integer or one decimal if needed
+            const multiplier =
+              Number(period.rewards_multiplier) % 1 === 0
+                ? Number(period.rewards_multiplier).toFixed(0)
+                : Number(period.rewards_multiplier).toFixed(1)
+            return (
+              <li key={period.period_type}>
+                {days} day lock → {multiplier}x multiplier
+              </li>
+            )
+          })
+      : null
+
   return (
     <div className="flex grow flex-col gap-8 lg:flex-row">
       <StakingDataCard
@@ -90,9 +111,7 @@ export default function Metrics({ tokenType }: { tokenType: 'UNLOCKED' | 'LOCKED
             </p>
             <ul className="list-disc list-inside ml-2">
               <li>Unlock anytime (no lock) → Base APR</li>
-              <li>90 day lock → 1.2x multiplier</li>
-              <li>360 day lock → 1.5x multiplier</li>
-              <li>540 day lock → 2x multiplier</li>
+              {lockPeriodList}
             </ul>
 
             <p>The multipliers stay in effect even after the lock expires.</p>
