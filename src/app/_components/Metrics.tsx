@@ -43,7 +43,7 @@ export default function Metrics({ tokenType }: { tokenType: 'UNLOCKED' | 'LOCKED
       />
       <StakingDataCard
         title="APR"
-        data={apr || '-'}
+        data={`${apr}%` || '-'}
         tooltip={
           <div>
             Latest APR based on current inflation and total bonded token amount. <br />
