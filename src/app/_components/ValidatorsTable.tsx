@@ -41,11 +41,7 @@ export function ValidatorsTable({
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [hideLocked, setHideLocked] = useState(true)
 
-  const {
-    data: validators,
-    isFetched,
-    isPending,
-  } = useAllValidators({ sortDescending: true, sortSupportedToken: true, tokenType })
+  const { data: validators, isFetched, isPending } = useAllValidators({ randomSort: true, tokenType })
   const size = useWindowSize()
 
   // Filter validators based on the toggle.

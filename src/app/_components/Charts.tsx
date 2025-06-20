@@ -28,7 +28,7 @@ export default function Charts() {
 
 function TotalStakeHistory() {
   // Add 'all' to the interval type
-  const [interval, setInterval] = useState<'1d' | '7d' | '30d' | 'all'>('30d')
+  const [interval, setInterval] = useState<'1d' | '7d' | '30d' | 'all'>('7d')
   const width = useWindowWidth()
   const {
     data: totalStakeHistory,
