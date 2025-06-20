@@ -12,6 +12,7 @@ export type GetAllValidatorsParams = {
   sortDescending?: boolean
   sortSupportedToken?: boolean
   filterLockedTokens?: boolean
+  randomSort?: boolean
 }
 
 export type GetAllValidatorsApiResponse = {

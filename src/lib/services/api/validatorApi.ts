@@ -55,6 +55,11 @@ export async function getAllValidators(params?: GetAllValidatorsParams): Promise
     })
   }
 
+  // Apply random sorting if specified (this will override other sorting)
+  if (params?.randomSort) {
+    validators = validators.sort(() => Math.random() - 0.5)
+  }
+
   return {
     allValidators: validators,
     pagination: response.data.msg.pagination,
