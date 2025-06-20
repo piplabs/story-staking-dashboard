@@ -17,10 +17,12 @@ import Link from 'next/link'
 import React, { ReactNode, useState } from 'react'
 import { useWindowSize } from 'react-use'
 import { formatEther } from 'viem'
+import { Search } from 'lucide-react'
 
 import { DataTablePagination } from '@/components/DataTablePagination'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import { Input } from '@/components/ui/input'
 import { useAllValidators } from '@/lib/services/hooks/useAllValidators'
 import { Validator } from '@/lib/types'
 import { cn, formatLargeMetricsNumber, truncateAddress } from '@/lib/utils'
@@ -48,8 +50,12 @@ export function ValidatorsTable({
   // A validator with locked tokens is defined as having support_token_type undefined or 0.
   const columns: ColumnDef<Validator>[] = [
     {
-      accessorFn: (row: Validator) =>
-        row.description.moniker || (row.operator_address ? truncateAddress(row.operator_address, 6, 4) : ''),
+      accessorFn: (row: Validator) => {
+        // For searching, include both moniker and full operator_address
+        const moniker = row.description.moniker || ''
+        const address = row.operator_address || ''
+        return `${moniker} ${address}`.toLowerCase()
+      },
       accessorKey: 'name',
       header: ({ column }) => {
         return (
@@ -185,6 +191,23 @@ export function ValidatorsTable({
 
   return (
     <>
+      {/* Search Bar */}
+      <div className="-mb-4 w-full">
+        <div className="relative max-w-md w-full">
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+          <Input
+            placeholder="Search validators by name or address..."
+            value={(table.getColumn('name')?.getFilterValue() as string) ?? ''}
+            onChange={(event) => {
+              table.getColumn('name')?.setFilterValue(event.target.value)
+              // Reset to first page when searching
+              table.setPageIndex(0)
+            }}
+            className="pl-10 w-full bg-black border-primary-border text-white placeholder:text-gray-400 focus:border-primary-outline"
+          />
+        </div>
+      </div>
+
       <StyledCard className="relative flex max-h-[780px] flex-col text-base overflow-y-auto scrollbar-hide">
         <Table>
           <TableHeader className="bg-none">
