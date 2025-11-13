@@ -2,8 +2,8 @@ import { parseEther } from 'viem'
 import { StakingPeriodMultiplierInfo } from './types'
 
 export const links = {
-  docsValidator: 'https://docs.story.foundation/docs/validator-operations',
-  twitter: 'https://twitter.com/storyprotocol',
+  docsValidator: 'https://docs.story.foundation/network/participate/validators/overview',
+  twitter: 'https://x.com/storyprotocol',
   privacy: 'https://story.foundation/privacy-policy',
   terms: 'https://story.foundation/terms',
 }
