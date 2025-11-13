@@ -13,6 +13,7 @@ export type GetAllValidatorsParams = {
   sortSupportedToken?: boolean
   filterLockedTokens?: boolean
   randomSort?: boolean
+  includeDelegatorCounts?: boolean
 }
 
 export type GetAllValidatorsApiResponse = {
@@ -24,8 +25,12 @@ export type GetAllValidatorsApiResponse = {
   error: string
 }
 
+export type ValidatorWithDelegatorCount = Validator & {
+  delegatorCount?: number
+}
+
 export type AllValidators = {
-  allValidators: Validator[]
+  allValidators: ValidatorWithDelegatorCount[]
   pagination: ApiResponsePagination
 }
 

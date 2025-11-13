@@ -25,6 +25,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Input } from '@/components/ui/input'
 import { useAllValidators } from '@/lib/services/hooks/useAllValidators'
 import { Validator } from '@/lib/types'
+import { ValidatorWithDelegatorCount } from '@/lib/types/validatorApiTypes'
 import { cn, formatLargeMetricsNumber, truncateAddress } from '@/lib/utils'
 import StyledCard from '@/components/cards/StyledCard'
 import { ArrowDown, ArrowUp } from 'lucide-react'
@@ -43,14 +44,18 @@ export function ValidatorsTable({
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [hideLocked, setHideLocked] = useState(true)
 
-  const { data: validators, isFetched, isPending } = useAllValidators({ randomSort: true, tokenType })
+  const {
+    data: validators,
+    isFetched,
+    isPending,
+  } = useAllValidators({ randomSort: true, tokenType, includeDelegatorCounts: true })
   const size = useWindowSize()
 
   // Filter validators based on the toggle.
   // A validator with locked tokens is defined as having support_token_type undefined or 0.
-  const columns: ColumnDef<Validator>[] = [
+  const columns: ColumnDef<ValidatorWithDelegatorCount>[] = [
     {
-      accessorFn: (row: Validator) => {
+      accessorFn: (row: ValidatorWithDelegatorCount) => {
         // For searching, include both moniker and full operator_address
         const moniker = row.description.moniker || ''
         const address = row.operator_address || ''
@@ -95,7 +100,7 @@ export function ValidatorsTable({
       },
     },
     {
-      accessorFn: (row: Validator) => Number(formatEther(BigInt(row.tokens), 'gwei')),
+      accessorFn: (row: ValidatorWithDelegatorCount) => Number(formatEther(BigInt(row.tokens), 'gwei')),
       id: 'totalStakedAmount',
       header: ({ column }) => {
         return (
@@ -116,6 +121,23 @@ export function ValidatorsTable({
             IP
           </div>
         )
+      },
+    },
+    {
+      accessorFn: (row: ValidatorWithDelegatorCount) => row.delegatorCount || 0,
+      id: 'delegatorCount',
+      header: ({ column }) => {
+        return (
+          <HeaderWithSortArrows
+            column={column}
+            header={'Delegators'}
+            sorting={sorting}
+            className="justify-center text-center"
+          />
+        )
+      },
+      cell: ({ row }) => {
+        return <div className="text-center">{row.original.delegatorCount?.toLocaleString() || '0'}</div>
       },
     },
     ...(showLockedTokens
@@ -153,7 +175,7 @@ export function ValidatorsTable({
       },
     },
     {
-      accessorFn: (row: Validator) => Number(row.commission.commission_rates.rate),
+      accessorFn: (row: ValidatorWithDelegatorCount) => Number(row.commission.commission_rates.rate),
       id: 'commission',
       header: ({ column }) => {
         return (

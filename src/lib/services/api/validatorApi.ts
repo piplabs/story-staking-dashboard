@@ -11,6 +11,7 @@ import {
   GetValidatorDelegationsParams,
   GetValidatorDelegationsResponse,
   GetValidatorParams,
+  ValidatorWithDelegatorCount,
 } from '@/lib/types/validatorApiTypes'
 
 /* Validator API queries
@@ -60,8 +61,46 @@ export async function getAllValidators(params?: GetAllValidatorsParams): Promise
     validators = validators.sort(() => Math.random() - 0.5)
   }
 
+  // Fetch delegator counts if requested
+  let validatorsWithDelegatorCounts: ValidatorWithDelegatorCount[] = validators
+  if (params?.includeDelegatorCounts) {
+    validatorsWithDelegatorCounts = await Promise.all(
+      validators.map(async (validator) => {
+        try {
+          const delegationsResponse = await stakingDataAxios.get<GetValidatorDelegationsApiResponse>(
+            `/staking/validators/${validator.operator_address}/delegations`,
+            {
+              params: {
+                'pagination.limit': 1, // We only need the total count, not the actual data
+                'pagination.count_total': true,
+              },
+            }
+          )
+
+          if (delegationsResponse.data.code === 200) {
+            return {
+              ...validator,
+              delegatorCount: Number(delegationsResponse.data.msg.pagination?.total) || 0,
+            }
+          } else {
+            return {
+              ...validator,
+              delegatorCount: 0,
+            }
+          }
+        } catch (error) {
+          console.error(`Failed to fetch delegator count for validator ${validator.operator_address}:`, error)
+          return {
+            ...validator,
+            delegatorCount: 0,
+          }
+        }
+      })
+    )
+  }
+
   return {
-    allValidators: validators,
+    allValidators: validatorsWithDelegatorCounts,
     pagination: response.data.msg.pagination,
   }
 }
