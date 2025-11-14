@@ -7,7 +7,6 @@ import { links } from '@/lib/constants'
 import { useIsSmallDevice } from '@/lib/services/hooks/useIsSmallDevice'
 import { StakeDialog } from '@/components/dialogs/StakeDialog'
 import { useAccount } from 'wagmi'
-import { ConnectButton } from '@rainbow-me/rainbowkit'
 import ConnectWalletButton from '@/components/buttons/ConnectWalletButton'
 import AprCalculatorDialog from '@/components/dialogs/AprCalculatorDialog'
 
@@ -26,11 +25,7 @@ export default function ValidatorHeader() {
             <ConnectWalletButton text={'Stake Now'} />
           )}
           <AprCalculatorDialog />
-          <Link
-            href={'https://docs.story.foundation/docs/node-setup-mainnet'}
-            target="_blank"
-            rel="noreferrer noopener"
-          >
+          <Link href={links.docsValidator} target="_blank" rel="noreferrer noopener">
             <Button variant="outline">Become a Validator</Button>
           </Link>
         </div>
