@@ -147,3 +147,109 @@ export type GetDelegatorPeriodDelegationsParams = {
   delegatorAddr: Address
   sortDescending?: boolean
 }
+
+/* 
+  Get lifetime rewards for delegator-validator pair
+  GET /api/rewards/:delegator_address/:validator_address
+*/
+export type GetDelegatorValidatorRewardsParams = {
+  delegatorAddr: Address
+  validatorAddr: string
+}
+
+export type GetDelegatorValidatorRewardsApiResponse = {
+  code: number
+  msg: {
+    delegator_address: Address
+    validator_address: Address
+    claimed_amount: string
+    unclaimed_amount: string
+    last_update_height: number
+  }
+  error: string
+}
+
+export type GetDelegatorValidatorRewardsResponse = {
+  delegatorAddress: Address
+  validatorAddress: Address
+  claimedAmount: string
+  unclaimedAmount: string
+  lastUpdateHeight: number
+}
+
+/*
+  Get delegation rewards for delegator-validator pair
+  GET /api/rewards/:delegator_address/:validator_address/delegations
+*/
+export type GetDelegatorValidatorDelegationRewardsParams = {
+  delegatorAddr: Address
+  validatorAddr: string
+}
+
+export type DelegationRewardInfo = {
+  delegator_address: Address
+  validator_address: Address
+  period_delegation_id: string
+  period_type: 0 | 1 | 2 | 3
+  status: string
+  reward_shares: string
+  claimed_amount: string
+  unclaimed_amount: string
+  last_update_height: number
+}
+
+export type GetDelegatorValidatorDelegationRewardsApiResponse = {
+  code: number
+  msg: {
+    delegator_address: Address
+    validator_address: Address
+    delegations: DelegationRewardInfo[]
+    total_rewards: string
+  }
+  error: string
+}
+
+export type GetDelegatorValidatorDelegationRewardsResponse = {
+  delegatorAddress: Address
+  validatorAddress: Address
+  delegations: {
+    delegatorAddress: Address
+    validatorAddress: Address
+    periodDelegationId: string
+    periodType: 0 | 1 | 2 | 3
+    status: string
+    rewardShares: string
+    claimedAmount: string
+    unclaimedAmount: string
+    lastUpdateHeight: number
+  }[]
+  totalRewards: string
+}
+
+/*
+  Get single delegation reward by period delegation ID
+  GET /api/rewards/:delegator_address/:validator_address/delegations/:period_delegation_id
+*/
+export type GetDelegationRewardParams = {
+  delegatorAddr: Address
+  validatorAddr: string
+  periodDelegationId: string
+}
+
+export type GetDelegationRewardApiResponse = {
+  code: number
+  msg: DelegationRewardInfo
+  error: string
+}
+
+export type GetDelegationRewardResponse = {
+  delegatorAddress: Address
+  validatorAddress: Address
+  periodDelegationId: string
+  periodType: 0 | 1 | 2 | 3
+  status: string
+  rewardShares: string
+  claimedAmount: string
+  unclaimedAmount: string
+  lastUpdateHeight: number
+}

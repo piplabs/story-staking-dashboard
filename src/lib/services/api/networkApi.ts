@@ -95,12 +95,15 @@ export async function getNetworkStakingParams(): Promise<GetNetworkStakingParams
 export async function getNetworkTotalStakeHistory(
   params?: GetNetworkTotalStakeHistoryParams
 ): Promise<GetNetworkTotalStakeHistoryResponse> {
-  const response = await stakingDataAxios.get<GetNetworkTotalStakeHistoryApiResponse>('/staking/total_stake/history', {
-    params: {
-      interval: params?.interval || '1d',
-      ...params,
-    },
-  })
+  const response = await stakingDataAxios.get<GetNetworkTotalStakeHistoryApiResponse>(
+    '/staking/total_stake_token/history',
+    {
+      params: {
+        interval: params?.interval || '1d',
+        ...params,
+      },
+    }
+  )
 
   if (response.status !== 200) {
     throw new Error(`Failed to get network total stake history: ${response.status}`)
@@ -112,7 +115,7 @@ export async function getNetworkTotalStakeHistory(
 }
 
 export async function getNetworkTotalStake(): Promise<GetNetworkTotalStakeResponse> {
-  const response = await stakingDataAxios.get<GetNetworkTotalStakeApiResponse>('/staking/total_stake')
+  const response = await stakingDataAxios.get<GetNetworkTotalStakeApiResponse>('/staking/total_stake_token')
 
   if (response.status !== 200) {
     throw new Error(`Failed to get network total stake: ${response.status}`)

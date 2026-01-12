@@ -18,6 +18,15 @@ import {
   GetValidatorDelegatorDelegationApiResponse,
   GetDelegatorPeriodDelegationsOnValidatorApiResponse,
   GetDelegatorPeriodDelegationsOnValidatorResponse,
+  GetDelegatorValidatorRewardsParams,
+  GetDelegatorValidatorRewardsApiResponse,
+  GetDelegatorValidatorRewardsResponse,
+  GetDelegatorValidatorDelegationRewardsParams,
+  GetDelegatorValidatorDelegationRewardsApiResponse,
+  GetDelegatorValidatorDelegationRewardsResponse,
+  GetDelegationRewardParams,
+  GetDelegationRewardApiResponse,
+  GetDelegationRewardResponse,
 } from '@/lib/types/delegatorApiTypes'
 
 export async function getValidatorDelegatorDelegations(
@@ -115,4 +124,93 @@ export async function getUnbondedDelegatorDelegations(
   }
 
   return response.msg
+}
+
+/**
+ * Get lifetime accrued rewards for a delegator-validator pair
+ * GET /api/rewards/:delegator_address/:validator_address
+ */
+export async function getDelegatorValidatorRewards(
+  params: GetDelegatorValidatorRewardsParams
+): Promise<GetDelegatorValidatorRewardsResponse> {
+  const response = await stakingDataAxios.get<GetDelegatorValidatorRewardsApiResponse>(
+    `/rewards/${params.delegatorAddr}/${params.validatorAddr}`
+  )
+
+  if (response.data.code !== 200) {
+    throw new Error(response.data.error || 'Failed to fetch delegator-validator rewards')
+  }
+
+  const msg = response.data.msg
+
+  return {
+    delegatorAddress: msg.delegator_address,
+    validatorAddress: msg.validator_address,
+    claimedAmount: formatEther(BigInt(msg.claimed_amount || '0'), 'gwei'),
+    unclaimedAmount: formatEther(BigInt(msg.unclaimed_amount || '0'), 'gwei'),
+    lastUpdateHeight: msg.last_update_height,
+  }
+}
+
+/**
+ * Get delegation rewards by delegator-validator pair
+ * GET /api/rewards/:delegator_address/:validator_address/delegations
+ */
+export async function getDelegatorValidatorDelegationRewards(
+  params: GetDelegatorValidatorDelegationRewardsParams
+): Promise<GetDelegatorValidatorDelegationRewardsResponse> {
+  const response = await stakingDataAxios.get<GetDelegatorValidatorDelegationRewardsApiResponse>(
+    `/rewards/${params.delegatorAddr}/${params.validatorAddr}/delegations`
+  )
+
+  if (response.data.code !== 200) {
+    throw new Error(response.data.error || 'Failed to fetch delegator-validator delegation rewards')
+  }
+
+  const msg = response.data.msg
+
+  return {
+    delegatorAddress: msg.delegator_address,
+    validatorAddress: msg.validator_address,
+    delegations: msg.delegations.map((d) => ({
+      delegatorAddress: d.delegator_address,
+      validatorAddress: d.validator_address,
+      periodDelegationId: d.period_delegation_id,
+      periodType: d.period_type,
+      status: d.status,
+      rewardShares: d.reward_shares,
+      claimedAmount: formatEther(BigInt(d.claimed_amount || '0'), 'gwei'),
+      unclaimedAmount: formatEther(BigInt(d.unclaimed_amount || '0'), 'gwei'),
+      lastUpdateHeight: d.last_update_height,
+    })),
+    totalRewards: formatEther(BigInt(msg.total_rewards || '0'), 'gwei'),
+  }
+}
+
+/**
+ * Get single delegation reward by period delegation ID
+ * GET /api/rewards/:delegator_address/:validator_address/delegations/:period_delegation_id
+ */
+export async function getDelegationReward(params: GetDelegationRewardParams): Promise<GetDelegationRewardResponse> {
+  const response = await stakingDataAxios.get<GetDelegationRewardApiResponse>(
+    `/rewards/${params.delegatorAddr}/${params.validatorAddr}/delegations/${params.periodDelegationId}`
+  )
+
+  if (response.data.code !== 200) {
+    throw new Error(response.data.error || 'Failed to fetch delegation reward')
+  }
+
+  const msg = response.data.msg
+
+  return {
+    delegatorAddress: msg.delegator_address,
+    validatorAddress: msg.validator_address,
+    periodDelegationId: msg.period_delegation_id,
+    periodType: msg.period_type,
+    status: msg.status,
+    rewardShares: msg.reward_shares,
+    claimedAmount: formatEther(BigInt(msg.claimed_amount || '0'), 'gwei'),
+    unclaimedAmount: formatEther(BigInt(msg.unclaimed_amount || '0'), 'gwei'),
+    lastUpdateHeight: msg.last_update_height,
+  }
 }
