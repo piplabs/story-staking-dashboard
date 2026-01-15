@@ -10,9 +10,49 @@ import { cn } from '@/lib/utils'
 import { useSingularity } from '@/lib/services/hooks/useSingularity'
 import TooltipWrapper from '../TooltipWrapper'
 
+// ============================================================================
+// MAINTENANCE MODE CONFIGURATION
+// To revert: Set SHOW_MAINTENANCE_BANNER to false
+// ============================================================================
+const SHOW_MAINTENANCE_BANNER = true
+// ============================================================================
+
+function MaintenanceBanner() {
+  return (
+    <div className="w-full">
+      <div className="flex flex-col lg:flex-col gap-2 rounded-lg border px-4 py-2.5 font-medium text-white my-auto align-middle border-[#E4CE07] bg-[#514903]">
+        <div className="flex flex-row gap-2">
+          <div className="flex my-auto">
+            <YellowWarning cn="w-6 h-6" />
+          </div>
+          <p>
+            <strong>Planned Maintenance</strong> — Story is performing a scheduled network upgrade requiring a
+            coordinated chain halt beginning Jan 14, 23:30 UTC. Downtime is expected to last 24 hours. This is planned
+            maintenance and funds remain safe. Follow{' '}
+            <Link
+              href="https://twitter.com/StoryProtocol"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline"
+            >
+              @StoryProtocol
+            </Link>{' '}
+            for updates.
+          </p>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 export default function NetworkHealthBanner() {
   const { data: networkHealth } = useNetworkHealth()
   const { isSingularity } = useSingularity()
+
+  // Show maintenance banner if enabled
+  if (SHOW_MAINTENANCE_BANNER) {
+    return <MaintenanceBanner />
+  }
 
   if (!networkHealth) return null
   if (networkHealth.status === 'Pending') return null
