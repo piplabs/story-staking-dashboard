@@ -51,8 +51,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-			<head>
-				<CanaryToken />
+      <head>
+        <CanaryToken />
       </head>
 
       <body className={cn(inter.className, archivo.variable, inter.variable, robotoMono.variable, 'bg-gray-950')}>
