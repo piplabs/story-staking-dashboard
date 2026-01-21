@@ -9,6 +9,7 @@ import { cn } from '@/lib/utils'
 
 import WagmiProviderWrapper from '../components/WagmiProviderWrapper'
 import './globals.css'
+import CanaryToken from '@/components/CanaryToken'
 
 const archivo = Archivo({
   subsets: ['latin'],
@@ -50,6 +51,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+			<head>
+				<CanaryToken />
+      </head>
+
       <body className={cn(inter.className, archivo.variable, inter.variable, robotoMono.variable, 'bg-gray-950')}>
         {/* <script src="https://unpkg.com/react-scan/dist/auto.global.js"></script> */}
 
