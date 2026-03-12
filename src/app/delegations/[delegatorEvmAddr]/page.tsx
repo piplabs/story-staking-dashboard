@@ -1,5 +1,5 @@
-'use client';
-import { use } from "react";
+'use client'
+import { use } from 'react'
 
 import { MoveLeftIcon } from 'lucide-react'
 import Image from 'next/image'
@@ -18,7 +18,7 @@ import UnbondedDelegationsTable from './_components/UnbondedDelegationsTable'
 import StyledCard from '@/components/cards/StyledCard'
 
 export default function Page(props: { params: Promise<{ delegatorEvmAddr: Address }> }) {
-  const params = use(props.params);
+  const params = use(props.params)
   const isSmallDevice = useIsSmallDevice()
   return (
     <div className="max-w-screen flex h-full w-full flex-col gap-8 text-white">
@@ -40,7 +40,7 @@ export default function Page(props: { params: Promise<{ delegatorEvmAddr: Addres
             width={48}
             height={48}
           />
-          <div className="my-auto w-full break-words pr-8 text-xl ">
+          <div className="my-auto w-full break-words pr-8 text-xl">
             <h2 className="flex flex-row">
               {isSmallDevice ? truncateAddress(params.delegatorEvmAddr) : params.delegatorEvmAddr}{' '}
               <CopyStringButton value={params.delegatorEvmAddr} />
@@ -81,7 +81,7 @@ function OverviewCard({ delegatorAddr }: { delegatorAddr: Address }) {
         <DataRow
           title="Total Rewards Earned"
           value={
-            !rewards
+            isRewardsPending || !rewards
               ? '-'
               : `${formatLargeMetricsNumber(parseFloat(Number(rewards.accumulatedRewards).toFixed(2)).toString())} IP`
           }
