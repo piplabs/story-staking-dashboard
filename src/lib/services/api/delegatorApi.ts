@@ -93,7 +93,9 @@ export async function getDelegatorRewards(params: GetDelegatorRewardsParams): Pr
     }
   }
 
-  const accumulatedRewards = formatEther(BigInt(rewards.amount), 'gwei')
+  // bigint can't handle decimals, so we need to remove them
+  const amountWithoutDecimals = rewards.amount.split('.')[0]
+  const accumulatedRewards = formatEther(BigInt(amountWithoutDecimals), 'gwei')
 
   return {
     accumulatedRewards: accumulatedRewards,
