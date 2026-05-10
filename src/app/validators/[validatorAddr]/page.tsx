@@ -13,6 +13,7 @@ import { useValidator } from '@/lib/services/hooks/useValidator'
 
 import { YourStakeCard } from './_components/ValidatorCtaCard'
 import { AddressesCard, CommissionCard, OverviewCard, StakeInfoCard } from './_components/ValidatorDataCards'
+import DKGCommitteeCard, { DKGCommitteeBadge } from './_components/DKGCommitteeCard'
 import DelegatorsTable from './_components/DelegatorsTable'
 
 export default function Page(props: { params: Promise<{ validatorAddr: Address }> }) {
@@ -59,9 +60,10 @@ export default function Page(props: { params: Promise<{ validatorAddr: Address }
                 {params.validatorAddr} <CopyStringButton value={params.validatorAddr} />
               </h2>
             )}
-            <div className="my-auto flex flex-row gap-2">
+            <div className="my-auto flex flex-row items-center gap-2">
               <ValidatorStatus status={validator.status} />
               <JailedStatus isJailed={validator.jailed} />
+              <DKGCommitteeBadge validatorAddr={params.validatorAddr} />
             </div>
           </div>
         </div>
@@ -84,6 +86,7 @@ export default function Page(props: { params: Promise<{ validatorAddr: Address }
           <AddressesCard validator={validator} />
         </div>
       </section>
+      <DKGCommitteeCard validatorAddr={params.validatorAddr} />
       <DelegatorsTable validator={validator} />
     </div>
   )
