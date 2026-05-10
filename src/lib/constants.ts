@@ -8,6 +8,19 @@ export const links = {
   terms: 'https://story.foundation/terms',
 }
 
+// Per-network defaults for the standalone DKG dashboard. Custom networks
+// (devnet etc.) set NEXT_PUBLIC_DKG_DASHBOARD_URL to override.
+export const DKG_DASHBOARD_URLS: Record<string, string> = {
+  '1315': 'https://aeneid.dkg.story.foundation',
+  '1514': 'https://dkg.story.foundation',
+}
+
+export function dkgDashboardUrl(): string {
+  const override = process.env.NEXT_PUBLIC_DKG_DASHBOARD_URL?.trim()
+  if (override) return override
+  return DKG_DASHBOARD_URLS[process.env.NEXT_PUBLIC_CHAIN_ID] ?? ''
+}
+
 // Network constants -- technically could pull from API or read onchain, however hardcoded as a constant to save RPC calls
 export const totalToken = 1e9
 export const feeEther = '1'
