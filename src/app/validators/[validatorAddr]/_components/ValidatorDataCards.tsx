@@ -146,7 +146,12 @@ export function OverviewCard({ validator }: { validator: Validator }) {
 
   const bondedTokens = formatEther(BigInt(bondedTokensGwei?.pool.bonded_tokens || 1e9), 'gwei')
 
-  const votingPower = (Number(totalStakedIp) / Number(bondedTokens)) * 100
+  // Only BONDED validators (status=3) contribute to consensus voting power.
+  // UNBONDED / UNBONDING / UNSPECIFIED validators still have `tokens` on the
+  // staking module, so the naive tokens/bonded_tokens ratio renders a
+  // non-zero percentage that misrepresents the validator's actual influence.
+  const isBonded = validator.status === 3
+  const votingPower = isBonded ? (Number(totalStakedIp) / Number(bondedTokens)) * 100 : 0
 
   return (
     <StyledCard className="w-full">
