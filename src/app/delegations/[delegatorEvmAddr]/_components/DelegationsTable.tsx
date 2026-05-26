@@ -148,10 +148,21 @@ export default function DelegationsTable(props: { delegatorEvmAddr: Address }) {
                   const isMatured = new Date(periodDelegation.period_delegation.end_time) < new Date()
 
                   const validator = validatorDetails[periodDelegation.period_delegation.validator_address]
+                  // Only treat the validator as locked-token if we have actually loaded its
+                  // metadata. Previously a missing validator (still fetching, or fetch failed)
+                  // satisfied `support_token_type === undefined` and silently fell through to
+                  // LOCKED_STAKING_PERIODS, which only defines a single 0.5x entry. That
+                  // produced the "Multiplier flips to 0.5x after refresh" regression because
+                  // the row resolved against the wrong period table while validatorDetails was
+                  // empty.
                   const isLockedTokenStaking =
-                    validator?.support_token_type === undefined || validator?.support_token_type == 0
+                    validator !== undefined && (validator.support_token_type === undefined || validator.support_token_type == 0)
 
-                  const stakingPeriods = isLockedTokenStaking ? LOCKED_STAKING_PERIODS : STAKING_PERIODS
+                  const stakingPeriods = validator
+                    ? isLockedTokenStaking
+                      ? LOCKED_STAKING_PERIODS
+                      : STAKING_PERIODS
+                    : null
                   return (
                     <TableRow key={pIndex} className="border-none">
                       <TableCell className="break-words">
@@ -199,20 +210,24 @@ export default function DelegationsTable(props: { delegatorEvmAddr: Address }) {
                         IP
                       </TableCell>
                       <TableCell className="break-words text-center">
-                        {periodDelegation.period_delegation.period_type !== undefined
-                          ? stakingPeriods[process.env.NEXT_PUBLIC_CHAIN_ID].find(
-                              (period: StakingPeriodMultiplierInfo) =>
-                                period.value === periodDelegation.period_delegation.period_type.toString()
-                            )?.label + ''
-                          : 'Flexible'}
+                        {!stakingPeriods
+                          ? '-'
+                          : periodDelegation.period_delegation.period_type !== undefined
+                            ? stakingPeriods[process.env.NEXT_PUBLIC_CHAIN_ID].find(
+                                (period: StakingPeriodMultiplierInfo) =>
+                                  period.value === periodDelegation.period_delegation.period_type.toString()
+                              )?.label + ''
+                            : 'Flexible'}
                       </TableCell>
                       <TableCell className="hidden break-words text-center md:table-cell">
-                        {periodDelegation.period_delegation.period_type !== undefined
-                          ? stakingPeriods[process.env.NEXT_PUBLIC_CHAIN_ID].find(
-                              (period: StakingPeriodMultiplierInfo) =>
-                                period.value === periodDelegation.period_delegation.period_type.toString()
-                            )?.multiplier
-                          : '1.0x'}
+                        {!stakingPeriods
+                          ? '-'
+                          : periodDelegation.period_delegation.period_type !== undefined
+                            ? stakingPeriods[process.env.NEXT_PUBLIC_CHAIN_ID].find(
+                                (period: StakingPeriodMultiplierInfo) =>
+                                  period.value === periodDelegation.period_delegation.period_type.toString()
+                              )?.multiplier
+                            : '1.0x'}
                       </TableCell>
                       <TableCell className="">
                         {(() => {
