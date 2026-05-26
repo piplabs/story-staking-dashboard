@@ -15,6 +15,7 @@ import { useAccount } from 'wagmi'
 
 import { DataTablePagination } from '@/components/DataTablePagination'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import { txExplorerUrl } from '@/lib/explorer'
 import { useEvmOperations } from '@/lib/services/hooks/useEvmOperations'
 import { useIsSmallDevice } from '@/lib/services/hooks/useIsSmallDevice'
 import { EvmOperation } from '@/lib/types/networkApiTypes'
@@ -118,7 +119,7 @@ export default function ActivityTable(props: { delegatorEvmAddr: Address }) {
                   <TableCell className="text-center">{operation.block_height}</TableCell>
                   <TableCell className="text-center">
                     <Link
-                      href={`${process.env.NEXT_PUBLIC_EXPLORER_URL}/tx/${operation.tx_hash}`}
+                      href={txExplorerUrl(operation.tx_hash)}
                       className="flex flex-row justify-center gap-2"
                     >
                       {truncateAddress(operation.tx_hash)}
