@@ -4,24 +4,36 @@
 
 import * as Sentry from "@sentry/nextjs";
 
+import { beforeBreadcrumb, beforeSend } from "@/lib/sentry-scrubber";
+
 Sentry.init({
   dsn: "https://9ebd334db989de6480ee11e6c44ad221@o4508775095140352.ingest.us.sentry.io/4508810560798720",
 
-  // Add optional integrations for additional features
+  // Session Replay captures DOM, inputs, and network metadata. Mask every
+  // text node and input, block media entirely, so wallet addresses and stake
+  // amounts are not exfiltrated even if a session is recorded.
   integrations: [
-    Sentry.replayIntegration(),
+    Sentry.replayIntegration({
+      maskAllText: true,
+      maskAllInputs: true,
+      blockAllMedia: true,
+    }),
   ],
 
-  // Define how likely traces are sampled. Adjust this value in production, or use tracesSampler for greater control.
-  tracesSampleRate: 1,
+  // Sample 10% of traces in production. 100% was a Sentry-init default and
+  // produces wallet-activity-level volume from every dashboard session.
+  tracesSampleRate: 0.1,
 
-  // Define how likely Replay events are sampled.
-  // This sets the sample rate to be 10%. You may want this to be 100% while
-  // in development and sample at a lower rate in production
-  replaysSessionSampleRate: 0.1,
+  // Disable random session recording entirely. Replays now happen only when
+  // the page hits an error, which keeps the volume small and avoids
+  // capturing routine wallet flows.
+  replaysSessionSampleRate: 0,
 
   // Define how likely Replay events are sampled when an error occurs.
   replaysOnErrorSampleRate: 1.0,
+
+  beforeSend,
+  beforeBreadcrumb,
 
   // Setting this option to true will print useful information to the console while you're setting up Sentry.
   debug: false,
