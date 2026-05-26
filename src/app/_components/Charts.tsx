@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import { useTotalStakeHistory } from '@/lib/services/hooks/useTotalStakeHistory'
 import { formatLargeMetricsNumber } from '@/lib/utils'
@@ -35,10 +35,14 @@ function TotalStakeHistory() {
     isFetching: isFetchingTotalStakeHistory,
     isError: isErrorTotalStakeHistory,
   } = useTotalStakeHistory({ interval: interval === 'all' ? 'all' : interval })
-  if (!totalStakeHistory) return null
 
-  // Helper to format date for axis and tooltip
+  // Helper to format date for axis and tooltip. 1d-range data points fall
+  // inside a single calendar day, so use an hour label there; everything
+  // longer is bucketed by day.
   const formatDate = (date: Date) => {
+    if (interval === '1d') {
+      return date.toLocaleTimeString('en-US', { hour: 'numeric' })
+    }
     return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
   }
 
@@ -67,23 +71,45 @@ function TotalStakeHistory() {
     return `${(value / 1000000).toFixed(1)}M`
   }
 
-  // Determine XAxis interval based on selected interval and screen width
-  const getXAxisInterval = () => {
-    // Fallback if no data
-    if (!totalStakeHistory || totalStakeHistory.length === 0) return 0
+  // Plot against a numeric (epoch-ms) X axis. The data carries Date objects,
+  // but recharts renders raw tick/axis values as React children, so passing
+  // Date objects to <XAxis ticks> throws React error #310 ("Objects are not
+  // valid as a React child"). Numbers are safe and let us use a proper time
+  // scale.
+  const chartData = useMemo(
+    () => (totalStakeHistory ?? []).map((item) => ({ ts: item.date.getTime(), value: item.value })),
+    [totalStakeHistory]
+  )
 
-    // Responsive breakpoints
+  // Compute explicit X-axis ticks as epoch-ms numbers. The history endpoint
+  // returns multiple samples per day, and recharts' built-in `interval`
+  // sampling picks every Nth data point - which produces duplicate "May 20"
+  // labels when several consecutive samples land on the same day. Build a
+  // deduplicated list (one timestamp per rendered label) and pass it to XAxis
+  // via `ticks` with `interval={0}` so recharts renders exactly these.
+  const xTicks = useMemo(() => {
+    if (!totalStakeHistory || totalStakeHistory.length === 0) return [] as number[]
+
+    // Dedupe by the same string the X-axis tickFormatter would render.
+    const seen = new Set<string>()
+    const uniques: number[] = []
+    for (const item of totalStakeHistory) {
+      const label = formatDate(item.date)
+      if (!seen.has(label)) {
+        seen.add(label)
+        uniques.push(item.date.getTime())
+      }
+    }
+
     const isMobile = width < 640
     const isTablet = width >= 640 && width < 1024
-
-    // Number of ticks to show for each interval and device size
-    let desiredTicks = 0
+    let desiredTicks: number
     switch (interval) {
       case '1d':
         desiredTicks = isMobile ? 3 : isTablet ? 6 : 12
         break
       case '7d':
-        desiredTicks = isMobile ? 3 : isTablet ? 6 : 10
+        desiredTicks = isMobile ? 4 : isTablet ? 7 : 8
         break
       case '30d':
         desiredTicks = isMobile ? 4 : isTablet ? 8 : 12
@@ -95,11 +121,14 @@ function TotalStakeHistory() {
         desiredTicks = 6
     }
 
-    // Calculate interval so that we get about desiredTicks labels
-    const dataLen = totalStakeHistory.length
-    if (dataLen <= desiredTicks) return 0 // show all
-    return Math.ceil(dataLen / desiredTicks) - 1
-  }
+    if (uniques.length <= desiredTicks) return uniques
+    const step = Math.ceil(uniques.length / desiredTicks)
+    return uniques.filter((_, i) => i % step === 0)
+  }, [totalStakeHistory, width, interval])
+
+  // Guard after all hooks so hook order stays stable across the
+  // loading -> loaded transition (Rules of Hooks).
+  if (!totalStakeHistory) return null
 
   return (
     <StyledCard className="flex flex-col w-full grow">
@@ -151,14 +180,18 @@ function TotalStakeHistory() {
         <div className="flex h-[200px] items-center justify-center text-gray-400">Loading...</div>
       ) : totalStakeHistory && totalStakeHistory.length > 0 ? (
         <ResponsiveContainer width="100%" height={200}>
-          <LineChart data={totalStakeHistory} margin={{ top: 5, right: 20, left: 10, bottom: 5 }}>
+          <LineChart data={chartData} margin={{ top: 5, right: 20, left: 10, bottom: 5 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="#444" />
             <XAxis
-              dataKey="date"
-              tickFormatter={(dateStr) => formatDate(new Date(dateStr))}
+              dataKey="ts"
+              type="number"
+              scale="time"
+              domain={['dataMin', 'dataMax']}
+              tickFormatter={(ts) => formatDate(new Date(ts))}
               stroke="#888"
               tick={{ fontSize: 12, fill: '#FFFFFF' }}
-              interval={getXAxisInterval()}
+              ticks={xTicks}
+              interval={0}
             />
             <YAxis
               tickFormatter={formatYAxisValue}
