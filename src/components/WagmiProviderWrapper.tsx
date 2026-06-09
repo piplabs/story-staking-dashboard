@@ -13,34 +13,34 @@ import {
 } from '@rainbow-me/rainbowkit/wallets'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { defineChain } from 'viem'
-import { mainnet } from 'viem/chains'
 import { WagmiProvider, createConfig, fallback, http } from 'wagmi'
 
-export const storyAeneid = defineChain({
-  id: 1315,
-  name: 'Story Aeneid',
-  nativeCurrency: {
-    decimals: 18,
-    name: 'IP',
-    symbol: 'IP',
+const KNOWN_NETWORKS: Record<number, { name: string; rpcUrl: string; explorerUrl: string; testnet: boolean }> = {
+  1315: {
+    name: 'Story Aeneid',
+    rpcUrl: 'https://aeneid.storyrpc.io',
+    explorerUrl: 'https://aeneid.storyscan.xyz/',
+    testnet: true,
   },
-  rpcUrls: {
-    default: {
-      http: ['https://aeneid.storyrpc.io'],
-    },
+  1514: {
+    name: 'Story Mainnet',
+    rpcUrl: 'https://mainnet.storyrpc.io',
+    explorerUrl: 'https://storyscan.xyz/',
+    testnet: false,
   },
-  blockExplorers: {
-    default: {
-      name: 'Story Aeneid Explorer',
-      url: 'https://aeneid.storyscan.xyz/',
-    },
-  },
-  testnet: true,
-})
+}
 
-export const storyMainnet = defineChain({
-  id: 1514,
-  name: 'Story Mainnet',
+const chainId = Number(process.env.NEXT_PUBLIC_CHAIN_ID)
+const knownNetwork = KNOWN_NETWORKS[chainId]
+
+const rpcUrl = process.env.NEXT_PUBLIC_RPC_URL || knownNetwork?.rpcUrl || 'http://localhost:8545'
+const explorerUrl = process.env.NEXT_PUBLIC_EXPLORER_URL || knownNetwork?.explorerUrl || ''
+const chainName = knownNetwork?.name || `Story (${chainId})`
+const isTestnet = knownNetwork?.testnet ?? true
+
+export const storyChain = defineChain({
+  id: chainId,
+  name: chainName,
   nativeCurrency: {
     decimals: 18,
     name: 'IP',
@@ -48,16 +48,18 @@ export const storyMainnet = defineChain({
   },
   rpcUrls: {
     default: {
-      http: ['https://mainnet.storyrpc.io'],
+      http: [rpcUrl],
     },
   },
-  blockExplorers: {
-    default: {
-      name: 'Story Explorer',
-      url: 'https://storyscan.xyz/',
-    },
-  },
-  testnet: false,
+  blockExplorers: explorerUrl
+    ? {
+        default: {
+          name: `${chainName} Explorer`,
+          url: explorerUrl,
+        },
+      }
+    : undefined,
+  testnet: isTestnet,
 })
 
 const connectors = connectorsForWallets(
@@ -81,39 +83,34 @@ const connectors = connectorsForWallets(
   }
 )
 
-const testnetConfig = createConfig({
-  chains: [storyAeneid],
+const transports =
+  chainId === 1514
+    ? fallback([
+        http(rpcUrl),
+        http('https://internal-full.storyrpc.io', {
+          fetchOptions: {
+            headers: {
+              'X-Origin': 'staking.story.foundation',
+            },
+          },
+        }),
+      ])
+    : fallback([http(rpcUrl)])
+
+const wagmiConfig = createConfig({
+  chains: [storyChain],
   transports: {
-    [1315]: fallback([http('https://aeneid.storyrpc.io')]),
+    [chainId]: transports,
   },
   connectors,
   ssr: true,
 })
 
-const mainnetConfig = createConfig({
-  chains: [storyMainnet],
-  transports: {
-    [1514]: fallback([
-      http('https://mainnet.storyrpc.io'),
-      http('https://internal-full.storyrpc.io', {
-        fetchOptions: {
-          headers: {
-            'X-Origin': 'staking.story.foundation',
-          },
-        },
-      }),
-    ]),
-  },
-  connectors,
-  ssr: true,
-})
 const queryClient = new QueryClient()
 
 export default function WagmiProviderWrapper({ children }: { children: React.ReactNode }) {
   return (
-    <WagmiProvider
-      config={process.env.NEXT_PUBLIC_CHAIN_ID == storyMainnet.id.toString() ? mainnetConfig : testnetConfig}
-    >
+    <WagmiProvider config={wagmiConfig}>
       <QueryClientProvider client={queryClient}>
         <RainbowKitProvider>{children}</RainbowKitProvider>
       </QueryClientProvider>
