@@ -1,9 +1,35 @@
 import { withSentryConfig } from '@sentry/nextjs'
 
+// securityHeaders applies low-risk hardening to every response served by the
+// dashboard. These four headers are universally safe (they do not affect
+// loading of any same-origin or whitelisted-origin resource) and they close
+// off clickjacking via iframe, MIME sniffing, and over-sharing of the
+// Referer header. HSTS is appropriate because the dashboard is served over
+// TLS in every environment we ship.
+const securityHeaders = [
+  { key: 'X-Frame-Options', value: 'DENY' },
+  { key: 'X-Content-Type-Options', value: 'nosniff' },
+  { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+  { key: 'Strict-Transport-Security', value: 'max-age=31536000; includeSubDomains' },
+  {
+    key: 'Permissions-Policy',
+    value: 'camera=(), microphone=(), geolocation=(), payment=(), usb=()',
+  },
+]
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production',
+  },
+
+  async headers() {
+    return [
+      {
+        source: '/:path*',
+        headers: securityHeaders,
+      },
+    ]
   },
 
   webpack: (config) => {

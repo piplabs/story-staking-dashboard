@@ -21,6 +21,7 @@ import { base64ToHex, cn, formatLargeMetricsNumber, truncateAddress } from '@/li
 
 import ViewTransaction from '../buttons/ViewTransaction'
 import { DialogClose } from '../ui/dialog'
+import { ValidatorConfirmCard } from './ValidatorConfirmCard'
 import { useAllValidators } from '@/lib/services/hooks/useAllValidators'
 import { useIsSmallDevice } from '@/lib/services/hooks/useIsSmallDevice'
 import { getValidator } from '@/lib/services/api/validatorApi'
@@ -85,7 +86,9 @@ export function StakeForm(props: { validator?: Validator }) {
     address: address,
   })
 
-  const { refetch: refetchAllUnlockedValidators } = useAllValidators({ tokenType: 'UNLOCKED' })
+  const { data: allUnlockedValidatorsData, refetch: refetchAllUnlockedValidators } = useAllValidators({
+    tokenType: 'UNLOCKED',
+  })
 
   const { refetch: refetchDelegatorStake } = useValidatorDelegatorDelegations({
     validatorAddr: props.validator?.operator_address || zeroAddress,
@@ -108,6 +111,14 @@ export function StakeForm(props: { validator?: Validator }) {
       stakingPeriod: '0',
     },
   })
+
+  // Resolve the validator that the user is about to stake to. props.validator
+  // takes precedence; otherwise look up the radio-selected one in the
+  // already-fetched list so we can surface its identity for verification.
+  const selectedValidatorAddr = form.watch('validator')
+  const selectedValidator =
+    props.validator ??
+    allUnlockedValidatorsData?.allValidators?.find((v) => v.operator_address === selectedValidatorAddr)
 
   useEffect(() => {
     form.trigger(['stakeAmount', 'validator', 'stakingPeriod'])
@@ -313,6 +324,14 @@ export function StakeForm(props: { validator?: Validator }) {
               </FormItem>
             )}
           />
+          {selectedValidator && (
+            <ValidatorConfirmCard
+              label="Staking to"
+              moniker={selectedValidator.description?.moniker}
+              operatorAddress={selectedValidator.operator_address}
+              consensusPubkeyB64={selectedValidator.consensus_pubkey.value}
+            />
+          )}
           <div className="mx-auto flex flex-row items-center gap-4 justify-center w-full">
             {txnReceipt.isSuccess && delegationsUpdated ? (
               <>
