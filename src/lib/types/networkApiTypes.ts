@@ -17,7 +17,7 @@ export type GetNetworkHealthApiResponse = {
 export type GetNetworkHealthResponse = {
   consensus_block_height: number
   execution_block_height: number
-  status: 'Normal' | 'Pending' | 'Degraded' | 'Down'
+  status: 'Normal' | 'Pending' | 'Degraded' | 'Down' | 'Indexing'
 }
 
 export type EvmOperation = {

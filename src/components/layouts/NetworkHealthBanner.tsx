@@ -22,11 +22,13 @@ export default function NetworkHealthBanner() {
       Normal: GreenCheck(),
       Degraded: YellowWarning({ cn: 'w-6 h-6' }),
       Down: RedAlert(),
+      Indexing: YellowWarning({ cn: 'w-6 h-6' }),
     },
     style: {
       Normal: 'border-white/[17%] bg-primary-grey',
       Degraded: 'border-[#E4CE07] bg-[#514903]',
       Down: 'border-[#EF7276] bg-[#4A030B]',
+      Indexing: 'border-[#60A5FA] bg-[#1E3A5F]',
     },
     text: {
       Normal: (
@@ -50,6 +52,11 @@ export default function NetworkHealthBanner() {
             X/Twitter
           </Link>{' '}
           for immediate updates.
+        </p>
+      ),
+      Indexing: (
+        <p className="">
+          Staking data is currently being indexed. Some information may be temporarily unavailable or outdated.
         </p>
       ),
     },
