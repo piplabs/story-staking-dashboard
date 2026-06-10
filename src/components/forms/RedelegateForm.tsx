@@ -22,6 +22,7 @@ import { Validator } from '@/lib/types'
 import { base64ToHex, cn, formatLargeMetricsNumber, truncateAddress } from '@/lib/utils'
 
 import ViewTransaction from '../buttons/ViewTransaction'
+import { ValidatorConfirmCard } from './ValidatorConfirmCard'
 import { getValidator } from '@/lib/services/api/validatorApi'
 import { useDelegatorPeriodDelegations } from '@/lib/services/hooks/useDelegatorPeriodDelegations'
 
@@ -292,6 +293,25 @@ export function RedelegateForm(props: { validator: Validator; delegationId?: str
               </FormItem>
             )}
           />
+          <ValidatorConfirmCard
+            label="Redelegating from"
+            moniker={props.validator.description?.moniker}
+            operatorAddress={props.validator.operator_address}
+            consensusPubkeyB64={props.validator.consensus_pubkey.value}
+          />
+          {(() => {
+            const dstAddr = form.watch('destinationValidator')
+            const dstValidator = filteredValidators?.find((v) => v.operator_address === dstAddr)
+            if (!dstValidator) return null
+            return (
+              <ValidatorConfirmCard
+                label="Redelegating to"
+                moniker={dstValidator.description?.moniker}
+                operatorAddress={dstValidator.operator_address}
+                consensusPubkeyB64={dstValidator.consensus_pubkey.value}
+              />
+            )
+          })()}
           <Button
             type="submit"
             className={cn(

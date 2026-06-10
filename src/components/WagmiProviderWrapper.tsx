@@ -15,17 +15,17 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { defineChain } from 'viem'
 import { WagmiProvider, createConfig, fallback, http } from 'wagmi'
 
-const KNOWN_NETWORKS: Record<number, { name: string; rpcUrl: string; explorerUrl: string; testnet: boolean }> = {
+import { EXPLORER_URL } from '@/lib/explorer'
+
+const KNOWN_NETWORKS: Record<number, { name: string; rpcUrl: string; testnet: boolean }> = {
   1315: {
     name: 'Story Aeneid',
     rpcUrl: 'https://aeneid.storyrpc.io',
-    explorerUrl: 'https://aeneid.storyscan.xyz/',
     testnet: true,
   },
   1514: {
     name: 'Story Mainnet',
     rpcUrl: 'https://mainnet.storyrpc.io',
-    explorerUrl: 'https://storyscan.xyz/',
     testnet: false,
   },
 }
@@ -34,7 +34,9 @@ const chainId = Number(process.env.NEXT_PUBLIC_CHAIN_ID)
 const knownNetwork = KNOWN_NETWORKS[chainId]
 
 const rpcUrl = process.env.NEXT_PUBLIC_RPC_URL || knownNetwork?.rpcUrl || 'http://localhost:8545'
-const explorerUrl = process.env.NEXT_PUBLIC_EXPLORER_URL || knownNetwork?.explorerUrl || ''
+// Explorer URL is resolved by lib/explorer (env -> known-chain fallback) so the
+// "View transaction" links and this chain definition share one source.
+const explorerUrl = EXPLORER_URL
 const chainName = knownNetwork?.name || `Story (${chainId})`
 const isTestnet = knownNetwork?.testnet ?? true
 
