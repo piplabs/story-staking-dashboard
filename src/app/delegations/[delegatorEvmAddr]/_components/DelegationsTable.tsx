@@ -148,46 +148,53 @@ export default function DelegationsTable(props: { delegatorEvmAddr: Address }) {
                   const isMatured = new Date(periodDelegation.period_delegation.end_time) < new Date()
 
                   const validator = validatorDetails[periodDelegation.period_delegation.validator_address]
+                  // Only treat the validator as locked-token if we have actually loaded its
+                  // metadata. Previously a missing validator (still fetching, or fetch failed)
+                  // satisfied `support_token_type === undefined` and silently fell through to
+                  // LOCKED_STAKING_PERIODS, which only defines a single 0.5x entry. That
+                  // produced the "Multiplier flips to 0.5x after refresh" regression because
+                  // the row resolved against the wrong period table while validatorDetails was
+                  // empty.
                   const isLockedTokenStaking =
-                    validator?.support_token_type === undefined || validator?.support_token_type == 0
+                    validator !== undefined && (validator.support_token_type === undefined || validator.support_token_type == 0)
 
-                  const stakingPeriods = isLockedTokenStaking ? LOCKED_STAKING_PERIODS : STAKING_PERIODS
+                  const stakingPeriods = validator
+                    ? isLockedTokenStaking
+                      ? LOCKED_STAKING_PERIODS
+                      : STAKING_PERIODS
+                    : null
                   return (
                     <TableRow key={pIndex} className="border-none">
                       <TableCell className="break-words">
-                        {validator ? (
-                          <Link
-                            href={`/validators/${periodDelegation.period_delegation.validator_address}`}
-                            className="relative flex flex-row gap-2"
-                          >
-                            <Image
-                              src={`https://cdn.stamp.fyi/avatar/${periodDelegation.period_delegation.validator_address}`}
-                              alt="Validator Avatar"
-                              className="my-auto flex h-6 w-6 rounded-[4px]"
-                              width={24}
-                              height={24}
-                            />
-                            <span className="md:text-lg">
-                              {isSmallDevice
-                                ? truncateAddress(validator.description.moniker)
-                                : validator.description.moniker}
-                            </span>
-                            {/* <div className="my-auto hidden md:flex">
-                              <ExternalLinkIcon className="ml-1 h-4 w-4" />
-                            </div> */}
-                          </Link>
-                        ) : (
-                          <div className="flex flex-row gap-2">
-                            <Image
-                              src={`https://cdn.stamp.fyi/avatar/${pIndex}`}
-                              alt="Validator Avatar"
-                              className="rounded-[4px]"
-                              width={24}
-                              height={24}
-                            />
-                            <span className="text-lg">{periodDelegation.period_delegation.validator_address}</span>
-                          </div>
-                        )}
+                        {(() => {
+                          const validatorAddr = periodDelegation.period_delegation.validator_address as string
+                          // Prefer moniker, fall back to truncated address. Previously the
+                          // missing-validator branch rendered the full raw address (and used
+                          // pIndex as the avatar seed), so a transient validatorDetails miss
+                          // - common on refresh because validators are re-fetched on each mount
+                          // without React Query caching - caused the column to flip from
+                          // "rt-d3" to "0x06da52b5cdc393d505c6fb4ed1980df52ca4d801".
+                          const label = validator?.description?.moniker
+                            ? isSmallDevice
+                              ? truncateAddress(validator.description.moniker)
+                              : validator.description.moniker
+                            : truncateAddress(validatorAddr, 8, 6)
+                          return (
+                            <Link
+                              href={`/validators/${validatorAddr}`}
+                              className="relative flex flex-row gap-2"
+                            >
+                              <Image
+                                src={`https://cdn.stamp.fyi/avatar/${validatorAddr}`}
+                                alt="Validator Avatar"
+                                className="my-auto flex h-6 w-6 rounded-[4px]"
+                                width={24}
+                                height={24}
+                              />
+                              <span className="md:text-lg">{label}</span>
+                            </Link>
+                          )
+                        })()}
                       </TableCell>
                       <TableCell className="hidden h-full text-center align-middle md:table-cell">
                         {periodDelegation.period_delegation.period_delegation_id}
@@ -199,20 +206,24 @@ export default function DelegationsTable(props: { delegatorEvmAddr: Address }) {
                         IP
                       </TableCell>
                       <TableCell className="break-words text-center">
-                        {periodDelegation.period_delegation.period_type !== undefined
-                          ? stakingPeriods[process.env.NEXT_PUBLIC_CHAIN_ID].find(
-                              (period: StakingPeriodMultiplierInfo) =>
-                                period.value === periodDelegation.period_delegation.period_type.toString()
-                            )?.label + ''
-                          : 'Flexible'}
+                        {!stakingPeriods
+                          ? '-'
+                          : periodDelegation.period_delegation.period_type !== undefined
+                            ? stakingPeriods[process.env.NEXT_PUBLIC_CHAIN_ID].find(
+                                (period: StakingPeriodMultiplierInfo) =>
+                                  period.value === periodDelegation.period_delegation.period_type.toString()
+                              )?.label + ''
+                            : 'Flexible'}
                       </TableCell>
                       <TableCell className="hidden break-words text-center md:table-cell">
-                        {periodDelegation.period_delegation.period_type !== undefined
-                          ? stakingPeriods[process.env.NEXT_PUBLIC_CHAIN_ID].find(
-                              (period: StakingPeriodMultiplierInfo) =>
-                                period.value === periodDelegation.period_delegation.period_type.toString()
-                            )?.multiplier
-                          : '1.0x'}
+                        {!stakingPeriods
+                          ? '-'
+                          : periodDelegation.period_delegation.period_type !== undefined
+                            ? stakingPeriods[process.env.NEXT_PUBLIC_CHAIN_ID].find(
+                                (period: StakingPeriodMultiplierInfo) =>
+                                  period.value === periodDelegation.period_delegation.period_type.toString()
+                              )?.multiplier
+                            : '1.0x'}
                       </TableCell>
                       <TableCell className="">
                         {(() => {

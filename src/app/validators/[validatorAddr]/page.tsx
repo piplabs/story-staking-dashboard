@@ -90,21 +90,21 @@ export default function Page(props: { params: Promise<{ validatorAddr: Address }
 }
 
 function ValidatorStatus({ status }: { status: number }) {
-  if (status == 2 || status == 0) return null // UNBONDING or UNDEFINED
-
-  let statusText
-  let statusStyle
+  // status enum from cosmos-sdk staking: 0=UNSPECIFIED, 1=UNBONDED, 2=UNBONDING, 3=BONDED.
+  let statusText: string
+  let statusStyle: string
   if (status == 1) {
     statusText = 'UNBONDED'
     statusStyle = 'text-white'
+  } else if (status == 2) {
+    statusText = 'UNBONDING'
+    statusStyle = 'text-yellow-500'
   } else if (status == 3) {
     statusText = 'ACTIVE'
     statusStyle = 'text-green-500'
+  } else {
+    return null
   }
-  // else if (status == 2) {
-  //   statusText = 'UNBONDING'
-  //   statusStyle = 'text-yellow-500'
-  // }
 
   return (
     <div className="">

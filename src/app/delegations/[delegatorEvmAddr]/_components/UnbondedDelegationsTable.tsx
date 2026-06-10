@@ -100,7 +100,10 @@ export default function UnbondedDelegationsTable(props: { delegatorEvmAddr: Addr
                                 ? `${diffDays} ${diffDays === 1 ? 'day' : 'days'} ${diffHours} ${diffHours === 1 ? 'hour' : 'hours'} left`
                                 : `${diffHours} ${diffHours === 1 ? 'hour' : 'hours'} left`
 
-                            const endTimeStr = endTime.toLocaleString([], {
+                            // Pin the locale to en-US so the timestamp does not switch to
+                            // Chinese / Japanese / Arabic formats on browsers configured for
+                            // those locales. The product surface is English-only.
+                            const endTimeStr = endTime.toLocaleString('en-US', {
                               month: 'short',
                               day: 'numeric',
                               year: 'numeric',

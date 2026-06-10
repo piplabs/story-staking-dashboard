@@ -205,9 +205,9 @@ export function RedelegateForm(props: { validator: Validator; delegationId?: str
                 <FormControl>
                   <Input
                     className="border-primary-border bg-black font-normal text-white"
-                    placeholder="Enter source validator uncompressed public key"
+                    placeholder="Source validator"
                     {...field}
-                    value={field.value ? `0x${field.value.slice(2)}` : ''}
+                    value={field.value ?? ''}
                     disabled={true}
                   />
                 </FormControl>

@@ -46,24 +46,29 @@ export function AddressesCard({ validator }: { validator: Validator }) {
 
 export function StakeInfoCard({ validator }: { validator: Validator }) {
   const totalStakedIp = formatEther(BigInt(Math.floor(parseFloat(validator.tokens))), 'gwei')
-  const { data: selfStake } = useValidatorDelegatorDelegations({
+  // The single-resource endpoint returns 404 (and throws via the API client)
+  // when the validator has not self-delegated. That is a normal state for
+  // some validators, not an error: it means self-stake is 0 and the full
+  // `tokens` figure represents delegations from other accounts. Treat the
+  // error branch as a zero self-stake instead of rendering '-' for both
+  // rows, which previously hid the actual delegated total.
+  const { data: selfStake, isError, isLoading } = useValidatorDelegatorDelegations({
     validatorAddr: validator.operator_address,
     delegatorAddr: validator.operator_address,
   })
-  const delegatedStakeAmount = selfStake
-    ? formatLargeMetricsNumber(
-        formatEther(
-          BigInt(Math.floor(parseFloat(validator.tokens))) -
-            BigInt(Math.floor(parseFloat(selfStake.delegation_response.balance.amount))),
-          'gwei'
-        )
-      )
-    : undefined
 
-  const selfStakeAmount = selfStake
-    ? formatLargeMetricsNumber(
-        formatEther(BigInt(Math.floor(parseFloat(selfStake.delegation_response.balance.amount))), 'gwei')
-      )
+  const totalTokensGwei = BigInt(Math.floor(parseFloat(validator.tokens)))
+  const selfStakeGwei =
+    selfStake?.delegation_response?.balance?.amount !== undefined
+      ? BigInt(Math.floor(parseFloat(selfStake.delegation_response.balance.amount)))
+      : BigInt(0)
+
+  const resolved = !isLoading && (selfStake !== undefined || isError)
+  const delegatedStakeAmount = resolved
+    ? formatLargeMetricsNumber(formatEther(totalTokensGwei - selfStakeGwei, 'gwei'))
+    : undefined
+  const selfStakeAmount = resolved
+    ? formatLargeMetricsNumber(formatEther(selfStakeGwei, 'gwei'))
     : undefined
 
   return (
@@ -79,12 +84,12 @@ export function StakeInfoCard({ validator }: { validator: Validator }) {
 
         <DataRow
           title="Delegated Stake"
-          value={delegatedStakeAmount ? `${delegatedStakeAmount} IP` : '-'}
+          value={delegatedStakeAmount !== undefined ? `${delegatedStakeAmount} IP` : '-'}
           tooltipInfo="The total amount of tokens delegated to the validator by other users"
         />
         <DataRow
           title="Self-Staked"
-          value={selfStakeAmount ? `${selfStakeAmount} IP` : '-'}
+          value={selfStakeAmount !== undefined ? `${selfStakeAmount} IP` : '-'}
           tooltipInfo="The tokens that the validator has staked on themselves."
         />
       </section>
@@ -146,7 +151,12 @@ export function OverviewCard({ validator }: { validator: Validator }) {
 
   const bondedTokens = formatEther(BigInt(bondedTokensGwei?.pool.bonded_tokens || 1e9), 'gwei')
 
-  const votingPower = (Number(totalStakedIp) / Number(bondedTokens)) * 100
+  // Only BONDED validators (status=3) contribute to consensus voting power.
+  // UNBONDED / UNBONDING / UNSPECIFIED validators still have `tokens` on the
+  // staking module, so the naive tokens/bonded_tokens ratio renders a
+  // non-zero percentage that misrepresents the validator's actual influence.
+  const isBonded = validator.status === 3
+  const votingPower = isBonded ? (Number(totalStakedIp) / Number(bondedTokens)) * 100 : 0
 
   return (
     <StyledCard className="w-full">
